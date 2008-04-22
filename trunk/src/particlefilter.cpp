@@ -33,8 +33,11 @@ CParticleFilter::CParticleFilter():num_max_variables(400),num_max_particles(100)
    reject=new bool [num_max_particles];
    state=new double [num_max_variables];
 
+   weights=new double [num_max_particles];
+
    trans=cvCreateMat(3,1,CV_32FC1);
    rotation=cvCreateMat(3,1,CV_32FC1);
+
 }
 CParticleFilter::~CParticleFilter()
 {
@@ -147,35 +150,58 @@ void CParticleFilter::Correct()
           reject[n_part]=false;
      int p=0;
      int m=0;
+
+     double w=0;
+    weights[n_part]=0;
      for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
      {
+         w=0;
         if((*It)->state==st_inited){
 //              cout<<"pred_measure "<<pred_measure[p][n_part]<<" measure "<<measure_[m]<< endl;
-             if ((fabs(pred_measure[p][n_part]-measure_[m]))>threshold){
+            weights[n_part]+=(fabs(pred_measure[p][n_part]-measure_[m]));
+
+            if ((fabs(pred_measure[p][n_part]-measure_[m]))>threshold){
                  reject[n_part]=true;
                  cout<<"true"<<endl;
-             }else{
+            }else{
                  cout<<"false"<<endl;
-             }
-             m+=2;
+            }
+            m+=2;
           }
           p+=2;
      }
+      weights[n_part]/=(m/2);
+      cout<<"wights dist "<<weights[n_part]<<endl;
+      weights[n_part]=(1/(sqrt(1*2*3.14159)))*exp((-weights[n_part]*weights[n_part])/(2*1));
+      cout<<"weights "<<weights[n_part]<<endl;
 
       }//end particles
-      int n_v;
+
+      /** normalize weights **/
+      double suma=0;
+      for (int i=0;i<num_particles;i++){
+          suma+=weights[i];
+ cout<<"weights "<<weights[i]<<endl;
+      }
+      cout<<"suma weights "<<suma<<endl;
+      for (int i=0;i<num_particles;i++){
+          weights[i]/=suma;
+           cout<<"weights normalized"<<weights[i]<<endl;
+      }
+
+     // int n_v;
       for (int v=0; v<num_variables;v++){
           state[v]=0;
-          n_v=0;
+       //   n_v=0;
           for (int n_part=0; n_part<num_particles; n_part++){
-              if (reject[n_part]==false){
-                 state[v]+=particles[v][n_part];
-                 n_v++;
-              }else{
+              //if (reject[n_part]==false){
+                 state[v]+=(weights[n_part]*particles[v][n_part]);
+               //  n_v++;
+              //}else{
       //          cout<<"rejected "<<n_part<<endl;
-              }
+              //}
           }
-          state[v]/=n_v;
+          //state[v]/=n_v;
       }
 
       int kstate=0;
@@ -243,10 +269,11 @@ void CParticleFilter::Correct()
      cvReleaseMat(&img);
 /** AÒado partÌculas nuevas en los sitios de las rechazadas **/
 for (int n_part=0; n_part<num_particles; n_part++){
-    for (int v=0; v<num_variables;v++){
+//    for (int v=0; v<num_variables;v++){
           if (reject[n_part]==true){
-                 particles[v][n_part]=state[v];
-          }
+                 initParticle(n_part);
+  //               particles[v][n_part]=state[v];
+    //      }
     }
     reject[n_part]=false;
 }
@@ -257,15 +284,9 @@ void CParticleFilter::Test()
 {
 
 }
-void CParticleFilter::initState()
+void CParticleFilter::initParticle(int part)
 {
-  int kstate;
-  //fixme esto puede tener otro orden
-  UpdateMatrixSize();
-
-  for (int part=0; part<num_particles;part++)
-  {
-      kstate=0;
+      int kstate=0;
       for( int i=0; i<3; i++){
            particles[kstate++][part]=cvmGet(pDataCam->translation,i,0);
            particles[kstate++][part]=cvmGet(pDataCam->translation,i,0);
@@ -277,17 +298,32 @@ void CParticleFilter::initState()
      }
 
   // inicializaci√≥n primeros puntos vistos
-  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+    for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
-      if((*It)->state==st_inited){
-    	particles[kstate++][part]=(*It)->wx;
-    	particles[kstate++][part]=(*It)->wy;
-    	particles[kstate++][part]=(*It)->wz;
-    	particles[kstate++][part]=(*It)->theta;
-    	particles[kstate++][part]=(*It)->phi;
-    	particles[kstate++][part]=(*It)->rho;
-      }
+      //if((*It)->state==st_inited){
+    	particles[kstate++][part]=(*It)->wx+Random(-0.0001,0.0001);
+    	particles[kstate++][part]=(*It)->wy+Random(-0.0001,0.0001);
+    	particles[kstate++][part]=(*It)->wz+Random(-0.0001,0.0001);
+    	particles[kstate++][part]=(*It)->theta+Random(-0.00005,0.00005);
+    	particles[kstate++][part]=(*It)->phi+Random(-0.00005,0.00005);
+    	particles[kstate++][part]=(*It)->rho+Random(-1./0.19,20);
+      //}
     }
+}
+double CParticleFilter::Random(double min, double max)
+{
+        double range= max-min;
+        return (range*rand()/RAND_MAX)+min;
+}
+void CParticleFilter::initState()
+{
+
+  //fixme esto puede tener otro orden
+  UpdateMatrixSize();
+
+  for (int part=0; part<num_particles;part++)
+  {
+    initParticle(part);
   }
      for(int i=0;i<6;i++) var_modelo[i]=0.0001;
      for(int i=6;i<12;i++) var_modelo[i]=0.00001;

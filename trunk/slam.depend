@@ -147,3 +147,151 @@
 	"highgui.h"
 	"../src/particlefilter.h"
 
+1205250972 f:\slam\programas\slamsvn\src\datacam.cpp
+	"datacam.h"
+
+1205250170 f:\slam\programas\slamsvn\src\datacam.h
+	<cv.h>
+	<iostream>
+
+1208768624 f:\slam\programas\slamsvn\src\dataout.cpp
+	"dataout.h"
+
+1208766698 f:\slam\programas\slamsvn\src\dataout.h
+	<cv.h>
+	<iostream>
+	<fstream>
+	"map.h"
+	"kalman.h"
+	"tracker.h"
+	"modelcam.h"
+	"kalman.h"
+	"particlefilter.h"
+
+1205240532 f:\slam\programas\slamsvn\src\map.h
+	"elempunto.h"
+	<list>
+
+1205240012 f:\slam\programas\slamsvn\src\elempunto.h
+	"cv.h"
+	<list>
+
+1208447556 f:\slam\programas\slamsvn\src\kalman.h
+	"modelcam.h"
+	"map.h"
+	"model.h"
+	"cv.h"
+	"estimator.h"
+
+1205240754 f:\slam\programas\slamsvn\src\modelcam.h
+	<cv.h>
+	<iostream>
+	"datacam.h"
+	"map.h"
+
+1205239120 f:\slam\programas\slamsvn\src\model.h
+	"cv.h"
+	"modelcam.h"
+	"map.h"
+	<list>
+
+1208515278 f:\slam\programas\slamsvn\src\estimator.h
+	"modelcam.h"
+	"map.h"
+	"model.h"
+	"cv.h"
+
+1208543772 f:\slam\programas\slamsvn\src\tracker.h
+	<cv.h>
+	<iostream>
+	"datacam.h"
+	"map.h"
+	"modelcam.h"
+
+1208817552 f:\slam\programas\slamsvn\src\particlefilter.h
+	"modelcam.h"
+	"map.h"
+	"model.h"
+	"cv.h"
+	"estimator.h"
+
+1207144566 f:\slam\programas\slamsvn\src\elempunto.cpp
+	"elempunto.h"
+	<iostream>
+
+1208447592 f:\slam\programas\slamsvn\src\estimator.cpp
+	"estimator.h"
+
+1205485138 f:\slam\programas\slamsvn\src\freecam.cpp
+	"freecam.h"
+
+1205240110 f:\slam\programas\slamsvn\src\freecam.h
+	"cv.h"
+	<list>
+	"model.h"
+
+1208538918 f:\slam\programas\slamsvn\src\kalman.cpp
+	"kalman.h"
+
+1205249552 f:\slam\programas\slamsvn\src\map.cpp
+	"map.h"
+
+1205249532 f:\slam\programas\slamsvn\src\model.cpp
+	"model.h"
+
+1208606550 f:\slam\programas\slamsvn\src\modelcam.cpp
+	"modelcam.h"
+
+1208817552 f:\slam\programas\slamsvn\src\particlefilter.cpp
+	"particlefilter.h"
+
+1208606700 f:\slam\programas\slamsvn\src\surf.cpp
+	"surf.h"
+
+1207309046 f:\slam\programas\slamsvn\src\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+
+1208543734 f:\slam\programas\slamsvn\src\tracker.cpp
+	"tracker.h"
+
+1208592300 f:\slam\programas\slamsvn\src\tracker_surf.cpp
+	"tracker_surf.h"
+
+1207291434 f:\slam\programas\slamsvn\src\tracker_surf.h
+	<cv.h>
+	<iostream>
+	"datacam.h"
+	"map.h"
+	"surf.h"
+	"tracker.h"
+
+1208607028 f:\slam\programas\slamsvn\src\updater.cpp
+	"updater.h"
+	<iostream>
+
+1207233126 f:\slam\programas\slamsvn\src\updater.h
+	"map.h"
+	"kalman.h"
+	"tracker.h"
+	"modelcam.h"
+	<vector>
+	"highgui.h"
+
+1208817586 f:\slam\programas\slamsvn\test1\test2.cpp
+	<stdio.h>
+	<iostream>
+	<fstream>
+	"../src/datacam.h"
+	"../src/modelcam.h"
+	"../src/map.h"
+	"../src/kalman.h"
+	"../src/updater.h"
+	"../src/tracker_surf.h"
+	"../src/freecam.h"
+	"../src/dataout.h"
+	"highgui.h"
+	"../src/particlefilter.h"
+

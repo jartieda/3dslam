@@ -30,7 +30,7 @@ int num_variables; ///number of variables
 int num_measurements; ///number of measurements
 
 protected:
-
+void initParticle(int part);
 int num_max_variables;
 int num_max_particles;
 int num_max_measurements;
@@ -47,6 +47,8 @@ double *var_modelo;
 double threshold;
 double *measure;
 double *state;
+double *weights;
+double Random(double min, double max);
      double ERF[200];
 int inited_vis; ///<number of visible points inited
 int inited_no_vis; ///<viewed once not visible now

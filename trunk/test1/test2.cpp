@@ -307,7 +307,7 @@ cout <<"ITERACION: "<< iter<<endl;
 	char filein[400];
 //	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
 //	sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
-//  	sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
+//  sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
 sprintf(filein,DATA,iter);
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif",iter);
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg",iter);
