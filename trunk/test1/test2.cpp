@@ -12,13 +12,14 @@
 #include "../src/dataout.h"
 #include "highgui.h"
 #include "../src/particlefilter.h"
+#include "../src/trackerfile.h"
 
 //#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
 //#define DATA "c:\\datos\\slam\\kkk%0.4d.tif"
-//#define DATA "F:\\SLAM\\Datos\\heli\\kkk%0.4d.tif"
+#define DATA "F:\\SLAM\\Datos\\heli\\kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg"
-#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
+//#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
 #define KALMAN
 
 using namespace std;
@@ -27,7 +28,8 @@ CDataCam mDataCam;
 CModelCam mModelCam;
 CMap mMap;
 CUpdater mUpdater;
-CTracker_surf mTracker;
+CTrackerFile mTracker;
+//CTracker_surf mTracker;
 CFreeCam mVehicle;
 #ifndef KALMAN
 CParticleFilter mEstimator;
@@ -50,7 +52,7 @@ IplImage* frameold = 0;
 IplImage* framecopy=0;
 
 /// variable para contar la iteracion;
-int iter;
+int iter=6;
 
 float randomVector(float max, float min);
 
@@ -160,7 +162,7 @@ void init_video(int argc, char **argv)
   cvNamedWindow( "CamShiftDemo", 1 );
   //obtencion del primer fram
   //frame = cvQueryFrame( capture );
-  int iter=6;
+  iter++;
   char filein[400];
 //  	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
  //sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
@@ -185,7 +187,7 @@ sprintf(filein,DATA,iter);
 void init_ptos()
 {
 //   frame = cvQueryFrame( capture );//tomo 2 frames para evitar negros
-   int iter=7;
+iter++;
    	char filein[400];
 //    sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
 // sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
@@ -231,7 +233,8 @@ sprintf(filein,DATA,iter);
      (*It)->wz=cvmGet(mDataCam.translation,2,0);
      (*It)->theta=atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0)));
      (*It)->phi=atan2(cvmGet(h,0,0),cvmGet(h,2,0));
-     (*It)->rho=1./0.02;
+     (*It)->rho=1./2000;
+     //(*It)->rho=1./0.02;
      (*It)->state=st_inited;
      mMap.inited++;
      cvmSet(object_points,0,i,(*It)->wx);

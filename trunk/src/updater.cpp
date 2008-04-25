@@ -14,8 +14,8 @@ void on_mouse( int event, int x, int y, int flags, void* param )
      p->y=y;
      }
      break;
-   
-     }          
+
+     }
 }
 /**
 * constructor
@@ -24,7 +24,7 @@ void on_mouse( int event, int x, int y, int flags, void* param )
  **/
 CUpdater::CUpdater(CMap *pMap_ ,CDataCam *pDataCam_)
 {
-   //CUIDADO ESTE CONSTRUCTOR NO SE USA  
+   ///CUIDADO ESTE CONSTRUCTOR NO SE USA
    pMap=pMap_;
    pDataCam=pDataCam_;
    border=20;
@@ -32,17 +32,18 @@ CUpdater::CUpdater(CMap *pMap_ ,CDataCam *pDataCam_)
    num_feat_max=30;
    point_sep=50;
    calidad_min_punto=2;
-   depth=0.02;
+//   depth=0.02;
+depth=200;
 }
 
 CUpdater::~CUpdater()
 {
-  
+
 }
 /**
  * constructor por defecto establece un borde de 30 y un número de características de 30
  **/
- 
+
 CUpdater::CUpdater()
 {
    border=20;
@@ -50,28 +51,29 @@ CUpdater::CUpdater()
    num_feat_max=30;
    point_sep=50;
    calidad_min_punto=2;
-   depth=0.02;
+   //   depth=0.02;
+depth=200;
 }
 
 void CUpdater::randsample(vector<point> *data, int n,vector<point> *maybeinliners)
 {
   int total= data->size();
   int r;
-  if(n>total) 
+  if(n>total)
     {
       cout<<"error"<<endl;
-      
+
     }
   for (int i =1; i<n ; i++)
     {
       r=1+(int) ((total-i)*rand()/(RAND_MAX+1.0));//rand()*(total-i);
       maybeinliners->push_back((*data)[r]);
-      (*data)[r]=(*data)[total-i]; 
+      (*data)[r]=(*data)[total-i];
       data->pop_back();
-    }   
+    }
 }
 /**
- * \fn ransac 
+ * \fn ransac
  * @param orig_data datos originales
  * @param k numero de iteraciones
  * @param n numero de datos que se cogen aleatoriamente
@@ -79,7 +81,7 @@ void CUpdater::randsample(vector<point> *data, int n,vector<point> *maybeinliner
  * @param d num minimo de puntos para aceptar el modelo
  *
  */
- 
+
 void CUpdater::ranasac(vector<point> orig_data,int k, int n,double t,int d)
 {
  double thiserr;
@@ -101,41 +103,41 @@ void CUpdater::ranasac(vector<point> orig_data,int k, int n,double t,int d)
        }
      // cout<<"data size: "<<data.size()<<endl;
      //    data= orig_data;//FIXME
-     randsample(&data, n, &maybeinliners);   
+     randsample(&data, n, &maybeinliners);
      fit(&maybemodel, maybeinliners);
      for (int i =0 ; i < data.size(); i++)
        {
          //cout <<"ifor"<<i<<endl;
 	 if(fits(data[i],maybemodel)<t)
-	   { 
+	   {
 	     maybeinliners.push_back(data[i]);
 	   }
-       }  
+       }
      //     cout<<"maybeinliner.size "<<maybeinliners.size()<<endl;
      if (maybeinliners.size()>d)
        {
 	 thiserr=fit(&bettermodel,maybeinliners);
 	 //        cout<< "besterr: "<< besterr<< " this_err: "<< thiserr <<" inliners "<<maybeinliners.size()<<endl;
-         
-	 if (thiserr<besterr) 
+
+	 if (thiserr<besterr)
 	   {
 	     bestfit=bettermodel;
-	     besterr=thiserr;  
-	     bestinliners=maybeinliners;                   
+	     besterr=thiserr;
+	     bestinliners=maybeinliners;
 	     //          cout<< "besterr: "<< besterr<< " this_err: "<< thiserr <<" inliners "<<maybeinliners.size()<<endl;
-	   }               
+	   }
        }
      maybeinliners.clear();
      iterations++;
      //cout<< "iter " <<iterations++<<endl;;
-     
+
    }
- 
+
  cout<<"poly_line:  ["<< bestfit.py[0]<<"(1,0,0) ;"<< bestfit.py[1]<<"(0,1,0) ; "<< bestfit.py[2]<<"(0,0,0); ";
  cout<< bestfit.py[3]<<"(2,0,0) ;"<< bestfit.py[4]<<"(0,2,0) ; "<< bestfit.py[5]<<"(1,1,0) "<<"]"<<endl;
  cout<<"poly_samp:  ["<< bestfit.px[0]<<"(1,0,0) ; "<< bestfit.px[1]<<"(0,1,0) ; "<< bestfit.px[2]<<"(0,0,0); ";
  cout<< bestfit.px[3]<<"(2,0,0) ;"<< bestfit.px[4]<<"(0,2,0) ; "<< bestfit.px[5]<<"(1,1,0) "<<"]"<<endl;
- 
+
  cout<< "#besterr: "<< besterr<< " this_err: "<< thiserr <<" inliners "<<maybeinliners.size()<<endl;
  cout<<"#data size: "<<data.size()<<endl;
  //     cout<<"bestfit x: "<< bestfit.px[0]<<" "<< bestfit.px[1]<<" "<< bestfit.px[2]<<" "<<endl;
@@ -149,7 +151,7 @@ void CUpdater::ranasac(vector<point> orig_data,int k, int n,double t,int d)
        for (int i=0; i <bestinliners.size(); i++)
 	 {
 	   if (bestinliners[i].ID==(*It)->ID){
-	     ok=1;                                   
+	     ok=1;
 	   }
 	 }
        if (ok==0){
@@ -185,17 +187,17 @@ double CUpdater::fits(point p, param model)
 	       +model.py[5]*p.ground[0]*p.ground[1]
 	       ));
   return sqrt(err);
-} 
+}
 double CUpdater::fit(param *model, vector<point> points)
 {
-  
+
   CvMat *Bx,*By,*A,*Px,*Py;
   A=cvCreateMat(points.size(), 6,  CV_32FC1);
   Bx=cvCreateMat( points.size(),1, CV_32FC1);
   By=cvCreateMat( points.size(),1, CV_32FC1);
   Px=cvCreateMat( 6,1, CV_32FC1);
   Py=cvCreateMat( 6,1, CV_32FC1);
-  
+
   for (int i =0;i<points.size();i++)
     {
       // cout<<"hh"<<endl;
@@ -203,11 +205,11 @@ double CUpdater::fit(param *model, vector<point> points)
       cvmSet(By,i,0,points[i].img[1]);
       cvmSet(A,i,0,points[i].ground[0]);
       cvmSet(A,i,1,points[i].ground[1]);
-      cvmSet(A,i,2,1.);		
+      cvmSet(A,i,2,1.);
       cvmSet(A,i,3,points[i].ground[0]*points[i].ground[0]);
       cvmSet(A,i,4,points[i].ground[1]*points[i].ground[1]);
       cvmSet(A,i,5,points[i].ground[1]*points[i].ground[0]);
-      
+
     }
   cvSolve(A,Bx,Px,CV_SVD);
   model->px[0]=cvmGet(Px,0,0);
@@ -258,7 +260,7 @@ double CUpdater::fit(param *model, vector<point> points)
 	cvmSet(A,i,3,points[i].ground[0]*points[i].ground[0]);
 	cvmSet(A,i,4,points[i].ground[1]*points[i].ground[1]);
 	cvmSet(A,i,5,points[i].ground[1]*points[i].ground[0]);
-	
+
     }
   err/=points.size();
   err=sqrt(err);
@@ -284,9 +286,9 @@ void CUpdater::TestRANSAC()
 	p.img[0]=(*It)->old_pto.x;
 	p.img[1]=(*It)->old_pto.y;
 	p.ID=(*It)->ID;
-	orig_data.push_back(p);   
+	orig_data.push_back(p);
       }//end if state
-    }//end iterator  
+    }//end iterator
   cout<<"end for"<<endl;
   if (orig_data.size()<10)
     {
@@ -322,7 +324,7 @@ void CUpdater::setTracker(CTracker *p)
  * actualiza el estado de un punto <br>
  * si el punto esta vacío se pone como st_1st_point si tiene pix distinto de 0 <br>
  * si el punto está como st_1st_point se toma una primera rotación y una primera traslación para luego triangular <br>
- * si el putno está a una distancia suficiente (>dist_triang) entonces se triangula 
+ * si el putno está a una distancia suficiente (>dist_triang) entonces se triangula
  **/
 
 int CUpdater::update()
@@ -356,12 +358,12 @@ int CUpdater::update()
 	default:
 	  break;
 	}
-      
+
     }
-  
+
   cvReleaseMat(&h);
   //triangulate();
-  
+
   return 0;
 }
 
@@ -379,7 +381,7 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
   int count;
   int num_max;
   num_max=20;
-  
+
   // count=busca_esquinas(f, pts,num_max);
   int *keys;
   int n_key;
@@ -387,25 +389,25 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
   int *keys2;
   int n_key2;
   CvMat *points2;
-  
+
   n_key=pTracker->Init(f, &keys, &points);
   n_key2=pTracker->Init(f2, &keys2, &points2);
-  
+
    int dim = pTracker->getFeatDim();
    count=points->rows;
-   
+
    bool encontrado;
    int j=0;
    int insert=0;
    unsigned char key[dim];
    for (int i=0; i<faltan; i++)
-     {        
+     {
        if(j<count){
          do {
 	   encontrado=true;
 	   /////////////////////////////////////////////////
 	     /////////////////////////////////////////////////
-	     
+
 	     float suma = 0;
 	     float suma_min = 10000000;
 	     float suma_sec = 10000000;
@@ -423,7 +425,7 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		     //dif=cvmGet(keys2,ii,jj)-cvmGet(keys,j,jj); //FIXME ESTA PARTE ES MUY LENTA
 		     dif=keys2[ii*dim+jj]-keys[j*dim+jj];
 		     suma += dif*dif;
-		     
+
 		   }
 		 suma=sqrt(suma);
 		 if (suma < suma_min)
@@ -432,35 +434,36 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		     suma_min = suma;
 		     nearest_neighbour = ii;
 		   }else if (suma < suma_sec)
-		   {  
+		   {
 		     suma_sec = suma;
 		   }
 	       }
 	    // cout<<" suma_min: "<<suma_min<<" nearest_neighbour "<<nearest_neighbour<<" suma_sec "<<suma_sec<<" ratio "<<suma_min/suma_sec<<endl;
-	     
+
 	     //query->data[0] = example_pairs[nearest_neighbour].data[0];
-	     
+
 	     if ((suma_min <100000)&&((suma_min/suma_sec)<0.8)){
-	       
+
 	     }else {
 	       encontrado=false;
 	       //return -1;
 	     }
-	     
+	     if (n_key2==0) encontrado = true; /// En el caso de tracker file FIXME
+
 	     /////////////////////////////////////////////////
 	       /////////////////////////////////////////////////
-	       
-	       
+
+
 	       //j=0;
-	       
+
 	       //no cerca de un punto existente FIXME poner el 30 en una variable
 	       for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
 		     It != pMap->bbdd.end(); It++ )
 		 {
-		   
+
 		   if((*It)->pto.x<(cvmGet(points,j,0)+point_sep) &&
 		      (*It)->pto.y<(cvmGet(points,j,1)+point_sep) &&
-		      (*It)->pto.x>(cvmGet(points,j,0)-point_sep) && 
+		      (*It)->pto.x>(cvmGet(points,j,0)-point_sep) &&
 		      (*It)->pto.y>(cvmGet(points,j,1)-point_sep))
 		     {
 		       encontrado=false;
@@ -468,14 +471,14 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		   if((*It)->state>=st_inited){      //FIXME no solo los inited
 		     if((*It)->projx<(cvmGet(points,j,0)+point_sep) &&
 			(*It)->projy<(cvmGet(points,j,1)+point_sep) &&
-			(*It)->projx>(cvmGet(points,j,0)-point_sep) && 
+			(*It)->projx>(cvmGet(points,j,0)-point_sep) &&
 			(*It)->projy>(cvmGet(points,j,1)-point_sep))
 		       {
 			 encontrado=false;
 		       }
 		   }
 		 }
-	       //no en borde 
+	       //no en borde
 	       if(cvmGet(points,j,0)<border ||
 		  cvmGet(points,j,1)<border ||
 		  cvmGet(points,j,0)>(pDataCam->frame_width-border) ||
@@ -491,7 +494,7 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		 }
 	       //inserto si cumple todas las condiciones anteriores
 	       if (encontrado==true)
-		 {   
+		 {
 	//	   cout << "inserto nuevo: "<<cvmGet(points,j,0)<<" "<<cvmGet(points,j,1)<<endl;
 		   //pts2[insert]=pts[j];
 		   for (int d =0; d<dim;d++)
@@ -516,7 +519,7 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
    return insert;
 }
 /**
- * se anaden puntos al mapa 
+ * se anaden puntos al mapa
  * @param f frame sobre el que buscar puntos
  * @param f2 frame anterior tiene que coincidir
  **/
@@ -538,7 +541,7 @@ int CUpdater::Add(IplImage *f,IplImage *f2)
 **/
 int CUpdater::AddByHand(IplImage *f)
 {
-    
+
   int cornercount;
   cornercount=num_feat_min-pMap->visible;//bbdd.size();
   cout<< "faltan "<<cornercount<<"esquinas"<<endl;
@@ -546,7 +549,7 @@ int CUpdater::AddByHand(IplImage *f)
   //if (cornercount>0)
     {
     CvPoint point;
-      
+
       cvNamedWindow( "select" );
       cvSetMouseCallback("select",  on_mouse, (void*)&point);
       int *key;
@@ -579,9 +582,9 @@ int CUpdater::AddByHand(IplImage *f)
             pTracker->Descriptor(f,&p,(int)point2.z, key);
             for (int kk =0 ; kk<pTracker->getFeatDim();kk++)
                 ckey[kk]=key[kk];
-                
+
  		    pMap->add_key(p,ckey,pTracker->getFeatDim());
-		    insert++;                  
+		    insert++;
 		    oldpoint.x = point.x;
 		    oldpoint.y =point.y;
       }
@@ -589,7 +592,7 @@ int CUpdater::AddByHand(IplImage *f)
       }
 }
   return 0;
-  
+
 }
 /**
  * funcion obsoleta
@@ -601,11 +604,11 @@ int CUpdater::busca_esquinas(IplImage *f,CvPoint* pts,int count)
   //cvCvtColor(f,grey,CV_RGB2GRAY);
   CvPoint2D32f corners[100];
   IplImage *grey, *eig_image, *temp;
-  grey=cvCreateImage( cvGetSize(f), 8, 1 );   
+  grey=cvCreateImage( cvGetSize(f), 8, 1 );
   eig_image = cvCreateImage( cvGetSize(f), 32, 1 );
   temp=cvCreateImage(cvGetSize(f),32,1);
   cvCvtColor(f,grey,CV_RGB2GRAY);
-  
+
   cvGoodFeaturesToTrack(grey,eig_image,temp,corners,&cornercount,0.1, 40, NULL);
   for (int i=0;i<cornercount;i++){
     pts[i]=cvPointFrom32f( corners[i]);
@@ -614,10 +617,10 @@ int CUpdater::busca_esquinas(IplImage *f,CvPoint* pts,int count)
   cvReleaseImage(&eig_image);
   cvReleaseImage(&temp);
   return cornercount;
-  
+
 }
 /**
- * establece condiciones en la que los puntos se deben borrar 
+ * establece condiciones en la que los puntos se deben borrar
  * FIXME es un poco redundante con la funcion match de la clase tracker y debe ser modificada.
  **/
 int CUpdater::remove()
@@ -632,10 +635,10 @@ int CUpdater::remove()
 	{
 	  cout<< "ERROR borro punto por not a number. estado:"<<(*It)->state <<"x y:"<<(*It)->pto.x<<" "<<(*It)->pto.y<< endl;
 	  //pMap->bbdd.erase(It);
-	  i++; 
+	  i++;
 	  pMap->visible--;
 	  exit(-1);
-	  
+
 	}else if((*It)->pto.x<border ||(*It)->pto.y<border ||(*It)->pto.x>pDataCam->frame_width-border ||(*It)->pto.y>pDataCam->frame_height-border )//FIXME Esto depende del tamaÃ±o de la imagen espeligrosso
       {
 	if((*It)->state==st_inited)
@@ -652,7 +655,7 @@ int CUpdater::remove()
 	  }
 	///FIXME En el casod de que el punto se deje de ver antes de inicializar quiero borrarlo.
 	  }
-      
+
     }
   return i;
 }
@@ -661,6 +664,6 @@ int CUpdater::remove()
  **/
 int CUpdater::rematch()
 {
-  
+
   return 0;
 }

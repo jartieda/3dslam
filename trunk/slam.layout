@@ -5,21 +5,35 @@
 		<Cursor position="5057" topLine="66"/>
 	</File>
 	<File name="src\particlefilter.cpp" open="1" top="0">
-		<Cursor position="6889" topLine="230"/>
+		<Cursor position="868" topLine="14"/>
 	</File>
 	<File name="src\particlefilter.h" open="1" top="0">
 		<Cursor position="757" topLine="18"/>
 	</File>
+	<File name="src\tracker.h" open="1" top="0">
+		<Cursor position="385" topLine="7"/>
+	</File>
 	<File name="src\tracker_surf.cpp" open="1" top="0">
-		<Cursor position="3794" topLine="58"/>
+		<Cursor position="4408" topLine="120"/>
 	</File>
 	<File name="src\tracker_surf.h" open="1" top="0">
 		<Cursor position="246" topLine="12"/>
 	</File>
+	<File name="src\trackerfile.cpp" open="1" top="1">
+		<Cursor position="1648" topLine="40"/>
+	</File>
+	<File name="src\trackerfile.h" open="1" top="0">
+		<Cursor position="413" topLine="0"/>
+	</File>
 	<File name="src\updater.cpp" open="1" top="0">
-		<Cursor position="12852" topLine="397"/>
+		<Cursor position="13667" topLine="380"/>
 	</File>
-	<File name="test1\test2.cpp" open="1" top="1">
-		<Cursor position="447" topLine="0"/>
+	<File name="test1\test2.cpp" open="1" top="0">
+		<Cursor position="943" topLine="15"/>
 	</File>
+	<Expand folder="/Sources/src"/>
+	<Expand folder="/Sources/test1"/>
+	<Expand folder="/Sources"/>
+	<Expand folder="/Headers/src"/>
+	<Expand folder="/Headers"/>
 </CodeBlocks_layout_file>

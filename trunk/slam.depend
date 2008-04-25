@@ -268,7 +268,7 @@
 	"surf.h"
 	"tracker.h"
 
-1208607028 f:\slam\programas\slamsvn\src\updater.cpp
+1209106914 f:\slam\programas\slamsvn\src\updater.cpp
 	"updater.h"
 	<iostream>
 
@@ -280,7 +280,7 @@
 	<vector>
 	"highgui.h"
 
-1208878046 f:\slam\programas\slamsvn\test1\test2.cpp
+1209128614 f:\slam\programas\slamsvn\test1\test2.cpp
 	<stdio.h>
 	<iostream>
 	<fstream>
@@ -294,4 +294,11 @@
 	"../src/dataout.h"
 	"highgui.h"
 	"../src/particlefilter.h"
+	"../src/trackerfile.h"
+
+1209128410 f:\slam\programas\slamsvn\src\trackerfile.cpp
+	"trackerfile.h"
+
+1209128642 f:\slam\programas\slamsvn\src\trackerfile.h
+	"tracker.h"
 

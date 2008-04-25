@@ -121,9 +121,6 @@
 		<Unit filename="src\particlefilter.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
-			<Breakpoint line="90" enabled="1" pass="0" />
-			<Breakpoint line="89" enabled="1" pass="0" />
-			<Breakpoint line="102" enabled="1" pass="0" />
 		</Unit>
 		<Unit filename="src\particlefilter.h">
 			<Option compilerVar="CPP"/>
@@ -157,6 +154,16 @@
 		</Unit>
 		<Unit filename="src\tracker_surf.h">
 			<Option compilerVar="CPP"/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="src\trackerfile.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="src\trackerfile.h">
+			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>
 			<Option target="default"/>
