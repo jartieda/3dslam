@@ -153,9 +153,12 @@ void CDataOut::Particle(IplImage *framecopy)
         {
 
             if (framecopy != NULL){
+                 /*  cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
+                                                pParticleFilter->pred_measure[i+1][p]),
+                            1,c[i/2],1 );*/
                    cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
                                                 pParticleFilter->pred_measure[i+1][p]),
-                            1,c[i/2],1 );
+                            1,cvScalar(0,0,pParticleFilter->weights[p]*200000.0),1 );
             }
             i+=2;
         }
@@ -214,10 +217,10 @@ void CDataOut::Disp_out(IplImage *framecopy)
     	  cvmSet(vect2,0,1,((cvmGet(res6,1,0)+(*It)->wy)+cvmGet(m,1,0)/cvmGet(res6,5,0)));
    	      cvmSet(vect2,0,2,((cvmGet(res6,2,0)+(*It)->wz)+cvmGet(m,2,0)/cvmGet(res6,5,0)));
 
-    		DispFile<<cvmGet(vect2,0,0)<<" ";
-    		DispFile<<cvmGet(vect2,0,1)<<" ";
-    		DispFile<<cvmGet(vect2,0,2)<<" ";
-     		DispFile<<ii<<endl;
+        DispFile<<cvmGet(vect2,0,0)<<" ";
+        DispFile<<cvmGet(vect2,0,1)<<" ";
+        DispFile<<cvmGet(vect2,0,2)<<" ";
+        DispFile<<ii<<endl;
           cvmSet(vect2,0,0,cvmGet(res6,0,0)+(*It)->wx);
           cvmSet(vect2,0,1,cvmGet(res6,0,1)+(*It)->wy);
           cvmSet(vect2,0,2,cvmGet(res6,0,2)+(*It)->wz);

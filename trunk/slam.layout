@@ -2,24 +2,24 @@
 <!DOCTYPE CodeBlocks_layout_file>
 <CodeBlocks_layout_file>
 	<File name="src\dataout.cpp" open="1" top="0">
-		<Cursor position="5449" topLine="279"/>
+		<Cursor position="5057" topLine="66"/>
 	</File>
-	<File name="src\particlefilter.cpp" open="1" top="1">
-		<Cursor position="12048" topLine="352"/>
+	<File name="src\particlefilter.cpp" open="1" top="0">
+		<Cursor position="6889" topLine="230"/>
 	</File>
 	<File name="src\particlefilter.h" open="1" top="0">
-		<Cursor position="1187" topLine="0"/>
+		<Cursor position="757" topLine="18"/>
 	</File>
 	<File name="src\tracker_surf.cpp" open="1" top="0">
-		<Cursor position="531" topLine="148"/>
+		<Cursor position="3794" topLine="58"/>
 	</File>
 	<File name="src\tracker_surf.h" open="1" top="0">
-		<Cursor position="246" topLine="0"/>
+		<Cursor position="246" topLine="12"/>
 	</File>
 	<File name="src\updater.cpp" open="1" top="0">
 		<Cursor position="12852" topLine="397"/>
 	</File>
-	<File name="test1\test2.cpp" open="1" top="0">
-		<Cursor position="445" topLine="0"/>
+	<File name="test1\test2.cpp" open="1" top="1">
+		<Cursor position="447" topLine="0"/>
 	</File>
 </CodeBlocks_layout_file>

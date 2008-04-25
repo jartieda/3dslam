@@ -1,5 +1,5 @@
 #include "tracker_surf.h"
- 
+
 using namespace std;
 
 CTracker_surf::CTracker_surf()
@@ -19,7 +19,7 @@ CTracker_surf::~CTracker_surf()
 
  int CTracker_surf::getFeatDim()
  {
-     return 64;    
+     return 64;
  }
 void CTracker_surf::Match(IplImage *img)
 {
@@ -42,33 +42,33 @@ CvMat *new_points = cvCreateMat(feat->total,4,CV_32FC1) ;
 for( int i = 0; i < feat->total; i++ )
     {
          CvPoint3D32f point = *(CvPoint3D32f*)cvGetSeqElem( feat, i );
-        // if((point.x>(9*levels+1)) && (point.y >(9*levels+1)) && 
+        // if((point.x>(9*levels+1)) && (point.y >(9*levels+1)) &&
         //    (point.x<img->width-(9*levels+1)) && (point.y < img->height-(9*levels+1)))
         // {
          ang=surf.orientation((int)point.x,(int)point.y,(int)point.z);
          desc=surf.descriptor((int)point.x,(int)point.y,(int)point.z,ang);
          cvCircle(grey2 , cvPoint((int)point.x,(int)point.y), (int)(point.z*3.0), cvScalar(255));
          cvLine(grey2,cvPoint((int)point.x,(int)point.y),cvPoint((int)(point.x+point.z*3.0*sin(ang)),(int)(point.y+point.z*3.0*cos(ang))),cvScalar(255));
-         
+
          	cvmSet(new_points,i,0,point.x) ;
           	cvmSet(new_points,i,1,point.y) ;
            	cvmSet(new_points,i,2,point.z) ;
             cvmSet(new_points,i,3,ang) ;
 	        for (int di=0; di<64; di++){
-	            samples1[i*64+di]=(unsigned char )(desc[di]+128);	
+	            samples1[i*64+di]=(unsigned char )(desc[di]+128);
 		        //cout<<"desc"<<desc[di]<<" sampl"<<samples1[i*64+di]<<endl;
             }
          delete desc;
         // }
     }
-  int key[64];  
+  int key[64];
 	for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
          	It != pMap->bbdd.end(); It++ )
-	{
-	     if((*It)->projx>20 && (*It)->projx<620 &&
-            (*It)->projy>20 && (*It)->projy<460)
-	     {   
-//           cout<<"key: ";                    
+	{///FIXME Esto tiene que estar relacionado con un valor mas claro del surf
+	     if((*It)->projx>(9*levels+1) && (*It)->projx<img->width-(9*levels+1) &&
+            (*It)->projy>(9*levels+1) && (*It)->projy<img->height-(9*levels+1))
+	     {
+//           cout<<"key: ";
              for (int d=0; d<64;d++)
              {
                  key[d]=(*It)->key[d];
@@ -76,7 +76,7 @@ for( int i = 0; i < feat->total; i++ )
              }
 //           cout<<endl;
 		     int n = surf.nearest_neighbor_2(key,samples1,feat->total,cvPoint((int)(*It)->projx,(int)(*It)->projy),new_points,50);
-		 
+
 	         if(n==-1)//en caso de no encorar fallo
 	         {
                  cout<<"no match "<<endl;
@@ -106,7 +106,12 @@ for( int i = 0; i < feat->total; i++ )
 			pMap->visible++;
 		   }
 	       }
-        }//end if dentro proj
+        }else
+        {
+            (*It)->state=st_no_view;
+            pMap->visible--;
+        }
+        //end if dentro proj
 	}
 	 cvShowImage("win",grey2);
      cvWaitKey(100);
@@ -141,14 +146,14 @@ int *desc;
 for( int i = 0; i < feat->total; i++ )
     {
         CvPoint3D32f point = *(CvPoint3D32f*)cvGetSeqElem( feat, i );
-        if((point.x>(9*levels+1)) && (point.y >(9*levels+1)) && 
+        if((point.x>(9*levels+1)) && (point.y >(9*levels+1)) &&
            (point.x<img->width-(9*levels+1)) && (point.y < img->height-(9*levels+1)))
         {
         ang=surf.orientation((int)point.x,(int)point.y,(int)point.z);
         desc=surf.descriptor((int)point.x,(int)point.y,(int)point.z,ang);
         cvCircle(grey2 , cvPoint((int)point.x,(int)point.y), (int)(point.z*3.0), cvScalar(255));
         cvLine(grey2,cvPoint((int)point.x,(int)point.y),cvPoint((int)(point.x+point.z*3.0*sin(ang)),(int)(point.y+point.z*3.0*cos(ang))),cvScalar(255));
-        
+
        	cvmSet(*points,i,0,point.x) ;
        	cvmSet(*points,i,1,point.y) ;
        	cvmSet(*points,i,2,point.z) ;
@@ -179,9 +184,9 @@ void CTracker_surf::Descriptor(IplImage *img, CvPoint *point,int s, int *key)
      int *desc;
      ang=surf.orientation((int)point->x,(int)point->y,s);
      desc=surf.descriptor((int)point->x,(int)point->y,s,ang);
-     for (int di=0; di<64; di++){  
+     for (int di=0; di<64; di++){
 	   key[di]=desc[di]+128;
      }
-        delete desc;   
+        delete desc;
      cvReleaseImage(&grey);
 }

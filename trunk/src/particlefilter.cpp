@@ -152,15 +152,17 @@ void CParticleFilter::Correct()
      int m=0;
 
      double w=0;
+     double err=0;
     weights[n_part]=0;
      for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
      {
          w=0;
         if((*It)->state==st_inited){
 //              cout<<"pred_measure "<<pred_measure[p][n_part]<<" measure "<<measure_[m]<< endl;
-            weights[n_part]+=(fabs(pred_measure[p][n_part]-measure_[m]));
+            err=(pred_measure[p][n_part]-measure_[m])*(pred_measure[p][n_part]-measure_[m]);
+            weights[n_part]+=(err);
 
-            if ((fabs(pred_measure[p][n_part]-measure_[m]))>threshold){
+            if (sqrt(err)>threshold){
                  reject[n_part]=true;
                  cout<<"true"<<endl;
             }else{
@@ -170,9 +172,11 @@ void CParticleFilter::Correct()
           }
           p+=2;
      }
-      weights[n_part]/=(m/2);
+      weights[n_part]=sqrt(weights[n_part]);
+
       cout<<"wights dist "<<weights[n_part]<<endl;
-      weights[n_part]=(1/(sqrt(1*2*3.14159)))*exp((-weights[n_part]*weights[n_part])/(2*1));
+      double sigma=20;
+      weights[n_part]=(1/(sqrt(sigma*2*3.14159)))*exp((-weights[n_part]*weights[n_part])/(sigma*1));
       cout<<"weights "<<weights[n_part]<<endl;
 
       }//end particles
@@ -181,12 +185,12 @@ void CParticleFilter::Correct()
       double suma=0;
       for (int i=0;i<num_particles;i++){
           suma+=weights[i];
- cout<<"weights "<<weights[i]<<endl;
+          cout<<"weights "<<weights[i]<<endl;
       }
       cout<<"suma weights "<<suma<<endl;
       for (int i=0;i<num_particles;i++){
           weights[i]/=suma;
-           cout<<"weights normalized"<<weights[i]<<endl;
+          cout<<"weights normalized"<<weights[i]<<endl;
       }
 
      // int n_v;
@@ -204,6 +208,14 @@ void CParticleFilter::Correct()
           //state[v]/=n_v;
       }
 
+      for (int i=0; i<num_particles;i++)
+      {
+          if (weights[i]<0.00001&&reject[i]==false)
+          {
+              cout<<"reject["<<i<<"] for low weight"<<endl;
+               reject[i]=true;
+          }
+      }
       int kstate=0;
    kk=0;
   for(int i =0; i<3;i++){

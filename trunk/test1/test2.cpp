@@ -13,8 +13,13 @@
 #include "highgui.h"
 #include "../src/particlefilter.h"
 
-#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
+//#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
 //#define DATA "c:\\datos\\slam\\kkk%0.4d.tif"
+//#define DATA "F:\\SLAM\\Datos\\heli\\kkk%0.4d.tif"
+//#define DATA "/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif"
+//#define DATA "/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg"
+#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
+#define KALMAN
 
 using namespace std;
 
@@ -24,9 +29,11 @@ CMap mMap;
 CUpdater mUpdater;
 CTracker_surf mTracker;
 CFreeCam mVehicle;
+#ifndef KALMAN
 CParticleFilter mEstimator;
-//CKalman mEstimator;
-
+#else
+CKalman mEstimator;
+#endif
 CDataOut mDataOut;
 
 
@@ -71,7 +78,7 @@ void conect()
   #ifndef KALMAN
   mDataOut.setParticle(&mEstimator);
   #else
-  mDataOut.setKalman(&mEstimator); FIXME!!!!
+  mDataOut.setKalman(&mEstimator);//FIXME!!!!
   #endif
 
   mTracker.setDataCam(&mDataCam);
@@ -261,8 +268,12 @@ void data_out()
   cout<<"a"<<endl;
   mDataOut.Draw(framecopy);
   cout<<"b"<<endl;
+  #ifndef KALMAN
+   mDataOut.Particle(framecopy);
+  #else
   //mDataOut.Disp_out(framecopy);
-  mDataOut.Particle(framecopy);
+  #endif
+
   cout<<"c"<<endl;
   mDataOut.Feat();
   cout<<"d"<<endl;
@@ -351,7 +362,7 @@ sprintf(filein,DATA,iter);
    cout<<"dataout"<<endl;
    data_out();
    cout<<"waitkey"<<endl;
-   c = cvWaitKey(0);//esto probablemente se pueda quitar
+   c = cvWaitKey(100);//esto probablemente se pueda quitar
    if( c == 27 )//si presiono escape salgo del programa limpiamente
      break;
 }

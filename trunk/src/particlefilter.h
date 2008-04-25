@@ -28,6 +28,7 @@ double **pred_measure;///< predicted measurements. Projection of particles
 int num_particles; ///number of particles per variable
 int num_variables; ///number of variables
 int num_measurements; ///number of measurements
+double *weights;
 
 protected:
 void initParticle(int part);
@@ -47,7 +48,7 @@ double *var_modelo;
 double threshold;
 double *measure;
 double *state;
-double *weights;
+
 double Random(double min, double max);
      double ERF[200];
 int inited_vis; ///<number of visible points inited
