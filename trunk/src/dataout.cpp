@@ -263,9 +263,10 @@ void CDataOut::Feat()
 
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
-      cvmSet(m,0,0,sin((*It)->phi));
+	///FIXME PONER en una funcion para que solo esté en un sitio
+      cvmSet(m,0,0,cos((*It)->theta)*sin((*It)->phi));
       cvmSet(m,1,0,-sin((*It)->theta));
-      cvmSet(m,2,0,cos((*It)->phi));
+      cvmSet(m,2,0,cos((*It)->theta)*cos((*It)->phi));
       cvNormalize( m, m);
       FeatFile<<(*It)->wx +cvmGet(m,0,0)/(*It)->rho<<" ";
       FeatFile<<(*It)->wy +cvmGet(m,1,0)/(*It)->rho<<" ";

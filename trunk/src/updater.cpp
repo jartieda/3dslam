@@ -33,7 +33,7 @@ CUpdater::CUpdater(CMap *pMap_ ,CDataCam *pDataCam_)
    point_sep=50;
    calidad_min_punto=2;
 //   depth=0.02;
-depth=200;
+depth=0.2;
 }
 
 CUpdater::~CUpdater()
@@ -49,10 +49,10 @@ CUpdater::CUpdater()
    border=20;
    num_feat_min=10;
    num_feat_max=30;
-   point_sep=50;
+   point_sep=5;//FIXME ESTO PONERLO A 50 OTRA VEZ!!!!!!
    calidad_min_punto=2;
    //   depth=0.02;
-depth=200;
+depth=0.2;
 }
 
 void CUpdater::randsample(vector<point> *data, int n,vector<point> *maybeinliners)
@@ -383,10 +383,10 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
   num_max=20;
 
   // count=busca_esquinas(f, pts,num_max);
-  int *keys;
+  int *keys=0;
   int n_key;
   CvMat *points;
-  int *keys2;
+  int *keys2=0;
   int n_key2;
   CvMat *points2;
 
@@ -394,7 +394,7 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
   n_key2=pTracker->Init(f2, &keys2, &points2);
 
    int dim = pTracker->getFeatDim();
-   count=points->rows;
+   count=n_key;//points->rows;
 
    bool encontrado;
    int j=0;
@@ -402,65 +402,62 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
    unsigned char key[dim];
    for (int i=0; i<faltan; i++)
      {
+         cout<<"for"<<endl;
        if(j<count){
          do {
-	   encontrado=true;
-	   /////////////////////////////////////////////////
-	     /////////////////////////////////////////////////
+             cout<<"begin while"<<endl;
+            encontrado=true;
+            /////////////////////////////////////////////////
 
-	     float suma = 0;
-	     float suma_min = 10000000;
-	     float suma_sec = 10000000;
-	     float dif;
-	     unsigned int nearest_neighbour = 0;
-             //para cada muestra
-	     for (unsigned int ii = 0; ii<n_key2; ii++)
-	       {
-		 suma = 0;
-		 //para cada componente
-		 for (unsigned int jj = 0; jj<dim;jj++)
-		   {
-		     //distancia en norma2
-		     //	    dif=example_pairs[i*64+j]-query[j];
-		     //dif=cvmGet(keys2,ii,jj)-cvmGet(keys,j,jj); //FIXME ESTA PARTE ES MUY LENTA
-		     dif=keys2[ii*dim+jj]-keys[j*dim+jj];
-		     suma += dif*dif;
+             float suma = 0;
+             float suma_min = 10000000;
+             float suma_sec = 10000000;
+             float dif;
+             unsigned int nearest_neighbour = 0;
+                 //para cada muestra
+             for (unsigned int ii = 0; ii<n_key2; ii++)
+               {
+             suma = 0;
+             //para cada componente
+             for (unsigned int jj = 0; jj<dim;jj++)
+               {
+                 //distancia en norma2
+                 //	    dif=example_pairs[i*64+j]-query[j];
+                 //dif=cvmGet(keys2,ii,jj)-cvmGet(keys,j,jj); //FIXME ESTA PARTE ES MUY LENTA
+                 dif=keys2[ii*dim+jj]-keys[j*dim+jj];
+                 suma += dif*dif;
 
-		   }
-		 suma=sqrt(suma);
-		 if (suma < suma_min)
-		   {
-		     suma_sec = suma_min;
-		     suma_min = suma;
-		     nearest_neighbour = ii;
-		   }else if (suma < suma_sec)
-		   {
-		     suma_sec = suma;
-		   }
-	       }
-	    // cout<<" suma_min: "<<suma_min<<" nearest_neighbour "<<nearest_neighbour<<" suma_sec "<<suma_sec<<" ratio "<<suma_min/suma_sec<<endl;
+               }
+             suma=sqrt(suma);
+             if (suma < suma_min)
+               {
+                 suma_sec = suma_min;
+                 suma_min = suma;
+                 nearest_neighbour = ii;
+               }else if (suma < suma_sec)
+               {
+                 suma_sec = suma;
+               }
+               }
+            // cout<<" suma_min: "<<suma_min<<" nearest_neighbour "<<nearest_neighbour<<" suma_sec "<<suma_sec<<" ratio "<<suma_min/suma_sec<<endl;
 
-	     //query->data[0] = example_pairs[nearest_neighbour].data[0];
+             //query->data[0] = example_pairs[nearest_neighbour].data[0];
+             if ((suma_min <100000)&&((suma_min/suma_sec)<0.8)){
 
-	     if ((suma_min <100000)&&((suma_min/suma_sec)<0.8)){
+             }else {
+               encontrado=false;
+               //return -1;
+             }
+             if (n_key2==0) encontrado = true; /// En el caso de tracker file FIXME
+            cout<<"he entrado encontrado="<<encontrado<<endl;
 
-	     }else {
-	       encontrado=false;
-	       //return -1;
-	     }
-	     if (n_key2==0) encontrado = true; /// En el caso de tracker file FIXME
+        /////////////////////////////////////////////////
+        /////////////////////////////////////////////////
 
-	     /////////////////////////////////////////////////
-	       /////////////////////////////////////////////////
-
-
-	       //j=0;
-
-	       //no cerca de un punto existente FIXME poner el 30 en una variable
+	       //no cerca de un punto existente
 	       for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
 		     It != pMap->bbdd.end(); It++ )
 		 {
-
 		   if((*It)->pto.x<(cvmGet(points,j,0)+point_sep) &&
 		      (*It)->pto.y<(cvmGet(points,j,1)+point_sep) &&
 		      (*It)->pto.x>(cvmGet(points,j,0)-point_sep) &&
@@ -478,20 +475,31 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		       }
 		   }
 		 }
+
 	       //no en borde
-	       if(cvmGet(points,j,0)<border ||
-		  cvmGet(points,j,1)<border ||
-		  cvmGet(points,j,0)>(pDataCam->frame_width-border) ||
-		  cvmGet(points,j,1)>(pDataCam->frame_height-border) )
-		 {
-		   encontrado = false;
-		 }
+	       cout<<cvmGet(points,j,0)<<" "<<cvmGet(points,j,1)<<" "<<border<<pDataCam->frame_width<<" "<<pDataCam->frame_height<<endl;
+	       cout<<( (cvmGet(points,j,0)<border) ||
+              (cvmGet(points,j,1)<border) ||
+              (cvmGet(points,j,0)>(pDataCam->frame_width-border)) ||
+              (cvmGet(points,j,1)>(pDataCam->frame_height-border)))<<endl;
+           cout<<(pDataCam->frame_width-border)<<" "<<(pDataCam->frame_height-border)<<endl;
+cout<<"he entrado encontrado2="<<encontrado<<endl;
+
+	       if( (cvmGet(points,j,0)<border) ||
+              (cvmGet(points,j,1)<border) ||
+              (cvmGet(points,j,0)>(pDataCam->frame_width-border)) ||
+              (cvmGet(points,j,1)>(pDataCam->frame_height-border)))
+               {
+                    encontrado = false;
+              }
+cout<<"he entrado encontrado2="<<encontrado<<endl;
+
 	       //calidad del punto mayor que un tamano
 	       if(cvmGet(points,j,2)<calidad_min_punto)
 		 {
-	//	   cout<<"calidad baja: "<<cvmGet(points,j,2)<<endl;
 		   encontrado = false;
 		 }
+cout<<"he entrado encontrado3="<<encontrado<<endl;
 	       //inserto si cumple todas las condiciones anteriores
 	       if (encontrado==true)
 		 {
@@ -507,12 +515,13 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		   insert++;
 		 }
 	       j++;
-	//       cout<< "j1: "<<j<<endl;
+	       cout<< "j1: "<<j<<endl;
        }while(!encontrado&& j<count);
       }//endif
+      cout<<"end for"<<endl;
      }//end for
-   delete (keys);
-   delete (keys2);
+     if (keys!=0)   delete (keys);
+     if (keys2!=0)   delete (keys2);
    //cvReleaseMat(&keys);
    cvReleaseMat(&points);
    cout<<"insertados: "<<insert<<" de "<<j<<endl;

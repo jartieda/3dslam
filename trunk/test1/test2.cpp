@@ -16,10 +16,10 @@
 
 //#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
 //#define DATA "c:\\datos\\slam\\kkk%0.4d.tif"
-#define DATA "F:\\SLAM\\Datos\\heli\\kkk%0.4d.tif"
+//#define DATA "F:\\SLAM\\Datos\\heli\\kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg"
-//#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
+#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
 #define KALMAN
 
 using namespace std;
@@ -52,7 +52,7 @@ IplImage* frameold = 0;
 IplImage* framecopy=0;
 
 /// variable para contar la iteracion;
-int iter=6;
+int iter=1;
 
 float randomVector(float max, float min);
 
@@ -233,7 +233,7 @@ sprintf(filein,DATA,iter);
      (*It)->wz=cvmGet(mDataCam.translation,2,0);
      (*It)->theta=atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0)));
      (*It)->phi=atan2(cvmGet(h,0,0),cvmGet(h,2,0));
-     (*It)->rho=1./2000;
+     (*It)->rho=1./0.2;
      //(*It)->rho=1./0.02;
      (*It)->state=st_inited;
      mMap.inited++;
@@ -268,23 +268,17 @@ void data_out()
 
   //dibjo puntos encontrados
   cvCopy( frame,framecopy);
-  cout<<"a"<<endl;
   mDataOut.Draw(framecopy);
-  cout<<"b"<<endl;
   #ifndef KALMAN
    mDataOut.Particle(framecopy);
   #else
   //mDataOut.Disp_out(framecopy);
   #endif
 
-  cout<<"c"<<endl;
   mDataOut.Feat();
-  cout<<"d"<<endl;
   mDataOut.Frame();
-  cout<<"e"<<endl;
   mDataOut.Cam();
-  cout<<"f"<<endl;
-
+  
    char nombre[100];
    //muestro imagen y compruebo salida
    sprintf(nombre,"frame%.2d.png",iter);
@@ -315,7 +309,7 @@ iter=8;
 
 while(1)
 {
-iter++;
+iter+=3;
 cout <<"ITERACION: "<< iter<<endl;
 //	frame = cvQueryFrame( capture );
 	char filein[400];
@@ -351,21 +345,21 @@ sprintf(filein,DATA,iter);
 
    mEstimator.Predict();
 
-   mEstimator.Test();
+//   mEstimator.Test();
    cout<<"ransac"<<endl;
-   mUpdater.TestRANSAC();
+//   mUpdater.TestRANSAC();
 
    mEstimator.UpdateMatrixSize();
 
    mEstimator.Correct();
 
-//   mEstimator.Print();
+   mEstimator.Print();
    cout<<"update"<<endl;
    mUpdater.update();
    cout<<"dataout"<<endl;
    data_out();
    cout<<"waitkey"<<endl;
-   c = cvWaitKey(100);//esto probablemente se pueda quitar
+   c = cvWaitKey(0);//esto probablemente se pueda quitar
    if( c == 27 )//si presiono escape salgo del programa limpiamente
      break;
 }

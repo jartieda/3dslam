@@ -1,6 +1,9 @@
 #include "trackerfile.h"
-#define FORIGEN "F:\\SLAM\\Datos\\datos_manuales\\datos%3d.txt"
-CTrackerFile::CTrackerFile()
+//#define FORIGEN "F:\\SLAM\\Datos\\datos_manuales\\datos%0.3d.txt"
+//#define FORIGEN "F:\\SLAM\\Datos\\datos_manuales\\redatos%0.3d.txt"
+//#define FORIGEN "F:\\SLAM\\Datos\\dat\\dat\\redatos%0.4d.txt"
+#define FORIGEN "/media/WOXTER/SLAM/Datos/dat/dat/redatos%0.4d.txt"
+CTrackerFile::CTrackerFile():first(true),frame(0)
 {
     //ctor
 }
@@ -14,6 +17,9 @@ CTrackerFile::~CTrackerFile()
 
       char fichero[200];
      sprintf(fichero,FORIGEN,frame);
+     frame+=3;
+     cout<<fichero<<endl;
+     fclose(f);
      f=fopen(fichero, "r");
      int num;
      int x,y;
@@ -27,14 +33,22 @@ CTrackerFile::~CTrackerFile()
             pMap->visible--;
          }
 	}
-    while (fscanf(f,"%d %d %d\n", &num, &x, &y)!=EOF)
+	cout<<"aqui casco"<<endl;
+    while (fscanf(f,"%d %d %d\n", &num, &y, &x)!=EOF)
      {
+         cout<<"in while"<<endl;
          list<CElempunto*>::iterator It=pMap->bbdd.begin();
-        while  (((*It)->ID!=num)&&( It != pMap->bbdd.end()))
+         int count=0;
+        while  (((*It)->ID!=num)&&( count < pMap->bbdd.size()))
         {
+            cout<<"."<<count;
             It++ ;
+            count++;
+            if (count>= pMap->bbdd.size()) break;
         }
-        if( It != pMap->bbdd.end()){
+        cout<<"fuera while"<<endl;
+
+        if( count<pMap->bbdd.size()){
            (*It)->old_pto.x=(*It)->pto.x;
            (*It)->old_pto.y=(*It)->pto.y;
            (*It)->pto.x=(int)x;
@@ -45,10 +59,14 @@ CTrackerFile::~CTrackerFile()
                 pMap->visible++;
 		   }
         }else{
+            ///add point
+            unsigned char *key;
+            key= new unsigned char [getFeatDim()];
+            pMap->add_key(cvPoint(x,y),key,getFeatDim());
 
         }
     }
-
+    cout<<"end match"<<endl;
         //end if dentro proj
 
  }
@@ -61,13 +79,13 @@ CTrackerFile::~CTrackerFile()
          int num;
          int x,y;
          *keys = new int[64*40];// cvCreateMat(feat->total,64,CV_32FC1) ;
-        *points = cvCreateMat(40,4,CV_32FC1) ;
-
-         while (fscanf(f,"%d %d %d\n", &num, &x, &y)!=EOF)
+         *points = cvCreateMat(40,4,CV_32FC1) ;
+         while (fscanf(f,"%d %d %d\n", &num, &y, &x)!=EOF)
          {
+            cout<<"x "<<x<<" y "<<y<<" id "<<num<<endl;
             cvmSet(*points,numptos,0,x) ;
             cvmSet(*points,numptos,1,y) ;
-            cvmSet(*points,numptos,2,1) ;
+            cvmSet(*points,numptos,2,1000) ;
             cvmSet(*points,numptos,3,0) ;
             numptos++;
          }

@@ -6,6 +6,7 @@
 #include "model.h"
 #include "cv.h"
 #include "estimator.h"
+#include "highgui.h"
 
 /**
 @author Jorge Artieda

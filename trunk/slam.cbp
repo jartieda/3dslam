@@ -9,7 +9,7 @@
 		<Option compiler="0"/>
 		<Build>
 			<Target title="default">
-				<Option output="F:\SLAM\Programas\slam_3d\slam.exe"/>
+				<Option output="slam.exe"/>
 				<Option working_dir="."/>
 				<Option object_output=".objs"/>
 				<Option deps_output=".deps"/>
@@ -81,6 +81,9 @@
 		<Unit filename="src\kalman.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
+			<Breakpoint line="785" enabled="1" pass="0" />
+			<Breakpoint line="796" enabled="1" pass="0" />
+			<Breakpoint line="818" enabled="1" pass="0" />
 		</Unit>
 		<Unit filename="src\kalman.h">
 			<Option compilerVar="CPP"/>

@@ -50,15 +50,15 @@ for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It
    /** \f$ \frac{dp}{d\phi}= \frac{dx}{dX}  (\frac{cos(\phi)}{\rho}) + 
    \frac{dx}{dZ} (\frac{-sin(\phi)}{\rho})\f$ **/
    cvmSet((*It)->dpdw,0,4,cvmGet((*It)->dpdw,0,0)*(c_th*c_ph)/(*It)->rho+
-                          cvmGet((*It)->dpdw,0,1)*(0    )/(*It)->rho+
+                          cvmGet((*It)->dpdw,0,1)*(0.0    )/(*It)->rho+
                           cvmGet((*It)->dpdw,0,2)*(-c_th*s_ph)/(*It)->rho);
 
    /** \f$ \frac{dp}{d\rho}=\frac{dx}{dX} (\frac{-sin(\phi)}{\rho^2}) +
     * \frac{dx}{dY} (\frac{sin(\theta)}{\rho^2}) +
     * \frac{dx}{dZ} (\frac{-cos(\phi)}{\rho^2}) \f$ **/
-   cvmSet((*It)->dpdw,0,5,cvmGet((*It)->dpdw,0,0)*(-c_th*s_ph)/((*It)->rho*(*It)->rho)+
-                          cvmGet((*It)->dpdw,0,1)*(s_th     )/((*It)->rho*(*It)->rho)+
-                          cvmGet((*It)->dpdw,0,2)*(-c_th*c_ph)/((*It)->rho*(*It)->rho));
+   cvmSet((*It)->dpdw,0,5,cvmGet((*It)->dpdw,0,0)*0.5*(-c_th*s_ph)/((*It)->rho*(*It)->rho)+
+                          cvmGet((*It)->dpdw,0,1)*0.5*(s_ph     )/((*It)->rho*(*It)->rho)+
+                          cvmGet((*It)->dpdw,0,2)*0.5*(-c_th*c_ph)/((*It)->rho*(*It)->rho));
 
    /** \f$ \frac{dy}{d\theta}= \frac{dy}{dX}(\frac{cos(\theta)}{\rho})\f$ **/
     cvmSet((*It)->dpdw,1,3,cvmGet((*It)->dpdw,1,0)*(-s_th*s_ph)/(*It)->rho+
@@ -68,15 +68,15 @@ for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It
    /** \f$ \frac{dy}{d\phi}=\frac{dy}{dX}(\frac{cos(\phi)}{\rho}) +
    \frac{dy}{dZ}(\frac{-sin(\phi)}{\rho}) \f$ **/
      cvmSet((*It)->dpdw,1,4,cvmGet((*It)->dpdw,1,0)*(c_th*c_ph)/(*It)->rho+
-                            cvmGet((*It)->dpdw,1,1)*(0    )/(*It)->rho+
+                            cvmGet((*It)->dpdw,1,1)*(0.0    )/(*It)->rho+
                             cvmGet((*It)->dpdw,1,2)*(-c_th*s_ph)/(*It)->rho);
 
    /** \f$ \frac{dp}{d\rho}=\frac{dy}{dX} (\frac{-sin(\phi)}{\rho^2}) +
     * \frac{dy}{dX} (\frac{sin(\theta)}{\rho^2}) +
     * \frac{dy}{dZ} (\frac{-cos(\phi)}{\rho^2}) \f$ **/
-     cvmSet((*It)->dpdw,1,5,cvmGet((*It)->dpdw,1,0)*(-c_th*s_ph)/((*It)->rho*(*It)->rho)+
-                            cvmGet((*It)->dpdw,1,1)*(s_th     )/((*It)->rho*(*It)->rho)+
-                            cvmGet((*It)->dpdw,1,2)*(-c_th*c_ph)/((*It)->rho*(*It)->rho));
+     cvmSet((*It)->dpdw,1,5,cvmGet((*It)->dpdw,1,0)*0.5*(-c_th*s_ph)/((*It)->rho*(*It)->rho)+
+                            cvmGet((*It)->dpdw,1,1)*0.5*(s_ph     )/((*It)->rho*(*It)->rho)+
+                            cvmGet((*It)->dpdw,1,2)*0.5*(-c_th*c_ph)/((*It)->rho*(*It)->rho));
 
 }
 cvReleaseMat(&obj);

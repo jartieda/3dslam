@@ -1,7 +1,7 @@
 #include "kalman.h"
 //covarianzas de las features solor
-#define MEAS_COV 5
-#define PROC_COV 0.01
+#define MEAS_COV 1
+#define PROC_COV 0.00001
 #define ERROR_COV 0.25
 /** imprime una matriz **/
 void printMat(CvMat *m)
@@ -27,7 +27,7 @@ CKalman::CKalman()
 {
    //fdim = 6;
    trans=cvCreateMat(3,1,CV_32FC1);
-   
+
    rotation=cvCreateMat(3,1,CV_32FC1);
    pKalmanMem=cvCreateKalman(3000,2000,10);
    pKalman=new CvKalman;
@@ -62,7 +62,7 @@ CKalman::CKalman()
    xi[29]=19.767740;
    xi[30]=0.1;//20.599230;
    xi[0]=0.000000;
-   
+
 }
 
 CKalman::~CKalman()
@@ -89,11 +89,11 @@ void CKalman::Predict()
   A_=cvCreateMatHeader(pModel->getStateNum(),pModel->getStateNum(),CV_32FC1);
   post=cvCreateMatHeader(pModel->getStateNum(),1,CV_32FC1);
   pre=cvCreateMatHeader(pModel->getStateNum(),1,CV_32FC1);
-  
+
   cvGetSubRect( pKalman->transition_matrix,A_,cvRect(0,0,pModel->getStateNum(),pModel->getStateNum()));
   cvGetSubRect( pKalman->state_post,post,cvRect(0,0,1,pModel->getStateNum()));
   cvGetSubRect( pKalman->state_pre,pre,cvRect(0,0,1,pModel->getStateNum()));
-  
+
   cout<<"he llegado a en medio"<<endl;
   //  cvMatMulAdd( pKalman->transition_matrix, pKalman->state_post, 0, pKalman->state_pre );
   cvCopy(pKalman->state_post,pKalman->state_pre);
@@ -102,14 +102,14 @@ void CKalman::Predict()
   cvReleaseMatHeader(&A_);
   cvReleaseMatHeader(&post);
   cvReleaseMatHeader(&pre);
-  
+
   if( control && pKalman->CP > 0 )
     {
       /* x'(k) = x'(k) + B*u(k) */
       cvMatMulAdd( pKalman->control_matrix, control, pKalman->state_pre, pKalman->state_pre );
     }
   /* update error covariance matrices */
-  
+
   /* temp1 = A*P(k) */
   CvMat  *P_ ,*temp1_,*Q_,*P_pre,*P_21,*P_12,*P_21_pre,*P_12_pre;
   A_=cvCreateMatHeader(pModel->getStateNum(),pModel->getStateNum(),CV_32FC1);
@@ -121,7 +121,7 @@ void CKalman::Predict()
   P_12=cvCreateMatHeader(pKalman->DP-pModel->getStateNum(),pModel->getStateNum(),CV_32FC1);
   P_21_pre=cvCreateMatHeader(pModel->getStateNum(),pKalman->DP-pModel->getStateNum(),CV_32FC1);
   P_12_pre=cvCreateMatHeader(pKalman->DP-pModel->getStateNum(),pModel->getStateNum(),CV_32FC1);
-  
+
   cvGetSubRect( pKalman->transition_matrix,A_,cvRect(0,0,pModel->getStateNum(),pModel->getStateNum()));
   cvGetSubRect( pKalman->error_cov_post,P_,cvRect(0,0,pModel->getStateNum(),pModel->getStateNum()));
   cvGetSubRect( pKalman->process_noise_cov,Q_,cvRect(0,0,pModel->getStateNum(),pModel->getStateNum()));
@@ -131,19 +131,19 @@ void CKalman::Predict()
   cvGetSubRect( pKalman->error_cov_post,P_12,cvRect(0,pModel->getStateNum(),pModel->getStateNum(),pKalman->DP-pModel->getStateNum()));
   cvGetSubRect( pKalman->error_cov_pre,P_21_pre,cvRect(pModel->getStateNum(),0,pKalman->DP-pModel->getStateNum(),pModel->getStateNum()));
   cvGetSubRect( pKalman->error_cov_pre,P_12_pre,cvRect(0,pModel->getStateNum(),pModel->getStateNum(),pKalman->DP-pModel->getStateNum()));
-  
+
   cout<<"he llegado a en medio3"<<endl;
   //cvMatMulAdd( pKalman->transition_matrix, pKalman->error_cov_post, 0, pKalman->temp1 );
   cvMatMulAdd( A_, P_, 0,temp1_ );
   cvMatMul(A_,P_21,P_21_pre);
   cvGEMM(P_12,A_,1,NULL,0,P_12_pre,CV_GEMM_B_T);
-  
+
   /* P'(k) = temp1*At + Q */
-  
+
   //cvGEMM( pKalman->temp1, pKalman->transition_matrix, 1, pKalman->process_noise_cov, 1,
   //                 pKalman->error_cov_pre, CV_GEMM_B_T );
   cvGEMM( temp1_,A_, 1, Q_, 1, P_pre, CV_GEMM_B_T );
-  
+
   cvReleaseMatHeader(&A_);
   cvReleaseMatHeader(&P_);
   cvReleaseMatHeader(&Q_);
@@ -153,7 +153,7 @@ void CKalman::Predict()
   cvReleaseMatHeader(&P_12);
   cvReleaseMatHeader(&P_21_pre);
   cvReleaseMatHeader(&P_12_pre);
-  
+
 }
 
 /**
@@ -180,17 +180,17 @@ void CKalman::initState()
 
   //grow(pMap->bbdd.size()-10);
   cout<<"after updateMatrizSize " <<endl;
-  
+
   // inicializaciÃ³n primeros puntos vistos
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
-	cvmSet(pKalman->state_post,kstate++,0,(*It)->wx);
-	cvmSet(pKalman->state_post,kstate++,0,(*It)->wy);
-	cvmSet(pKalman->state_post,kstate++,0,(*It)->wz);
-	cvmSet(pKalman->state_post,kstate++,0,(*It)->theta);
-	cvmSet(pKalman->state_post,kstate++,0,(*It)->phi);
-	cvmSet(pKalman->state_post,kstate++,0,(*It)->rho);
+        cvmSet(pKalman->state_post,kstate++,0,(*It)->wx);
+        cvmSet(pKalman->state_post,kstate++,0,(*It)->wy);
+        cvmSet(pKalman->state_post,kstate++,0,(*It)->wz);
+        cvmSet(pKalman->state_post,kstate++,0,(*It)->theta);
+        cvmSet(pKalman->state_post,kstate++,0,(*It)->phi);
+        cvmSet(pKalman->state_post,kstate++,0,(*It)->rho);
       }
     }
 }
@@ -202,16 +202,16 @@ void CKalman::initState()
  **/
 void CKalman::setModel(CModel *p)
 {
-  
+
   pModel = p;
-  
+
   cout<<"getStateNum"<<pModel->getStateNum()<<endl;
   cout<<"getMeasurementNum"<<pModel->getMeasurementNum()<<endl;
   //fdims=6;//FIXME WARNING ERROR
   SetKalman(pKalman,pModel->getStateNum(),
 	    pModel->getMeasurementNum(),
 	    pModel->getInputNum());
-  
+
   cout<<"mp "<<pKalman->MP<<" dp "<<pKalman->DP<<endl;
   if(pModel->getMeasurementNum()>0){
     measurement=cvCreateMat(pModel->getMeasurementNum(),1,CV_32FC1);
@@ -220,7 +220,7 @@ void CKalman::setModel(CModel *p)
   //	dim_state=3*10+pModel->getStateNum();
   cvSetIdentity( pKalman->transition_matrix);//, cvRealScalar(pptosBBDD->bbdd.size()*3+12) );
   transMat(pModel->getTransitionMatrix(),pKalman->transition_matrix);
-  
+
   cvSetIdentity( pKalman->process_noise_cov, cvRealScalar(PROC_COV) );
   transMat(pModel->getProcessNoiseCov(),pKalman->process_noise_cov);
   if(pKalman->MP>0){
@@ -233,19 +233,19 @@ void CKalman::setModel(CModel *p)
       transMat(pModel->getMeasurementNoiseCov(),pKalman->measurement_noise_cov );
     }
   //covarianza de la medida
-  
+
   cvSetIdentity( pKalman->error_cov_post, cvRealScalar(1));
   cvSetIdentity( pKalman->error_cov_pre, cvRealScalar(1));
   //cvSetIdentity( pKalman->state_post, cvRealScalar(0));
   cout<<"end set param kalman"<<endl;
-  
+
 }
 
 void CKalman::Test()
 {
-  
+
   UpdateJacob();
-  
+
   CvMat* innov;
   CvMat* C;
   CvMat* H;
@@ -254,7 +254,7 @@ void CKalman::Test()
   CvMat* T2;
   CvMat* T3;
   CvMat* T4;
-  
+
   innov=cvCreateMat(2,1,CV_32FC1);
   C=cvCreateMat(2,2,CV_32FC1);
   H=cvCreateMat(2,12+fdims,CV_32FC1);
@@ -263,13 +263,13 @@ void CKalman::Test()
   T2=cvCreateMat(2,12+fdims,CV_32FC1);
   T3=cvCreateMat(2,1,CV_32FC1);
   T4=cvCreateMat(1,1,CV_32FC1);
-  
+
   int m_i=pModel->getMeasurementNum();
   int s_i=12;//
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
-	
+
         for(int col=0;col<12;col++)
 	  {
      	    cvmSet(H,0,col,cvmGet(pKalman->measurement_matrix,m_i,col));
@@ -283,28 +283,28 @@ void CKalman::Test()
         for (int d=0;d<fdims;d++){
 	  cvmSet(H,1,12+d,cvmGet(pKalman->measurement_matrix,m_i+1,s_i+d));
         }
-	
+
 //    cvmSet(H,1,12,cvmGet(pKalman->measurement_matrix,m_i+1,s_i+0));
 //    cvmSet(H,1,13,cvmGet(pKalman->measurement_matrix,m_i+1,s_i+1));
 //    cvmSet(H,1,14,cvmGet(pKalman->measurement_matrix,m_i+1,s_i+2));
-	
+
      for (int col=0;col<12;col++)
 	  for (int row=0; row<12;row++)
 	    {
 	      cvmSet(P,row,col,cvmGet(pKalman->error_cov_pre,row,col));
 	    }
-	
+
      for (int col=0;col<fdims;col++)
 	  for (int row=0; row<fdims;row++)
 	    {
 	      cvmSet(P,row+12,col+12,cvmGet(pKalman->error_cov_pre,s_i+row,s_i+col));
 	    }
-        for (int col=0;col<12;col++)
+    for (int col=0;col<12;col++)
 	  for (int row=0; row<fdims;row++)
 	    {
 	      cvmSet(P,row+12,col,cvmGet(pKalman->error_cov_pre,s_i+row,col));
 	    }
-        for (int col=0;col<fdims;col++)
+    for (int col=0;col<fdims;col++)
 	  for (int row=0; row<12;row++)
 	    {
 	      cvmSet(P,row,col+12,cvmGet(pKalman->error_cov_pre,row,col+s_i));
@@ -315,16 +315,16 @@ void CKalman::Test()
     cvMatMulAdd( H,P,0,T2 );
     /* C = temp2*Ht + R */
     cvGEMM( T2,H, 1,R, 1, C, CV_GEMM_B_T );
-	
+
         /* temp5 = z(k) - H*x'(k) */
 	cvmSet(innov,0,0,(*It)->pto.x-(*It)->projx);
 	cvmSet(innov,1,0,(*It)->pto.y-(*It)->projy);
-	
+
         /* temp3=C^-1 * (z-h)*/
 	cvSolve( C,innov,T3, CV_SVD );
         /* temp2 = (z-h) temp3t */
 	cvGEMM(innov,T3,1,NULL,0,  T4 ,CV_GEMM_A_T);
-	
+
     	if (cvmGet(T4,0,0)>xi[30])
 	  {
 	    cout<<"test ko: "<<cvmGet(T4,0,0)<<" xi: "<<xi[30]<<" id "<<(*It)->ID<<endl;
@@ -333,15 +333,15 @@ void CKalman::Test()
 	  }else{
 	  cout<<"test OK: "<<cvmGet(T4,0,0)<<" xi: "<<xi[30]<<" id "<<(*It)->ID<<endl;
     	}
-	
+
         m_i+=2;
         s_i+=fdims;
-	
+
       }//end if inited
-      
-      
+
+
     }//end for iterator
-  
+
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
@@ -363,44 +363,44 @@ void CKalman::Test()
   cvReleaseMat(&T2);
   cvReleaseMat(&T3);
   cvReleaseMat(&T4);
-  
+
 }
 
 
 void CKalman::UpdateJacob()
 {
-  
+
   int kstate=0;
-  
+
   cout<<"antes trans "<<endl;
   for(int i =0; i<3;i++){
     cvmSet(trans,i,0,cvmGet(pKalman->state_pre,kstate,0));
     kstate++;
     kstate++;
   }
-  
+
   cout<<"antes rot "<<endl;
   for(int i =0; i<3;i++){
     cvmSet(rotation,i,0,cvmGet(pKalman->state_pre,kstate,0)+0.0001);
     kstate++;
     kstate++;
   }
-  
+
   int i =0;
-  
+
   pDataCam->SetRotation(rotation);
   pDataCam->SetTranslation(trans);
   i=0;
   pModelCam->ProjectPoints();
-  
+
   cout<<"pmodel->getMeasNum()"<<pModel->getMeasurementNum()<<endl;
   int j=0;
-  
+
   cvSetIdentity(pKalman->measurement_matrix,cvRealScalar(0));
   if(pModel->getMeasurementNum()){
     transMat(pModel->getMeasurementMatrix(),pKalman->measurement_matrix);
   }
-  
+
   for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
@@ -418,7 +418,7 @@ void CKalman::UpdateJacob()
 	cvmSet(pKalman->measurement_matrix,i+pModel->getMeasurementNum(),j+pModel->getStateNum()+4,cvmGet((*It)->dpdw,0,4));
 	cvmSet(pKalman->measurement_matrix,i+pModel->getMeasurementNum(),j+pModel->getStateNum()+5,cvmGet((*It)->dpdw,0,5));
 	i++;
-	
+
 	cvmSet(pKalman->measurement_matrix,i+pModel->getMeasurementNum(),0,cvmGet((*It)->dpdt,1,0));
 	cvmSet(pKalman->measurement_matrix,i+pModel->getMeasurementNum(),2,cvmGet((*It)->dpdt,1,1));
 	cvmSet(pKalman->measurement_matrix,i+pModel->getMeasurementNum(),4,cvmGet((*It)->dpdt,1,2));
@@ -433,14 +433,14 @@ void CKalman::UpdateJacob()
 	cvmSet(pKalman->measurement_matrix,i+pModel->getMeasurementNum(),j+pModel->getStateNum()+5,cvmGet((*It)->dpdw,1,5));
 	i++;
 	j+=fdims;
-	
+
       }//end if inited
       else if((*It)->state==st_no_view){
 	j+=fdims;
 
       }
     }
-  
+
 }
 /**
  * etapa de corrección del filtro de kalman <br>
@@ -456,7 +456,7 @@ void CKalman::UpdateJacob()
 
 void CKalman::Correct()
 {
-  
+
   UpdateJacob();
   cout<<"correction"<<endl;
   CvMat *Paa, *Haa;
@@ -492,7 +492,7 @@ void CKalman::Correct()
 	      i_c++;
 	    }
 	}
-      
+
     }
 //  cout<<"3"<<endl;
 /** genero una submatriz de medida con las columnas que son **/
@@ -504,7 +504,7 @@ void CKalman::Correct()
 	    {
 	      cvmSet(Haa,i,i_aa,cvmGet(pKalman->measurement_matrix,i,j));
 	    }
-	  
+
 	  i_aa++;
         }
     }
@@ -544,15 +544,15 @@ void CKalman::Correct()
   /* temp3 = temp2*Ht + R */
   /*    cvGEMM( pKalman->temp2, pKalman->measurement_matrix, 1,
 	pKalman->measurement_noise_cov, 1, pKalman->temp3, CV_GEMM_B_T );*/
-  
+
     /* temp4 = inv(temp3)*temp2 = Kt(k) */
   cvSolve( t3, pKalman->temp2, pKalman->temp4, CV_SVD );
 //  cout<<"8"<<endl;
   /* K(k) */
   cvTranspose( pKalman->temp4, pKalman->gain );
-  
+
   /* temp5 = z(k) - H*x'(k) */
-  
+
   if(pModel->getMeasurementNum()!=0)
     {
       CvMat *tempmeas;
@@ -573,13 +573,13 @@ void CKalman::Correct()
 	ii++;
       }
     }
-  
+
   //FIXME esta parte se ejecuta pero solo tiene efecto cuando hay medida de movimiento de camara.
   if(pModel->getMeasurementNum()!=0)
     {
       cvGEMM( pKalman->measurement_matrix, pKalman->state_pre, -1, measurement, 1, pKalman->temp5 );
     }
-  
+
   ii=pModel->getMeasurementNum();
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
@@ -599,22 +599,22 @@ void CKalman::Correct()
 	}
       cout <<endl;
     }
-  
+
   /*cout<<"measurement: "<<endl;
     for (int i=0; i<(pKalman->MP);i++)
     {
     cout<<" "<<cvmGet(measurement,i,0);
     }
     cout<<endl;*/
-  
+
   /* x(k) = x'(k) + K(k)*temp5 */
   cvMatMulAdd( pKalman->gain, pKalman->temp5, pKalman->state_pre, pKalman->state_post );
-  
+
   /* P(k) = P'(k) - K(k)*temp2 */
   cvGEMM( pKalman->gain, pKalman->temp2, -1, pKalman->error_cov_pre, 1,
 	  pKalman->error_cov_post, 0 );
-  
-  
+
+
   int kstate=0;
   int kk=0;
   for(int i =0; i<3;i++){
@@ -625,14 +625,14 @@ void CKalman::Correct()
     cvmSet(rotation,i,0,cvmGet(pKalman->state_post,kstate++,0));
     kstate++;
   }
- 
+
   pDataCam->SetRotation(rotation);
   pDataCam->SetTranslation(trans);
   cout<<"_trans "<<cvmGet(trans,0,0)<<" "<<cvmGet(trans,1,0)<<" "<<cvmGet(trans,1,0)<<endl;
   cout<<"translation "<<cvmGet(pDataCam->translation,0,0)<<" ";
   cout<< cvmGet(pDataCam->translation,1,0)<<" ";
   cout<< cvmGet(pDataCam->translation,2,0)<<" "<<endl;
-  
+
   ii=pModel->getStateNum();
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
@@ -659,10 +659,10 @@ void CKalman::Correct()
   cvReleaseMat(&Haa);
   cvReleaseMat(&t2);
   cvReleaseMat(&t3);
-  
+
   //    cvReleaseMat(&rotation);
   //    cvReleaseMat(&trans);
-  
+
 }
 /**
  * actualiza las matrizes del filtro de kalman para aceptar otro numero de entradas
@@ -670,10 +670,10 @@ void CKalman::Correct()
  **/
 void CKalman::UpdateMatrixSize()
 {
-  
+
   int inited_vis=0;
   int inited_no_vis=0;
-  
+
   for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
 	It != pMap->bbdd.end(); It++ )
     {
@@ -684,11 +684,11 @@ void CKalman::UpdateMatrixSize()
         inited_no_vis++;
       }
     }
-  
+
   int n=inited_vis*2+pModel->getMeasurementNum();
   int s=(inited_no_vis+inited_vis)*fdims+pModel->getStateNum();
   int oldDP,oldMP,oldCP;
-  if (!pKalman){
+  if (pKalman!=0){
     oldDP=pKalman->DP;
     oldMP=pKalman->MP;
     oldCP=pKalman->CP;
@@ -698,22 +698,22 @@ void CKalman::UpdateMatrixSize()
     oldMP=0;
   }
   //	int npoints=inited_vis-((oldDP-pModel->getStateNum())/fdims);
-  int npoints=(s-oldDP)/fdims;
-  
+  int npoints=(s-oldDP)/fdims;/// numero de puntos nuevos
+
   SetKalman(pKalman,s,n,oldCP);
-  
+
   cout<<"updateMatrixSize("<<n<<") "<<npoints<<endl;
-  
+
   cvSetIdentity( pKalman->measurement_noise_cov, cvRealScalar(MEAS_COV) );
   if(pModel->getMeasurementNum()>0)
     {
 	    transMat(pModel->getMeasurementNoiseCov(),pKalman->measurement_noise_cov );
     }
-  
+
   pKalman->MP=n;
   cvReleaseMat(&measurement);
   measurement=cvCreateMat( n,1,CV_32FC1);
-  
+
   //anada datos nuevo parametro
   //FIXME COMPROBAR LO DE NUMERO DE PUNTOS >0 SE PUEDE REDUCIR LA MEDIDA Y QUE NO ME ENTER
   if (npoints>0){
@@ -730,13 +730,13 @@ void CKalman::UpdateMatrixSize()
     }else{
 	cout<<"debate 1 oldDP "<<oldDP<<" getmeasnum "<<pModel->getMeasurementNum()<<endl;
         cvGetSubRect(pKalman->transition_matrix, submat,
-		 cvRect(oldDP,oldDP,fdims*npoints,fdims*npoints)); 
+                    cvRect(oldDP,oldDP,fdims*npoints,fdims*npoints));
          cvSetIdentity(submat,cvRealScalar(1));
          cvReleaseMatHeader(&submat);
     }
 
 //    cout<<"1"<<endl;
-    
+
     //measurement_matrix
     /** Se anula esta matriz y se inicializa solo la parte correspondiente al sensor.
     	Esta matriz se debe actualizar en cada paso y se hace en la etapa de corrección
@@ -747,18 +747,18 @@ void CKalman::UpdateMatrixSize()
     if(pModel->getMeasurementNum()){
       transMat(pModel->getMeasurementMatrix(),pKalman->measurement_matrix);
     }
-    
+
 //    cout<<"2"<<endl;
-    
+
     /** Covarianza del error del modelo del proceso se inicializac a una diagonal PROC_COV **/
     submat=cvCreateMatHeader(fdims*npoints,fdims*npoints,CV_32FC1 );
     cvGetSubRect(pKalman->process_noise_cov, submat, cvRect(oldDP,oldDP,fdims*npoints,fdims*npoints));
     cvSetIdentity(submat,cvRealScalar(PROC_COV));
     cvReleaseMatHeader(&submat);
     for (int i =0; i<6; i++) cvmSet(pKalman->process_noise_cov,i,i,10);
-    
+//    for (int i =17;i<fdims*npoints+pModel->getStateNum(); i+=6) cvmSet(pKalman->process_noise_cov,i,i,1);
 //    cout<<"3"<<endl;
-    
+
     /** Covarianza del estado del proceso a posteriori se inicializa a matriz identidad
 	FIXME IMPLEMENTACIÓN DEPENDIENTE DE LA PARAMETRIZACIÓN **/
     submat=cvCreateMatHeader(fdims*npoints,fdims*npoints,CV_32FC1 );
@@ -769,7 +769,7 @@ void CKalman::UpdateMatrixSize()
     cvGetSubRect(pKalman->error_cov_post, submat2, cvRect(0,oldDP,12,fdims*npoints));
     submat3=cvCreateMatHeader(12,fdims*npoints,CV_32FC1 );
     cvGetSubRect(pKalman->error_cov_post, submat3, cvRect(oldDP,0,fdims*npoints,12));
-    
+
     cvSetIdentity(submat,cvRealScalar(ERROR_COV));
     CvMat *jPos, *jPix,*jBig;
     jPos=cvCreateMat(6,6,CV_32FC1);
@@ -777,66 +777,62 @@ void CKalman::UpdateMatrixSize()
     jBig=cvCreateMat(12,9,CV_32FC1);
     CvMat *ptemp;
     ptemp=cvCreateMat(9,9,CV_32FC1);
+    cvSetIdentity(ptemp,cvRealScalar(0));
     cvSetIdentity(jBig,cvRealScalar(0));
     CvMat *temp2;
     temp2=cvCreateMat(12,9,CV_32FC1);
     CvMat *ptemp2;
     ptemp2=cvCreateMat(12,12,CV_32FC1);
-    
+
     int startpoint=(oldDP-pModel->getStateNum())/fdims;
-    
+
     for(int i=0; i<6; i++)
-      for(int j=0; j<6;j++)	    
-	cvmSet(ptemp,i,j,cvmGet(pKalman->error_cov_post,2*i,2*j));
+      for(int j=0; j<6;j++)
+        cvmSet(ptemp,i,j,cvmGet(pKalman->error_cov_post,2*i,2*j));
+
     cvmSet(ptemp,6,6,4);//covarianza del error de localización de un pixel
     cvmSet(ptemp,7,7,4);//covarianza del error de localización de un pixel
-    cvmSet(ptemp,8,8,0.25);//covarianza del error de localización de un pixel
+    cvmSet(ptemp,8,8,0.5);//covarianza de rho
+
     int id=0;
     int start=0;
     for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
       {
-	if ((*It)->state>=st_inited){
-	  if (start<startpoint) start++;
-	  else {
-	    
-            pModelCam->getJInit(jPos,jPix,(*It)->pto);
-	    cvSetIdentity(jBig,cvRealScalar(1));
-	    
-	    for(int i=0; i<6; i++)
-	      for(int j=0; j<6;j++)	    
-		cvmSet(jBig,6+i,j,cvmGet(jPos,i,j));
-	    for(int i=0; i<6; i++)
-	      for(int j=0; j<2;j++)	    
-		cvmSet(jBig,6+i,6+j,cvmGet(jPos,i,j));
-	    cvmSet(jBig,11,8,1);
-	    cvMatMul(jBig,ptemp,temp2);
-	    cvGEMM(temp2,jBig,1,NULL,0,ptemp2,CV_GEMM_B_T);
-	    for(int i=0; i<6; i++)
-	      for(int j=0; j<6;j++){
-		cvmSet(submat,id*fdims+i,id*fdims+j,cvmGet(ptemp2,6+i,6+j));
-		//cout<<"hola"<<id*fdims+i<<j*2<<endl;
-		cvmSet(submat2,id*fdims+i,j*2,cvmGet(ptemp2,6+i,j));
-		//cout<<"hola2"<<endl;
-		cvmSet(submat3,i*2,id*fdims+j,cvmGet(ptemp2,i,6+j));	
-	      }	    
-	    id++;
-	  }//end else if star>start
-	}//end if >inited
+    if ((*It)->state>=st_inited){
+      if (start<startpoint) start++;
+      else {
+
+        pModelCam->getJInit(jPos,jPix,(*It)->pto);
+        cvSetIdentity(jBig,cvRealScalar(1));
+
+        for(int i=0; i<6; i++)
+          for(int j=0; j<6;j++)
+            cvmSet(jBig,6+i,j,cvmGet(jPos,i,j));//derivada de feature respecto pos
+
+        for(int i=0; i<6; i++)
+          for(int j=0; j<2;j++)
+            cvmSet(jBig,6+i,6+j,cvmGet(jPix,i,j));//derivada de feature respecto de pix
+
+        cvmSet(jBig,11,8,1);//derivada de rho respecto de rho
+
+        cvMatMul(jBig,ptemp,temp2);
+        cvGEMM(temp2,jBig,1,NULL,0,ptemp2,CV_GEMM_B_T);
+        for(int i=0; i<6; i++)
+          for(int j=0; j<6;j++){
+            cvmSet(submat,id*fdims+i,id*fdims+j,cvmGet(ptemp2,6+i,6+j));
+//            cout<<"i "<< i<< " j "<<j << " var "<<cvmGet(ptemp2,6+i,6+j)<<endl;
+            //cout<<"hola"<<id*fdims+i<<j*2<<endl;
+            cvmSet(submat2,id*fdims+i,j*2,cvmGet(ptemp2,6+i,j));
+            //cout<<"hola2"<<endl;
+            cvmSet(submat3,i*2,id*fdims+j,cvmGet(ptemp2,i,6+j));
+          }
+        id++;
+      }//end else if star>start
+    }//end if >inited
       }//end iter
     cvReleaseMatHeader(&submat);
-    
-//    cout<<"4"<<endl;
-    
-    
-    //		error_cov_pre
-    /**Covarianza del estado del proceso a poseteriori se inicializa a matriz identidad.
-       Esto es poco importante. **/
-    submat=cvCreateMatHeader(fdims*npoints,fdims*npoints,CV_32FC1 );
-    cvGetSubRect(pKalman->error_cov_pre, submat, cvRect(oldDP,oldDP,fdims*npoints,fdims*npoints));
-    cvSetIdentity(submat,cvRealScalar(ERROR_COV));
-    cvReleaseMatHeader(&submat);
-//    cout<<"5"<<endl;
-    
+    cvReleaseMatHeader(&submat2);
+    cvReleaseMatHeader(&submat3);
     cvReleaseMat(&jPos);
     cvReleaseMat(&jPix);
     cvReleaseMat(&jBig);
@@ -844,28 +840,43 @@ void CKalman::UpdateMatrixSize()
     cvReleaseMat(&temp2);
     cvReleaseMat(&ptemp2);
 
-  }
-  
+//    cout<<"4"<<endl;
+
+
+    //		error_cov_pre
+    /**Covarianza del estado del proceso a priori se inicializa a matriz identidad.
+       Esto es poco importante. **/
+    submat=cvCreateMatHeader(fdims*npoints,fdims*npoints,CV_32FC1 );
+    cvGetSubRect(pKalman->error_cov_pre, submat, cvRect(oldDP,oldDP,fdims*npoints,fdims*npoints));
+    cvSetIdentity(submat,cvRealScalar(ERROR_COV));
+    cvReleaseMatHeader(&submat);
+//    cout<<"5"<<endl;
+
+
+  }//end if npoints >0
+
   //	state_post=wx wy wz
   int kstate=pModel->getStateNum();
+  cout<<"preupdater"<<endl;
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
+      cout<<"for"<<endl;
       if((*It)->state==st_inited||(*It)->state==st_no_view){
-	cvmSet(pKalman->state_post,kstate,0,(*It)->wx);
-	kstate++;
-	cvmSet(pKalman->state_post,kstate,0,(*It)->wy);
-	kstate++;
-	cvmSet(pKalman->state_post,kstate,0,(*It)->wz);
-	kstate++;
-	cvmSet(pKalman->state_post,kstate,0,(*It)->theta);
-	kstate++;
-	cvmSet(pKalman->state_post,kstate,0,(*It)->phi);
-	kstate++;
-	cvmSet(pKalman->state_post,kstate,0,(*It)->rho);
-	kstate++;
+        cout<<"if"<<endl;
+        cvmSet(pKalman->state_post,kstate,0,(*It)->wx);
+        kstate++;
+        cvmSet(pKalman->state_post,kstate,0,(*It)->wy);
+        kstate++;
+        cvmSet(pKalman->state_post,kstate,0,(*It)->wz);
+        kstate++;
+        cvmSet(pKalman->state_post,kstate,0,(*It)->theta);
+        kstate++;
+        cvmSet(pKalman->state_post,kstate,0,(*It)->phi);
+        kstate++;
+        cvmSet(pKalman->state_post,kstate,0,(*It)->rho);
+        kstate++;
       }
     }
-  
 }
 
 /**
@@ -888,14 +899,13 @@ void CKalman::transMat(CvMat* o_mat, CvMat* d_mat)
  **/
 void CKalman::SetKalman(CvKalman*pk,int state, int meas, int input)
 {
-  
-  
+
   pKalman->DP = state;
   pKalman->MP = meas;
   pKalman->CP = input;
   cout<<"state "<<state<<" meas "<<meas<<" input "<<input<<endl;
-  
-  
+
+
   /*    CV_CALL( kalman->state_pre = cvCreateMat( DP, 1, CV_32FC1 ));
 	cvZero( kalman->state_pre );*/
   pKalman->state_pre = cvCreateMatHeader( state, 1, CV_32FC1 );
@@ -1002,5 +1012,12 @@ void CKalman::Print()
   printMat(pKalman->error_cov_post);
   cout<<"kalman gain"<<endl;
   printMat(pKalman->gain);
-  
+  cvNamedWindow( "kalman", 1 );
+  IplImage *im;
+  IplImage *im2;
+  im=cvCreateImageHeader(cvSize(pKalman->gain->height,pKalman->gain->width),IPL_DEPTH_32F,1);
+  im2=cvCreateImageHeader(cvSize(pKalman->gain->height,pKalman->gain->width),IPL_DEPTH_32F,1);
+  im2=cvGetImage(pKalman->gain,im);
+  cvShowImage("kalman",im);
+
 }

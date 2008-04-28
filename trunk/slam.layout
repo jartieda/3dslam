@@ -2,7 +2,19 @@
 <!DOCTYPE CodeBlocks_layout_file>
 <CodeBlocks_layout_file>
 	<File name="src\dataout.cpp" open="1" top="0">
-		<Cursor position="5057" topLine="66"/>
+		<Cursor position="4997" topLine="123"/>
+	</File>
+	<File name="src\kalman.cpp" open="1" top="1">
+		<Cursor position="12100" topLine="313"/>
+	</File>
+	<File name="src\kalman.h" open="1" top="0">
+		<Cursor position="227" topLine="12"/>
+	</File>
+	<File name="src\map.cpp" open="1" top="0">
+		<Cursor position="205" topLine="17"/>
+	</File>
+	<File name="src\map.h" open="1" top="0">
+		<Cursor position="95" topLine="0"/>
 	</File>
 	<File name="src\particlefilter.cpp" open="1" top="0">
 		<Cursor position="868" topLine="14"/>
@@ -11,29 +23,24 @@
 		<Cursor position="757" topLine="18"/>
 	</File>
 	<File name="src\tracker.h" open="1" top="0">
-		<Cursor position="385" topLine="7"/>
+		<Cursor position="385" topLine="5"/>
 	</File>
 	<File name="src\tracker_surf.cpp" open="1" top="0">
-		<Cursor position="4408" topLine="120"/>
+		<Cursor position="2969" topLine="62"/>
 	</File>
 	<File name="src\tracker_surf.h" open="1" top="0">
 		<Cursor position="246" topLine="12"/>
 	</File>
-	<File name="src\trackerfile.cpp" open="1" top="1">
-		<Cursor position="1648" topLine="40"/>
+	<File name="src\trackerfile.cpp" open="1" top="0">
+		<Cursor position="2765" topLine="70"/>
 	</File>
 	<File name="src\trackerfile.h" open="1" top="0">
-		<Cursor position="413" topLine="0"/>
+		<Cursor position="530" topLine="0"/>
 	</File>
 	<File name="src\updater.cpp" open="1" top="0">
-		<Cursor position="13667" topLine="380"/>
+		<Cursor position="11971" topLine="373"/>
 	</File>
 	<File name="test1\test2.cpp" open="1" top="0">
-		<Cursor position="943" topLine="15"/>
+		<Cursor position="887" topLine="32"/>
 	</File>
-	<Expand folder="/Sources/src"/>
-	<Expand folder="/Sources/test1"/>
-	<Expand folder="/Sources"/>
-	<Expand folder="/Headers/src"/>
-	<Expand folder="/Headers"/>
 </CodeBlocks_layout_file>
