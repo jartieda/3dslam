@@ -1,7 +1,7 @@
 #include "kalman.h"
 //covarianzas de las features solor
 #define MEAS_COV 1
-#define PROC_COV 0.00001
+#define PROC_COV 0.0000
 #define ERROR_COV 0.25
 /** imprime una matriz **/
 void printMat(CvMat *m)
@@ -223,6 +223,7 @@ void CKalman::setModel(CModel *p)
 
   cvSetIdentity( pKalman->process_noise_cov, cvRealScalar(PROC_COV) );
   transMat(pModel->getProcessNoiseCov(),pKalman->process_noise_cov);
+
   if(pKalman->MP>0){
     cvSetIdentity( pKalman->measurement_matrix,cvRealScalar(0) );///FIXME
       cvSetIdentity( pKalman->measurement_noise_cov, cvRealScalar(MEAS_COV) );
@@ -345,14 +346,14 @@ void CKalman::Test()
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
-	if(sqrt(((*It)->pto.x-(*It)->projx)*((*It)->pto.x-(*It)->projx)+
-		((*It)->pto.y-(*It)->projy)*((*It)->pto.y-(*It)->projy))>150)
-	  {
-	    cout<<"fuera por distancia a proj: "<<(*It)->ID<<" Dist: "<<sqrt(((*It)->pto.x-(*It)->projx)*((*It)->pto.x-(*It)->projx)+
-									     ((*It)->pto.y-(*It)->projy)*((*It)->pto.y-(*It)->projy))<<endl;
-	    (*It)->state=st_no_view;
-	    pMap->visible--;
-	  }//end if for
+        if(sqrt(((*It)->pto.x-(*It)->projx)*((*It)->pto.x-(*It)->projx)+
+            ((*It)->pto.y-(*It)->projy)*((*It)->pto.y-(*It)->projy))>150)
+          {
+            cout<<"fuera por distancia a proj: "<<(*It)->ID<<" Dist: "<<sqrt(((*It)->pto.x-(*It)->projx)*((*It)->pto.x-(*It)->projx)+
+                                             ((*It)->pto.y-(*It)->projy)*((*It)->pto.y-(*It)->projy))<<endl;
+            (*It)->state=st_no_view;
+            pMap->visible--;
+        }//end if for
       }//end if state
     }//end iterator
   cvReleaseMat(&innov);
@@ -755,7 +756,7 @@ void CKalman::UpdateMatrixSize()
     cvGetSubRect(pKalman->process_noise_cov, submat, cvRect(oldDP,oldDP,fdims*npoints,fdims*npoints));
     cvSetIdentity(submat,cvRealScalar(PROC_COV));
     cvReleaseMatHeader(&submat);
-    for (int i =0; i<6; i++) cvmSet(pKalman->process_noise_cov,i,i,10);
+//    for (int i =0; i<6; i++) cvmSet(pKalman->process_noise_cov,i,i,0.01);///FIXME NO LO PILLA DEL MODELO
 //    for (int i =17;i<fdims*npoints+pModel->getStateNum(); i+=6) cvmSet(pKalman->process_noise_cov,i,i,1);
 //    cout<<"3"<<endl;
 
@@ -857,12 +858,9 @@ void CKalman::UpdateMatrixSize()
 
   //	state_post=wx wy wz
   int kstate=pModel->getStateNum();
-  cout<<"preupdater"<<endl;
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
-      cout<<"for"<<endl;
       if((*It)->state==st_inited||(*It)->state==st_no_view){
-        cout<<"if"<<endl;
         cvmSet(pKalman->state_post,kstate,0,(*It)->wx);
         kstate++;
         cvmSet(pKalman->state_post,kstate,0,(*It)->wy);
@@ -988,8 +986,8 @@ void CKalman::SetKalman(CvKalman*pk,int state, int meas, int input)
 }
 
 /** imprime todas all matrices de pKalman **/
-void CKalman::Print()
-{   cout<<"--------------------Kalman-----------------------"<<endl;
+void CKalman::Print(int iter)
+{  /*   cout<<"--------------------Kalman-----------------------"<<endl;
   cout<<"Estados: "<<pKalman->DP<<" Medidas: "<<pKalman->MP<<" Control: "<<pKalman->DP<<endl;
   cout<<"------------------------------------------------"<<endl;
   cout<<"state_pre"<<endl;
@@ -1011,13 +1009,21 @@ void CKalman::Print()
   cout<<"error_cov_post"<<endl;
   printMat(pKalman->error_cov_post);
   cout<<"kalman gain"<<endl;
-  printMat(pKalman->gain);
+  printMat(pKalman->gain);*/
   cvNamedWindow( "kalman", 1 );
   IplImage *im;
   IplImage *im2;
-  im=cvCreateImageHeader(cvSize(pKalman->gain->height,pKalman->gain->width),IPL_DEPTH_32F,1);
-  im2=cvCreateImageHeader(cvSize(pKalman->gain->height,pKalman->gain->width),IPL_DEPTH_32F,1);
-  im2=cvGetImage(pKalman->gain,im);
+  im=cvCreateImageHeader(cvSize(pKalman->error_cov_post->height,pKalman->error_cov_post->width),IPL_DEPTH_32F,1);
+  im2=cvCreateImageHeader(cvSize(pKalman->error_cov_post->height,pKalman->error_cov_post->width),IPL_DEPTH_32F,1);
+  im2=cvGetImage(pKalman->error_cov_post,im);
+  IplImage *im3;
+  im3=cvCreateImage(cvSize(pKalman->error_cov_post->height,pKalman->error_cov_post->width),IPL_DEPTH_8U,1);
+  cout<<"hola"<<endl;
+  cvConvertScale(im2, im3,255);
+  cout<<"adios"<<endl;
+  char fname[100];
+  sprintf(fname, "cov%d.tif",iter);
+  cvSaveImage(fname,im3);
   cvShowImage("kalman",im);
 
 }

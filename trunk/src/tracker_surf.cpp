@@ -114,6 +114,7 @@ for( int i = 0; i < feat->total; i++ )
         //end if dentro proj
 	}
 	 cvShowImage("win",grey2);
+	 cvSaveImage("surf.tif",grey2);
      cvWaitKey(100);
 cvReleaseImage(&grey);
 cvReleaseImage(&grey2);
@@ -138,7 +139,6 @@ surf.find_features( grey,feat, levels);
 *keys = new int[64*feat->total];// cvCreateMat(feat->total,64,CV_32FC1) ;
 *points = cvCreateMat(feat->total,4,CV_32FC1) ;
 
-int n_key=0;
 cout<<"end2"<<endl;
 float ang;
 int *desc;

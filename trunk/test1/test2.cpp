@@ -14,12 +14,12 @@
 #include "../src/particlefilter.h"
 #include "../src/trackerfile.h"
 
-//#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
+#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
 //#define DATA "c:\\datos\\slam\\kkk%0.4d.tif"
 //#define DATA "F:\\SLAM\\Datos\\heli\\kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg"
-#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
+//#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
 #define KALMAN
 
 using namespace std;
@@ -28,8 +28,8 @@ CDataCam mDataCam;
 CModelCam mModelCam;
 CMap mMap;
 CUpdater mUpdater;
-CTrackerFile mTracker;
-//CTracker_surf mTracker;
+//CTrackerFile mTracker;
+CTracker_surf mTracker;
 CFreeCam mVehicle;
 #ifndef KALMAN
 CParticleFilter mEstimator;
@@ -162,7 +162,7 @@ void init_video(int argc, char **argv)
   cvNamedWindow( "CamShiftDemo", 1 );
   //obtencion del primer fram
   //frame = cvQueryFrame( capture );
-  iter++;
+  //iter++;
   char filein[400];
 //  	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
  //sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
@@ -187,7 +187,7 @@ sprintf(filein,DATA,iter);
 void init_ptos()
 {
 //   frame = cvQueryFrame( capture );//tomo 2 frames para evitar negros
-iter++;
+//iter++;
    	char filein[400];
 //    sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
 // sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
@@ -272,13 +272,13 @@ void data_out()
   #ifndef KALMAN
    mDataOut.Particle(framecopy);
   #else
-  //mDataOut.Disp_out(framecopy);
+  mDataOut.Disp_out(framecopy);
   #endif
 
   mDataOut.Feat();
   mDataOut.Frame();
   mDataOut.Cam();
-  
+
    char nombre[100];
    //muestro imagen y compruebo salida
    sprintf(nombre,"frame%.2d.png",iter);
@@ -305,7 +305,7 @@ init_ptos();
 //cvSetErrMode(2);
 int n=0;
 int i;
-iter=8;
+//iter=8;
 
 while(1)
 {
@@ -344,6 +344,7 @@ sprintf(filein,DATA,iter);
    mEstimator.UpdateMatrixSize();
 
    mEstimator.Predict();
+   mModelCam.ProjectPoints();
 
 //   mEstimator.Test();
    cout<<"ransac"<<endl;
@@ -352,14 +353,16 @@ sprintf(filein,DATA,iter);
    mEstimator.UpdateMatrixSize();
 
    mEstimator.Correct();
+   mModelCam.ProjectPoints();
 
-   mEstimator.Print();
+   mEstimator.Print(iter);
    cout<<"update"<<endl;
    mUpdater.update();
    cout<<"dataout"<<endl;
+
    data_out();
    cout<<"waitkey"<<endl;
-   c = cvWaitKey(0);//esto probablemente se pueda quitar
+   c = cvWaitKey(100);//esto probablemente se pueda quitar
    if( c == 27 )//si presiono escape salgo del programa limpiamente
      break;
 }

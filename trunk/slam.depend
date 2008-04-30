@@ -154,7 +154,7 @@
 	<cv.h>
 	<iostream>
 
-1208877556 f:\slam\programas\slamsvn\src\dataout.cpp
+1209452898 f:\slam\programas\slamsvn\src\dataout.cpp
 	"dataout.h"
 
 1208766698 f:\slam\programas\slamsvn\src\dataout.h
@@ -176,12 +176,13 @@
 	"cv.h"
 	<list>
 
-1208447556 f:\slam\programas\slamsvn\src\kalman.h
+1209494902 f:\slam\programas\slamsvn\src\kalman.h
 	"modelcam.h"
 	"map.h"
 	"model.h"
 	"cv.h"
 	"estimator.h"
+	"highgui.h"
 
 1205240754 f:\slam\programas\slamsvn\src\modelcam.h
 	<cv.h>
@@ -222,7 +223,7 @@
 1208447592 f:\slam\programas\slamsvn\src\estimator.cpp
 	"estimator.h"
 
-1205485138 f:\slam\programas\slamsvn\src\freecam.cpp
+1209479936 f:\slam\programas\slamsvn\src\freecam.cpp
 	"freecam.h"
 
 1205240110 f:\slam\programas\slamsvn\src\freecam.h
@@ -230,7 +231,7 @@
 	<list>
 	"model.h"
 
-1209293750 f:\slam\programas\slamsvn\src\kalman.cpp
+1209494902 f:\slam\programas\slamsvn\src\kalman.cpp
 	"kalman.h"
 
 1205249552 f:\slam\programas\slamsvn\src\map.cpp
@@ -239,7 +240,7 @@
 1205249532 f:\slam\programas\slamsvn\src\model.cpp
 	"model.h"
 
-1208606550 f:\slam\programas\slamsvn\src\modelcam.cpp
+1209378208 f:\slam\programas\slamsvn\src\modelcam.cpp
 	"modelcam.h"
 
 1208876210 f:\slam\programas\slamsvn\src\particlefilter.cpp
@@ -268,7 +269,7 @@
 	"surf.h"
 	"tracker.h"
 
-1209287656 f:\slam\programas\slamsvn\src\updater.cpp
+1209484130 f:\slam\programas\slamsvn\src\updater.cpp
 	"updater.h"
 	<iostream>
 
@@ -280,7 +281,7 @@
 	<vector>
 	"highgui.h"
 
-1209293810 f:\slam\programas\slamsvn\test1\test2.cpp
+1209500662 f:\slam\programas\slamsvn\test1\test2.cpp
 	<stdio.h>
 	<iostream>
 	<fstream>
@@ -296,7 +297,7 @@
 	"../src/particlefilter.h"
 	"../src/trackerfile.h"
 
-1209278640 f:\slam\programas\slamsvn\src\trackerfile.cpp
+1209481248 f:\slam\programas\slamsvn\src\trackerfile.cpp
 	"trackerfile.h"
 
 1209198824 f:\slam\programas\slamsvn\src\trackerfile.h

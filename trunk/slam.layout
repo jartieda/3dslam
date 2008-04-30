@@ -2,22 +2,34 @@
 <!DOCTYPE CodeBlocks_layout_file>
 <CodeBlocks_layout_file>
 	<File name="src\dataout.cpp" open="1" top="0">
-		<Cursor position="4997" topLine="123"/>
+		<Cursor position="5539" topLine="151"/>
 	</File>
-	<File name="src\kalman.cpp" open="1" top="1">
-		<Cursor position="12100" topLine="313"/>
+	<File name="src\freecam.cpp" open="1" top="0">
+		<Cursor position="959" topLine="19"/>
+	</File>
+	<File name="src\kalman.cpp" open="1" top="0">
+		<Cursor position="36694" topLine="995"/>
 	</File>
 	<File name="src\kalman.h" open="1" top="0">
-		<Cursor position="227" topLine="12"/>
+		<Cursor position="1028" topLine="13"/>
 	</File>
 	<File name="src\map.cpp" open="1" top="0">
-		<Cursor position="205" topLine="17"/>
+		<Cursor position="205" topLine="0"/>
 	</File>
 	<File name="src\map.h" open="1" top="0">
 		<Cursor position="95" topLine="0"/>
 	</File>
+	<File name="src\model.cpp" open="1" top="0">
+		<Cursor position="211" topLine="15"/>
+	</File>
+	<File name="src\model.h" open="1" top="0">
+		<Cursor position="253" topLine="18"/>
+	</File>
+	<File name="src\modelcam.cpp" open="1" top="0">
+		<Cursor position="7061" topLine="195"/>
+	</File>
 	<File name="src\particlefilter.cpp" open="1" top="0">
-		<Cursor position="868" topLine="14"/>
+		<Cursor position="6942" topLine="203"/>
 	</File>
 	<File name="src\particlefilter.h" open="1" top="0">
 		<Cursor position="757" topLine="18"/>
@@ -25,22 +37,22 @@
 	<File name="src\tracker.h" open="1" top="0">
 		<Cursor position="385" topLine="5"/>
 	</File>
-	<File name="src\tracker_surf.cpp" open="1" top="0">
-		<Cursor position="2969" topLine="62"/>
+	<File name="src\tracker_surf.cpp" open="1" top="1">
+		<Cursor position="4611" topLine="118"/>
 	</File>
 	<File name="src\tracker_surf.h" open="1" top="0">
 		<Cursor position="246" topLine="12"/>
 	</File>
 	<File name="src\trackerfile.cpp" open="1" top="0">
-		<Cursor position="2765" topLine="70"/>
+		<Cursor position="1789" topLine="48"/>
 	</File>
 	<File name="src\trackerfile.h" open="1" top="0">
 		<Cursor position="530" topLine="0"/>
 	</File>
 	<File name="src\updater.cpp" open="1" top="0">
-		<Cursor position="11971" topLine="373"/>
+		<Cursor position="931" topLine="342"/>
 	</File>
 	<File name="test1\test2.cpp" open="1" top="0">
-		<Cursor position="887" topLine="32"/>
+		<Cursor position="969" topLine="9"/>
 	</File>
 </CodeBlocks_layout_file>

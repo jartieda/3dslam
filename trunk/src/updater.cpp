@@ -30,7 +30,7 @@ CUpdater::CUpdater(CMap *pMap_ ,CDataCam *pDataCam_)
    border=20;
    num_feat_min=10;
    num_feat_max=30;
-   point_sep=50;
+   point_sep=5;
    calidad_min_punto=2;
 //   depth=0.02;
 depth=0.2;
@@ -149,15 +149,15 @@ void CUpdater::ranasac(vector<point> orig_data,int k, int n,double t,int d)
      if((*It)->state==st_inited){
        ok=0;
        for (int i=0; i <bestinliners.size(); i++)
-	 {
-	   if (bestinliners[i].ID==(*It)->ID){
-	     ok=1;
-	   }
-	 }
+        {
+            if (bestinliners[i].ID==(*It)->ID){
+                ok=1;
+            }
+        }
        if (ok==0){
-	 (*It)->state=st_no_view;
-	 cout<<"eleminado ransac "<<(*It)->ID<<endl;
-	 pMap->visible--;
+            (*It)->state=st_no_view;
+            cout<<"eleminado ransac "<<(*It)->ID<<endl;
+            pMap->visible--;
        }
      }
    }
@@ -289,14 +289,13 @@ void CUpdater::TestRANSAC()
 	orig_data.push_back(p);
       }//end if state
     }//end iterator
-  cout<<"end for"<<endl;
   if (orig_data.size()<10)
     {
       printf("ERROR no hay suficientes puntos\n");
     }else
     {
       cout <<"pre ranasac"<<endl;
-      ranasac(orig_data,200,10,15.0,(int)(orig_data.size()/8));
+      ranasac(orig_data,200,10,35.0,(int)(orig_data.size()/8));
     cout <<"post ranasca"<<endl;
     }
 }
@@ -402,10 +401,8 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
    unsigned char key[dim];
    for (int i=0; i<faltan; i++)
      {
-         cout<<"for"<<endl;
        if(j<count){
          do {
-             cout<<"begin while"<<endl;
             encontrado=true;
             /////////////////////////////////////////////////
 
@@ -449,7 +446,6 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
                //return -1;
              }
              if (n_key2==0) encontrado = true; /// En el caso de tracker file FIXME
-            cout<<"he entrado encontrado="<<encontrado<<endl;
 
         /////////////////////////////////////////////////
         /////////////////////////////////////////////////
@@ -477,13 +473,12 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		 }
 
 	       //no en borde
-	       cout<<cvmGet(points,j,0)<<" "<<cvmGet(points,j,1)<<" "<<border<<pDataCam->frame_width<<" "<<pDataCam->frame_height<<endl;
-	       cout<<( (cvmGet(points,j,0)<border) ||
+//	       cout<<cvmGet(points,j,0)<<" "<<cvmGet(points,j,1)<<" "<<border<<pDataCam->frame_width<<" "<<pDataCam->frame_height<<endl;
+	      /* cout<<( (cvmGet(points,j,0)<border) ||
               (cvmGet(points,j,1)<border) ||
               (cvmGet(points,j,0)>(pDataCam->frame_width-border)) ||
-              (cvmGet(points,j,1)>(pDataCam->frame_height-border)))<<endl;
-           cout<<(pDataCam->frame_width-border)<<" "<<(pDataCam->frame_height-border)<<endl;
-cout<<"he entrado encontrado2="<<encontrado<<endl;
+              (cvmGet(points,j,1)>(pDataCam->frame_height-border)))<<endl;*/
+ //          cout<<(pDataCam->frame_width-border)<<" "<<(pDataCam->frame_height-border)<<endl;
 
 	       if( (cvmGet(points,j,0)<border) ||
               (cvmGet(points,j,1)<border) ||
@@ -492,14 +487,12 @@ cout<<"he entrado encontrado2="<<encontrado<<endl;
                {
                     encontrado = false;
               }
-cout<<"he entrado encontrado2="<<encontrado<<endl;
 
 	       //calidad del punto mayor que un tamano
 	       if(cvmGet(points,j,2)<calidad_min_punto)
 		 {
 		   encontrado = false;
 		 }
-cout<<"he entrado encontrado3="<<encontrado<<endl;
 	       //inserto si cumple todas las condiciones anteriores
 	       if (encontrado==true)
 		 {
@@ -515,11 +508,9 @@ cout<<"he entrado encontrado3="<<encontrado<<endl;
 		   insert++;
 		 }
 	       j++;
-	       cout<< "j1: "<<j<<endl;
        }while(!encontrado&& j<count);
       }//endif
-      cout<<"end for"<<endl;
-     }//end for
+    }//end for
      if (keys!=0)   delete (keys);
      if (keys2!=0)   delete (keys2);
    //cvReleaseMat(&keys);

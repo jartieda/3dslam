@@ -37,7 +37,7 @@ void UpdateJacob();///< actualiza el jacobiano
 void UpdateMatrixSize(); ///< incrementa el tamaño del filtro
 void transMat(CvMat* o_mat, CvMat* d_mat);
 void SetKalman(CvKalman*pk,int state, int meas, int input);
-void Print();
+void Print(int iter);
 float xi[31];///<probabilidad acumulada de la distribucion chi cuadrado
 void setModel(CModel *p);///< enlaza la clase calman con el modelo de vehÃ­culo
 

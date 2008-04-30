@@ -14,7 +14,7 @@ CModelCam::~CModelCam()
 /**
 * proyecta los puntos que existen en pMap <br>
 * rellena los puntos y las derivadas <br>
- * En esta funci&oacute;n se aplican las derivadas respecto del las 
+ * En esta funci&oacute;n se aplican las derivadas respecto del las
  variables de parametrización inversa.
  *
 **/
@@ -34,7 +34,7 @@ for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It
     cvmSet(obj,0,3,(*It)->theta);
     cvmSet(obj,0,4,(*It)->phi);
     cvmSet(obj,0,5,(*It)->rho);
-    
+
    ///FIXME solo se deber&iacute;a proyectar sobre los puntos iniciados
    cvProject_1_pto(obj,proj,(*It)->dpdr,(*It)->dpdt,(*It)->dpdw);
    (*It)->projx=cvmGet(proj,0,0);
@@ -47,7 +47,7 @@ for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It
    cvmSet((*It)->dpdw,0,3,cvmGet((*It)->dpdw,0,0)*(-s_th*s_ph)/(*It)->rho+
                           cvmGet((*It)->dpdw,0,1)*(-c_th     )/(*It)->rho+
                           cvmGet((*It)->dpdw,0,2)*(-s_th*c_ph)/(*It)->rho);
-   /** \f$ \frac{dp}{d\phi}= \frac{dx}{dX}  (\frac{cos(\phi)}{\rho}) + 
+   /** \f$ \frac{dp}{d\phi}= \frac{dx}{dX}  (\frac{cos(\phi)}{\rho}) +
    \frac{dx}{dZ} (\frac{-sin(\phi)}{\rho})\f$ **/
    cvmSet((*It)->dpdw,0,4,cvmGet((*It)->dpdw,0,0)*(c_th*c_ph)/(*It)->rho+
                           cvmGet((*It)->dpdw,0,1)*(0.0    )/(*It)->rho+
@@ -57,7 +57,7 @@ for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It
     * \frac{dx}{dY} (\frac{sin(\theta)}{\rho^2}) +
     * \frac{dx}{dZ} (\frac{-cos(\phi)}{\rho^2}) \f$ **/
    cvmSet((*It)->dpdw,0,5,cvmGet((*It)->dpdw,0,0)*0.5*(-c_th*s_ph)/((*It)->rho*(*It)->rho)+
-                          cvmGet((*It)->dpdw,0,1)*0.5*(s_ph     )/((*It)->rho*(*It)->rho)+
+                          cvmGet((*It)->dpdw,0,1)*0.5*(s_th     )/((*It)->rho*(*It)->rho)+
                           cvmGet((*It)->dpdw,0,2)*0.5*(-c_th*c_ph)/((*It)->rho*(*It)->rho));
 
    /** \f$ \frac{dy}{d\theta}= \frac{dy}{dX}(\frac{cos(\theta)}{\rho})\f$ **/
@@ -75,7 +75,7 @@ for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It
     * \frac{dy}{dX} (\frac{sin(\theta)}{\rho^2}) +
     * \frac{dy}{dZ} (\frac{-cos(\phi)}{\rho^2}) \f$ **/
      cvmSet((*It)->dpdw,1,5,cvmGet((*It)->dpdw,1,0)*0.5*(-c_th*s_ph)/((*It)->rho*(*It)->rho)+
-                            cvmGet((*It)->dpdw,1,1)*0.5*(s_ph     )/((*It)->rho*(*It)->rho)+
+                            cvmGet((*It)->dpdw,1,1)*0.5*(s_th     )/((*It)->rho*(*It)->rho)+
                             cvmGet((*It)->dpdw,1,2)*0.5*(-c_th*c_ph)/((*It)->rho*(*It)->rho));
 
 }
@@ -107,7 +107,7 @@ void CModelCam::cvProject_1_pto(CvMat* nobj, CvMat* nimg,
    dpdr_= cvCreateMat(2*4,3,CV_32FC1);
    dpdt_= cvCreateMat(2*4,3,CV_32FC1);
    dpdw_= cvCreateMat(2*4,3*4,CV_32FC1);
-   
+
    CvMat * m;
    m=cvCreateMat(3,1,CV_32FC1);
    CvMat *obj;
@@ -471,15 +471,15 @@ void CModelCam::cvProjectPoints3( const CvMat* obj_points,
             double dxdp[] = { z, 0, -x*z };
             double dydp[] = { 0, z, -y*z };
             double dydt[3], dxdt[3];
-            
+
             dxdt[0]=-R[0]*dxdp[0]-R[3]*dxdp[1]-R[6]*dxdp[2];
             dxdt[1]=-R[1]*dxdp[0]-R[4]*dxdp[1]-R[7]*dxdp[2];
             dxdt[2]=-R[2]*dxdp[0]-R[5]*dxdp[1]-R[8]*dxdp[2];
-            
+
             dydt[0]=-R[0]*dydp[0]-R[3]*dydp[1]-R[6]*dydp[2];
             dydt[1]=-R[1]*dydp[0]-R[4]*dydp[1]-R[7]*dydp[2];
             dydt[2]=-R[2]*dydp[0]-R[5]*dydp[1]-R[8]*dydp[2];
-            
+
             for( j = 0; j < 3; j++ )
             {
                double dr2dt = 2*x*dxdt[j] + 2*y*dydt[j];
@@ -491,29 +491,29 @@ void CModelCam::cvProjectPoints3( const CvMat* obj_points,
                         k[2]*(dr2dt + 2*y*dydt[j]) + k[3]*da1dt);
                dpdt_p[j] = dmxdt;
                dpdt_p[dpdt_step+j] = dmydt;
-               
+
             }
-            
+
             dpdt_p += dpdt_step*2;
          }
 
          if( dpdw_p )
          {
             double dwdW[6];
-           
+
             l+=1;
             double dxdp[] = { z, 0, -x*z };
             double dydp[] = { 0, z, -y*z };
-            
+
             dwdW[0]=R[0]*dxdp[0]+R[3]*dxdp[1]+R[6]*dxdp[2];
             dwdW[1]=R[1]*dxdp[0]+R[4]*dxdp[1]+R[7]*dxdp[2];
             dwdW[2]=R[2]*dxdp[0]+R[5]*dxdp[1]+R[8]*dxdp[2];
-            
+
             dwdW[3]=R[0]*dydp[0]+R[3]*dydp[1]+R[6]*dydp[2];
             dwdW[4]=R[1]*dydp[0]+R[4]*dydp[1]+R[7]*dydp[2];
             dwdW[5]=R[2]*dydp[0]+R[5]*dydp[1]+R[8]*dydp[2];
-            
-            
+
+
             for( j = 0; j < 3; j++ )
             {
             double dr2dt = 2*x*dwdW[j] + 2*y*dwdW[j+3];
@@ -602,7 +602,7 @@ void CModelCam::cvProjectPoints3( const CvMat* obj_points,
    if( _dpdw != dpdw )
       cvReleaseMat( &_dpdw );
 }
-/** cálculo de la derivada de la inicialización de los parámetros respecto de 
+/** cálculo de la derivada de la inicialización de los parámetros respecto de
  * la posción y de los puntos <br>
  * se calcula por incrementos finitos
  **/

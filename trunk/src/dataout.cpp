@@ -167,7 +167,7 @@ void CDataOut::Particle(IplImage *framecopy)
 void CDataOut::Disp_out(IplImage *framecopy)
 {
   char ndisp[100];
-  sprintf(ndisp,"disp%d.txt",iter);
+  sprintf(ndisp,"disp%d.txt",iter++);
   DispFile.open(ndisp);
   int ii=0;
   CvMat *temp,*temp2,*temp3;
@@ -201,32 +201,33 @@ void CDataOut::Disp_out(IplImage *framecopy)
 	      cvGetSubRect( pKalman->pKalman->error_cov_post,temp,cvRect(12+ii*6,12+ii*6,6,6) );
 
         for (int part=0; part<40; part++){
-		  cvmSet(vect,0,0,randomVector(-.5,.5));
-  		  cvmSet(vect,1,0,randomVector(-.5,.5));
-  		  cvmSet(vect,2,0,randomVector(-.5,.5));
-		  cvmSet(vect,3,0,randomVector(-.1,0.1));
-		  cvmSet(vect,4,0,randomVector(-.1,0.1));
-		  cvmSet(vect,5,0,randomVector(0.1,100000));
+		  cvmSet(vect,0,0,randomVector(-.005,.005));
+  		  cvmSet(vect,1,0,randomVector(-.005,.005));
+  		  cvmSet(vect,2,0,randomVector(-.005,.005));
+		  cvmSet(vect,3,0,randomVector(-.005,0.005));
+		  cvmSet(vect,4,0,randomVector(-.005,0.005));
+		  cvmSet(vect,5,0,randomVector(-1,1));
 
           cvMatMul(temp,vect,res6);
+
           cvmSet(m,0,0,cos(cvmGet(res6,3,0)+(*It)->theta)*sin(cvmGet(res6,4,0)+(*It)->phi));
   		  cvmSet(m,1,0,-sin(cvmGet(res6,3,0)+(*It)->theta));
   		  cvmSet(m,2,0,cos(cvmGet(res6,3,0)+(*It)->theta)*cos(cvmGet(res6,4,0)+(*It)->phi));
     	  cvNormalize( m, m);
-    	  cvmSet (vect2,0,0,((cvmGet(res6,0,0)+(*It)->wx)+cvmGet(m,0,0)/cvmGet(res6,5,0)));
-    	  cvmSet(vect2,0,1,((cvmGet(res6,1,0)+(*It)->wy)+cvmGet(m,1,0)/cvmGet(res6,5,0)));
-   	      cvmSet(vect2,0,2,((cvmGet(res6,2,0)+(*It)->wz)+cvmGet(m,2,0)/cvmGet(res6,5,0)));
+    	  cvmSet (vect2,0,0,((cvmGet(res6,0,0)+(*It)->wx)+cvmGet(m,0,0)/(cvmGet(res6,5,0)+(*It)->rho)));
+    	  cvmSet(vect2,0,1,((cvmGet(res6,1,0)+(*It)->wy)+cvmGet(m,1,0)/(cvmGet(res6,5,0)+(*It)->rho)));
+   	      cvmSet(vect2,0,2,((cvmGet(res6,2,0)+(*It)->wz)+cvmGet(m,2,0)/(cvmGet(res6,5,0)+(*It)->rho)));
 
         DispFile<<cvmGet(vect2,0,0)<<" ";
         DispFile<<cvmGet(vect2,0,1)<<" ";
         DispFile<<cvmGet(vect2,0,2)<<" ";
         DispFile<<ii<<endl;
           cvmSet(vect2,0,0,cvmGet(res6,0,0)+(*It)->wx);
-          cvmSet(vect2,0,1,cvmGet(res6,0,1)+(*It)->wy);
-          cvmSet(vect2,0,2,cvmGet(res6,0,2)+(*It)->wz);
-          cvmSet(vect2,0,3,cvmGet(res6,0,3)+(*It)->theta);
-          cvmSet(vect2,0,4,cvmGet(res6,0,4)+(*It)->phi);
-          cvmSet(vect2,0,5,cvmGet(res6,0,5)+(*It)->rho);
+          cvmSet(vect2,0,1,cvmGet(res6,1,0)+(*It)->wy);
+          cvmSet(vect2,0,2,cvmGet(res6,2,0)+(*It)->wz);
+          cvmSet(vect2,0,3,cvmGet(res6,3,0)+(*It)->theta);
+          cvmSet(vect2,0,4,cvmGet(res6,4,0)+(*It)->phi);
+          cvmSet(vect2,0,5,cvmGet(res6,5,0)+(*It)->rho);
 
              pModelCam->cvProject_1_pto(vect2,proj,NULL,NULL,NULL);
              if (framecopy != NULL){
@@ -245,6 +246,7 @@ void CDataOut::Disp_out(IplImage *framecopy)
     cvReleaseMat(&vect2);
     cvReleaseMat(&res6);
     cvReleaseMat(&proj);
+    DispFile.close();
 }
 void CDataOut::Cam()
 {

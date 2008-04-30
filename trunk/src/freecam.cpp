@@ -18,7 +18,7 @@ CFreeCam::CFreeCam()
     MeasurementVector=cvCreateMat(6,1,CV_32FC1);
 
 	cvSetIdentity( TransitionMatrix);
-	
+
 	for (int i=0;i<6;i++){
    		cvmSet(TransitionMatrix,2*i,2*i,2);
    		cvmSet(TransitionMatrix,2*i,2*i+1,-1);
@@ -30,13 +30,13 @@ CFreeCam::CFreeCam()
 
 //covarianzas de las posicion
    for (int i=0;i<3;i++){
-      cvmSet(ProcessNoiseCov,2*i,2*i,10);
-      cvmSet(ProcessNoiseCov,2*i+1,2*i+1,10);
+      cvmSet(ProcessNoiseCov,2*i,2*i,0.005);
+      cvmSet(ProcessNoiseCov,2*i+1,2*i+1,0.005);
    }
 //covarianzas del angulo
    for (int i=3;i<6;i++){
-      cvmSet(ProcessNoiseCov,2*i,2*i,0.03);
-      cvmSet(ProcessNoiseCov,2*i+1,2*i+1,0.03);
+      cvmSet(ProcessNoiseCov,2*i,2*i,0.001);
+      cvmSet(ProcessNoiseCov,2*i+1,2*i+1,0.001);
    }
 }
 
