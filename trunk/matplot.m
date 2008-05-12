@@ -40,7 +40,7 @@ hold off
 % grid on
 % hold off
 figure (4)
-subplot(1,2,1)
+subplot(2,2,1)
 load disp0.txt
 load disp1.txt
 load disp2.txt
@@ -48,7 +48,15 @@ load disp3.txt
 plot3(disp0(:,3),disp0(:,1),disp0(:,2),'b.');
 axis equal
 grid on
-subplot(1,2,2)
+subplot(2,2,2)
+plot3(disp1(:,3),disp1(:,1),disp1(:,2),'b.');
+axis equal
+grid on
+subplot(2,2,3)
+plot3(disp2(:,3),disp2(:,1),disp2(:,2),'b.');
+axis equal
+grid on
+subplot(2,2,4)
 plot3(disp3(:,3),disp3(:,1),disp3(:,2),'b.');
 axis equal
 grid on

@@ -140,10 +140,10 @@ void CParticleFilter::Correct()
               pModelCam->cvProject_1_pto(obj,img,NULL,NULL,NULL);
               for (int i=0;i<2;i++){
                  pred_measure[n_meas++][n_part]=cvmGet(img,0,i);
-//                cout<<"meas ("<<(n_meas-1)<<") "<<pred_measure[n_meas-1][n_part]<<endl;
+             //    cout<<"meas ("<<(n_meas-1)<<") "<<pred_measure[n_meas-1][n_part]<<endl;
               }
               for(int i=0;i<2;i++){
-//                  cout<<"real meas("<<kk<<") " <<measure_[kk++]<<endl;
+               //   cout<<"real meas("<<kk<<") " <<measure_[kk++]<<endl;
               }
 
      }
@@ -158,8 +158,9 @@ void CParticleFilter::Correct()
      {
          w=0;
         if((*It)->state==st_inited){
-//              cout<<"pred_measure "<<pred_measure[p][n_part]<<" measure "<<measure_[m]<< endl;
+        //      cout<<"pred_measure "<<pred_measure[p][n_part]<<" measure "<<measure_[m]<< endl;
             err=(pred_measure[p][n_part]-measure_[m])*(pred_measure[p][n_part]-measure_[m]);
+          //  cout<<"err"<<err<<endl;
             weights[n_part]+=(err);
 
             if (sqrt(err)>threshold){
@@ -193,24 +194,25 @@ void CParticleFilter::Correct()
           cout<<"weights normalized"<<weights[i]<<endl;
       }
 
-     // int n_v;
+//      int n_v;
       for (int v=0; v<num_variables;v++){
           state[v]=0;
-       //   n_v=0;
+          //n_v=0;
           for (int n_part=0; n_part<num_particles; n_part++){
-              //if (reject[n_part]==false){
+              if (reject[n_part]==false){
                  state[v]+=(weights[n_part]*particles[v][n_part]);
-               //  n_v++;
-              //}else{
-      //          cout<<"rejected "<<n_part<<endl;
-              //}
+            //       state[v]+=particles[v][n_part];
+            //       n_v++;
+              }else{
+                cout<<"rejected "<<n_part<<endl;
+              }
           }
-          //state[v]/=n_v;
+        //  if (n_v!=0) state[v]/=n_v;
       }
 
       for (int i=0; i<num_particles;i++)
       {
-          if (weights[i]<0.00001&&reject[i]==false)
+          if (weights[i]<0.001&&reject[i]==false)
           {
               cout<<"reject["<<i<<"] for low weight"<<endl;
                reject[i]=true;

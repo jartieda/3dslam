@@ -40,6 +40,8 @@ void SetKalman(CvKalman*pk,int state, int meas, int input);
 void Print(int iter);
 float xi[31];///<probabilidad acumulada de la distribucion chi cuadrado
 void setModel(CModel *p);///< enlaza la clase calman con el modelo de vehículo
-
+void Predict_FAST();
+void Correct_FAST();
 };
+
 #endif

@@ -339,6 +339,7 @@ sprintf(filein,DATA,iter);
    i=0;
 
    n++;
+
    mUpdater.remove();
 
    mEstimator.UpdateMatrixSize();
@@ -346,16 +347,18 @@ sprintf(filein,DATA,iter);
    mEstimator.Predict();
    mModelCam.ProjectPoints();
 
-//   mEstimator.Test();
+   mEstimator.Test();
    cout<<"ransac"<<endl;
-//   mUpdater.TestRANSAC();
+   mUpdater.TestRANSAC();
 
    mEstimator.UpdateMatrixSize();
 
    mEstimator.Correct();
    mModelCam.ProjectPoints();
 
+#ifdef KALMAN
    mEstimator.Print(iter);
+#endif
    cout<<"update"<<endl;
    mUpdater.update();
    cout<<"dataout"<<endl;

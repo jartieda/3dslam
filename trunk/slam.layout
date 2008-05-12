@@ -2,16 +2,16 @@
 <!DOCTYPE CodeBlocks_layout_file>
 <CodeBlocks_layout_file>
 	<File name="src\dataout.cpp" open="1" top="0">
-		<Cursor position="5539" topLine="151"/>
+		<Cursor position="2681" topLine="80"/>
 	</File>
 	<File name="src\freecam.cpp" open="1" top="0">
 		<Cursor position="959" topLine="19"/>
 	</File>
-	<File name="src\kalman.cpp" open="1" top="0">
-		<Cursor position="36694" topLine="995"/>
+	<File name="src\kalman.cpp" open="1" top="1">
+		<Cursor position="33920" topLine="965"/>
 	</File>
 	<File name="src\kalman.h" open="1" top="0">
-		<Cursor position="1028" topLine="13"/>
+		<Cursor position="248" topLine="6"/>
 	</File>
 	<File name="src\map.cpp" open="1" top="0">
 		<Cursor position="205" topLine="0"/>
@@ -29,19 +29,19 @@
 		<Cursor position="7061" topLine="195"/>
 	</File>
 	<File name="src\particlefilter.cpp" open="1" top="0">
-		<Cursor position="6942" topLine="203"/>
+		<Cursor position="509" topLine="381"/>
 	</File>
 	<File name="src\particlefilter.h" open="1" top="0">
 		<Cursor position="757" topLine="18"/>
 	</File>
 	<File name="src\tracker.h" open="1" top="0">
-		<Cursor position="385" topLine="5"/>
+		<Cursor position="385" topLine="0"/>
 	</File>
-	<File name="src\tracker_surf.cpp" open="1" top="1">
+	<File name="src\tracker_surf.cpp" open="1" top="0">
 		<Cursor position="4611" topLine="118"/>
 	</File>
 	<File name="src\tracker_surf.h" open="1" top="0">
-		<Cursor position="246" topLine="12"/>
+		<Cursor position="246" topLine="6"/>
 	</File>
 	<File name="src\trackerfile.cpp" open="1" top="0">
 		<Cursor position="1789" topLine="48"/>
@@ -50,9 +50,9 @@
 		<Cursor position="530" topLine="0"/>
 	</File>
 	<File name="src\updater.cpp" open="1" top="0">
-		<Cursor position="931" topLine="342"/>
+		<Cursor position="932" topLine="100"/>
 	</File>
 	<File name="test1\test2.cpp" open="1" top="0">
-		<Cursor position="969" topLine="9"/>
+		<Cursor position="10350" topLine="0"/>
 	</File>
 </CodeBlocks_layout_file>

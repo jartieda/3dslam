@@ -158,7 +158,7 @@ void CDataOut::Particle(IplImage *framecopy)
                             1,c[i/2],1 );*/
                    cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
                                                 pParticleFilter->pred_measure[i+1][p]),
-                            1,cvScalar(0,0,pParticleFilter->weights[p]*200000.0),1 );
+                            1,cvScalar(0,0,pParticleFilter->weights[p]*10001.0),1 );
             }
             i+=2;
         }
