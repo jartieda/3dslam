@@ -49,7 +49,7 @@ CUpdater::CUpdater()
    border=20;
    num_feat_min=10;
    num_feat_max=30;
-   point_sep=50;//FIXME ESTO PONERLO A 50 OTRA VEZ!!!!!!
+   point_sep=5;//FIXME ESTO PONERLO A 50 OTRA VEZ!!!!!!
    calidad_min_punto=2;
    //   depth=0.02;
 depth=0.2;

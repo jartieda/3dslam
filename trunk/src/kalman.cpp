@@ -1,7 +1,7 @@
 #include "kalman.h"
 //covarianzas de las features solor
 #define MEAS_COV 1
-#define PROC_COV 0.0000
+#define PROC_COV 0.0020
 #define ERROR_COV 0.025
 /** imprime una matriz **/
 void printMat(CvMat *m)
@@ -487,11 +487,6 @@ void CKalman::Correct()
   UpdateJacob();
   cout<<"correction"<<endl;
 
-  int i_state=0;
-  int i_aa=0;
-  int j_aa=0;
-  bool cols[pKalman->DP];
-  int i_c=0;
 //  cout<<"1"<<endl;
   /* temp2 = H*P'(k) */
   cvMatMulAdd( pKalman->measurement_matrix,
@@ -539,28 +534,15 @@ void CKalman::Correct()
   for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
+        cout<<"linearidad--> "<<" Jacob x:"<< cvmGet(pKalman->temp5,ii,0)<<" y: ";
+        cout<<cvmGet(pKalman->temp5,ii+1,0)<< " modelo x: "<<(*It)->pto.x-(*It)->projx;
+        cout<<" y: "<<(*It)->pto.y-(*It)->projy<<endl;
         cvmSet(pKalman->temp5,ii,0,(*It)->pto.x-(*It)->projx);
         ii++;
         cvmSet(pKalman->temp5,ii,0,(*It)->pto.y-(*It)->projy);
         ii++;
       }
     }
-  cout<<"pto.x - projx "<<endl;
-  for (int i=0 ; i<(pKalman->MP); i++)
-    {
-      for (int j=0;j<1;j++)
-        {
-          cout << cvmGet(pKalman->temp5, i,j)<<" ";
-        }
-      cout <<endl;
-    }
-
-  /*cout<<"measurement: "<<endl;
-    for (int i=0; i<(pKalman->MP);i++)
-    {
-    cout<<" "<<cvmGet(measurement,i,0);
-    }
-    cout<<endl;*/
 
   /* x(k) = x'(k) + K(k)*temp5 */
   cvMatMulAdd( pKalman->gain, pKalman->temp5, pKalman->state_pre, pKalman->state_post );
@@ -570,7 +552,6 @@ void CKalman::Correct()
 	  pKalman->error_cov_post, 0 );
 
   int kstate=0;
-  int kk=0;
   for(int i =0; i<3;i++){
     cvmSet(trans,i,0,cvmGet(pKalman->state_post,kstate++,0));
     kstate++;
@@ -621,7 +602,6 @@ void CKalman::Correct_FAST()
   Paa = cvCreateMat((pKalman->MP/2)*fdims+pModel->getStateNum(),
 		    (pKalman->MP/2)*fdims+pModel->getStateNum(),CV_32FC1);
   Haa = cvCreateMat(pKalman->MP,(pKalman->MP/2)*fdims+pModel->getStateNum(),CV_32FC1);//num_medidas/2*6
-  int i_state=0;
   int i_aa=0;
   int j_aa=0;
   bool cols[pKalman->DP];
@@ -774,7 +754,6 @@ void CKalman::Correct_FAST()
 
 
   int kstate=0;
-  int kk=0;
   for(int i =0; i<3;i++){
     cvmSet(trans,i,0,cvmGet(pKalman->state_post,kstate++,0));
     kstate++;
@@ -1149,7 +1128,7 @@ void CKalman::SetKalman(CvKalman*pk,int state, int meas, int input)
 
 /** imprime todas all matrices de pKalman **/
 void CKalman::Print(int iter)
-{/*
+{
   cout<<"--------------------Kalman-----------------------"<<endl;
   cout<<"Estados: "<<pKalman->DP<<" Medidas: "<<pKalman->MP<<" Control: "<<pKalman->DP<<endl;
   cout<<"------------------------------------------------"<<endl;
@@ -1172,7 +1151,7 @@ void CKalman::Print(int iter)
   cout<<"error_cov_post"<<endl;
   printMat(pKalman->error_cov_post);
   cout<<"kalman gain"<<endl;
-  printMat(pKalman->gain);*/
+  printMat(pKalman->gain);
   cvNamedWindow( "kalman", 1 );
   IplImage *im;
   IplImage *im2;

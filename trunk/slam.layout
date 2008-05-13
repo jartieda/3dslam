@@ -8,7 +8,7 @@
 		<Cursor position="959" topLine="19"/>
 	</File>
 	<File name="src\kalman.cpp" open="1" top="1">
-		<Cursor position="33920" topLine="965"/>
+		<Cursor position="100" topLine="0"/>
 	</File>
 	<File name="src\kalman.h" open="1" top="0">
 		<Cursor position="248" topLine="6"/>
@@ -29,7 +29,7 @@
 		<Cursor position="7061" topLine="195"/>
 	</File>
 	<File name="src\particlefilter.cpp" open="1" top="0">
-		<Cursor position="509" topLine="381"/>
+		<Cursor position="509" topLine="375"/>
 	</File>
 	<File name="src\particlefilter.h" open="1" top="0">
 		<Cursor position="757" topLine="18"/>
@@ -50,9 +50,9 @@
 		<Cursor position="530" topLine="0"/>
 	</File>
 	<File name="src\updater.cpp" open="1" top="0">
-		<Cursor position="932" topLine="100"/>
+		<Cursor position="931" topLine="75"/>
 	</File>
 	<File name="test1\test2.cpp" open="1" top="0">
-		<Cursor position="10350" topLine="0"/>
+		<Cursor position="5210" topLine="184"/>
 	</File>
 </CodeBlocks_layout_file>

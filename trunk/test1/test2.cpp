@@ -20,6 +20,13 @@
 //#define DATA "/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg"
 //#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
+//	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
+//	sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
+//  sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
+//	sprintf(filein,"/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif",iter);
+//	sprintf(filein,"/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg",iter);
+//	sprintf(filein,"/media/WOXTER/SLAM/Datos/univ-alberta-vision-sift/ualberta-csc-flr3-vision/image%0.4d.png",iter);
+
 #define KALMAN
 
 using namespace std;
@@ -28,8 +35,8 @@ CDataCam mDataCam;
 CModelCam mModelCam;
 CMap mMap;
 CUpdater mUpdater;
-//CTrackerFile mTracker;
-CTracker_surf mTracker;
+CTrackerFile mTracker;
+//CTracker_surf mTracker;
 CFreeCam mVehicle;
 #ifndef KALMAN
 CParticleFilter mEstimator;
@@ -164,21 +171,12 @@ void init_video(int argc, char **argv)
   //frame = cvQueryFrame( capture );
   //iter++;
   char filein[400];
-//  	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
- //sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
-//sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
-sprintf(filein,DATA,iter);
-  //sprintf(filein,"/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg",iter);
-//  sprintf(filein,"/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif",iter);
-  //	sprintf(filein,"/media/WOXTER/SLAM/Datos/univ-alberta-vision-sift/ualberta-csc-flr3-vision/image%0.4d.png",iter);
+  sprintf(filein,DATA,iter);
   printf("%s\n",filein);
+
   frameold=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
   frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
-  cout<<"kkjorge"<<endl;
-  //sleep(1);
   framecopy=cvCreateImage(cvGetSize(frame),8,3);//copia para poder tocar
-  cout<<"kk2"<<endl;
-
   cvCopy( frame,framecopy);
 
 }
@@ -186,17 +184,8 @@ sprintf(filein,DATA,iter);
 
 void init_ptos()
 {
-//   frame = cvQueryFrame( capture );//tomo 2 frames para evitar negros
-//iter++;
-   	char filein[400];
-//    sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
-// sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
-//sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
-sprintf(filein,DATA,iter);
-//sprintf(filein,"/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif",iter);
-
-//	sprintf(filein,"/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg",iter);
-//	sprintf(filein,"/media/WOXTER/SLAM/Datos/univ-alberta-vision-sift/ualberta-csc-flr3-vision/image%0.4d.png",iter);
+   char filein[400];
+   sprintf(filein,DATA,iter);
    printf("%s\n",filein);
    frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
    cvCopy( frame,framecopy);
@@ -216,17 +205,10 @@ sprintf(filein,DATA,iter);
    cout <<"marcas visibles en init "<<mMap.visible<<endl;
 
    CvMat *h;
-    h=cvCreateMat(3,1,CV_32FC1);
+   h=cvCreateMat(3,1,CV_32FC1);
 
    for   (list<CElempunto*>::iterator It=mMap.bbdd.begin();It != mMap.bbdd.end();It++)
    {
-     //inserto la proyeccion como la vision de tal manera que simulo una camara
-     /*(*It)->wx=((*It)->pto.x-337)/3.36;
-       (*It)->wy=((*It)->pto.y-240)/3.36;
-       (*It)->wz=-724;
-       (*It)->theta=0;
-       (*It)->phi=0;
-       (*It)->rho=999999999;*/
      mModelCam.cvInverseParam(&h,(*It)->pto);
      (*It)->wx=cvmGet(mDataCam.translation,0,0);
      (*It)->wy=cvmGet(mDataCam.translation,1,0);
@@ -234,7 +216,6 @@ sprintf(filein,DATA,iter);
      (*It)->theta=atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0)));
      (*It)->phi=atan2(cvmGet(h,0,0),cvmGet(h,2,0));
      (*It)->rho=1./0.2;
-     //(*It)->rho=1./0.02;
      (*It)->state=st_inited;
      mMap.inited++;
      cvmSet(object_points,0,i,(*It)->wx);
@@ -245,21 +226,9 @@ sprintf(filein,DATA,iter);
      i++;
      cout<<i<<endl;
    }
-   cout<<"fuera"<<endl;
-
-   /*cvFindExtrinsicCameraParams2( object_points,
-     image_points,
-     mDataCam.calibration,
-     mDataCam.distortion,
-     rotation,
-     trans );*/
-   //mDataCam.SetRotation(rotation);
-   //mDataCam.SetTranslation(trans);
 
    cout<<"kalman ini"<<endl;
-
    mEstimator.initState();
-
    cout<<"kalman inited"<<endl;
 
 }
@@ -313,13 +282,7 @@ iter+=3;
 cout <<"ITERACION: "<< iter<<endl;
 //	frame = cvQueryFrame( capture );
 	char filein[400];
-//	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
-//	sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
-//  sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
 sprintf(filein,DATA,iter);
-//	sprintf(filein,"/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif",iter);
-//	sprintf(filein,"/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg",iter);
-//	sprintf(filein,"/media/WOXTER/SLAM/Datos/univ-alberta-vision-sift/ualberta-csc-flr3-vision/image%0.4d.png",iter);
         cvCopy(frame,frameold);
     frame=cvLoadImage(filein, CV_LOAD_IMAGE_COLOR );
 
@@ -347,9 +310,9 @@ sprintf(filein,DATA,iter);
    mEstimator.Predict();
    mModelCam.ProjectPoints();
 
-   mEstimator.Test();
+//   mEstimator.Test();
    cout<<"ransac"<<endl;
-   mUpdater.TestRANSAC();
+//   mUpdater.TestRANSAC();
 
    mEstimator.UpdateMatrixSize();
 
@@ -365,7 +328,7 @@ sprintf(filein,DATA,iter);
 
    data_out();
    cout<<"waitkey"<<endl;
-   c = cvWaitKey(100);//esto probablemente se pueda quitar
+   c = cvWaitKey(0);//esto probablemente se pueda quitar
    if( c == 27 )//si presiono escape salgo del programa limpiamente
      break;
 }
