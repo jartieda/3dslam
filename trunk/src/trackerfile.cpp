@@ -1,8 +1,8 @@
 #include "trackerfile.h"
 //#define FORIGEN "F:\\SLAM\\Datos\\datos_manuales\\datos%0.3d.txt"
 //#define FORIGEN "F:\\SLAM\\Datos\\datos_manuales\\redatos%0.3d.txt"
-#define FORIGEN "F:\\SLAM\\Datos\\dat2\\dat\\redatos%0.4d.txt"
-//#define FORIGEN "/media/WOXTER/SLAM/Datos/dat2/dat/redatos%0.4d.txt"
+//#define FORIGEN "F:\\SLAM\\Datos\\dat2\\dat\\redatos%0.4d.txt"
+#define FORIGEN "/media/WOXTER/SLAM/Datos/dat2/dat/redatos%0.4d.txt"
 CTrackerFile::CTrackerFile():first(true),frame(0)
 {
     //ctor

@@ -461,7 +461,7 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		     {
 		       encontrado=false;
 		     }
-		   if((*It)->state>=st_inited){      //FIXME no solo los inited
+		   if((*It)->state>=st_inited){      //FIXME no solo los inited ¿esto evita la revisita?
 		     if((*It)->projx<(cvmGet(points,j,0)+point_sep) &&
 			(*It)->projy<(cvmGet(points,j,1)+point_sep) &&
 			(*It)->projx>(cvmGet(points,j,0)-point_sep) &&
@@ -472,23 +472,16 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		   }
 		 }
 
-	       //no en borde
-//	       cout<<cvmGet(points,j,0)<<" "<<cvmGet(points,j,1)<<" "<<border<<pDataCam->frame_width<<" "<<pDataCam->frame_height<<endl;
-	      /* cout<<( (cvmGet(points,j,0)<border) ||
-              (cvmGet(points,j,1)<border) ||
-              (cvmGet(points,j,0)>(pDataCam->frame_width-border)) ||
-              (cvmGet(points,j,1)>(pDataCam->frame_height-border)))<<endl;*/
- //          cout<<(pDataCam->frame_width-border)<<" "<<(pDataCam->frame_height-border)<<endl;
 
 	       if( (cvmGet(points,j,0)<border) ||
-              (cvmGet(points,j,1)<border) ||
-              (cvmGet(points,j,0)>(pDataCam->frame_width-border)) ||
-              (cvmGet(points,j,1)>(pDataCam->frame_height-border)))
-               {
-                    encontrado = false;
-              }
+		      (cvmGet(points,j,1)<border) ||
+		      (cvmGet(points,j,0)>(pDataCam->frame_width-border)) ||
+		      (cvmGet(points,j,1)>(pDataCam->frame_height-border)))
+                  {
+                      encontrado = false;
+                  }
 
-	       //calidad del punto mayor que un tamano
+	       //calidad del punto mayor que un tamano FIXME ESTA CALIDAD DEPENDE DEL METODO
 	       if(cvmGet(points,j,2)<calidad_min_punto)
 		 {
 		   encontrado = false;
@@ -639,22 +632,23 @@ int CUpdater::remove()
 	  pMap->visible--;
 	  exit(-1);
 
-	}else if((*It)->pto.x<border ||(*It)->pto.y<border ||(*It)->pto.x>pDataCam->frame_width-border ||(*It)->pto.y>pDataCam->frame_height-border )//FIXME Esto depende del tamaÃ±o de la imagen espeligrosso
-      {
-	if((*It)->state==st_inited)
-	  {
-	    i++;
-	    std::cout << "pongo punto como st_no_view: "<<(*It)->ID<<" "<<(*It)->pto.x<<" "<<(*It)->pto.y<<std::endl;
-	    (*It)->state = st_no_view;
-	    pMap->visible--;
-	  }else if((*It)->state!=st_no_view)
-	  {
-	    cout<< "borro punto por no iniciado y fuera devista state: "<<(*It)->state << endl;
-	    //pMap->bbdd.erase(It);
-	    //pMap->visible--;
-	  }
-	///FIXME En el casod de que el punto se deje de ver antes de inicializar quiero borrarlo.
-	  }
+	}else if((*It)->pto.x<border ||(*It)->pto.y<border ||
+		(*It)->pto.x>pDataCam->frame_width-border ||(*It)->pto.y>pDataCam->frame_height-border )
+	      {
+		if((*It)->state==st_inited)
+		  {
+		    i++;
+		    std::cout << "pongo punto como st_no_view: "<<(*It)->ID<<" "<<(*It)->pto.x<<" "<<(*It)->pto.y<<std::endl;
+		    (*It)->state = st_no_view;
+		    pMap->visible--;
+		  }else if((*It)->state!=st_no_view)
+		  {
+		    cout<< "borro punto por no iniciado y fuera devista state: "<<(*It)->state << endl;
+		    exit(-1);	///FIXME En el casod de que el punto se deje de ver antes de inicializar quiero borrarlo.
+		    //pMap->bbdd.erase(It);
+		    //pMap->visible--;
+		  }
+               }
 
     }
   return i;

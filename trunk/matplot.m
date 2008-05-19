@@ -8,13 +8,13 @@ load cam.txt
 plot3(cam(:,1),cam(:,2),cam(:,3),'r');
 axis equal
 grid on
-hold off
 figure(2)
 s=size(feat,1);
-plot3(feat(s-40:s,1), feat(s-40:s,2), feat(s-40:s,3),'.');
+hold off
+plot3(-feat(s-40:s,1), feat(s-40:s,2), -feat(s-40:s,3),'.');
 hold on
 load cam.txt
-plot3(cam(:,1),cam(:,2),cam(:,3),'r');
+plot3(-cam(:,1),cam(:,2),-cam(:,3),'r');
 axis equal
 grid on
 hold off
@@ -58,5 +58,26 @@ axis equal
 grid on
 subplot(2,2,4)
 plot3(disp3(:,3),disp3(:,1),disp3(:,2),'b.');
+axis equal
+grid on
+figure (5)
+subplot(2,2,1)
+d1=load ('disp40.txt')
+d2=load ('disp43.txt')
+d3=load ('disp46.txt')
+d4=load ('disp49.txt')
+plot3(d1(:,3),d1(:,1),d1(:,2),'b.');
+axis equal
+grid on
+subplot(2,2,2)
+plot3(d2(:,3),d2(:,1),d2(:,2),'b.');
+axis equal
+grid on
+subplot(2,2,3)
+plot3(d3(:,3),d3(:,1),d3(:,2),'b.');
+axis equal
+grid on
+subplot(2,2,4)
+plot3(d4(:,3),d4(:,1),d4(:,2),'b.');
 axis equal
 grid on

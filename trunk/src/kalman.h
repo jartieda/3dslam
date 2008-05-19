@@ -42,6 +42,8 @@ float xi[31];///<probabilidad acumulada de la distribucion chi cuadrado
 void setModel(CModel *p);///< enlaza la clase calman con el modelo de vehículo
 void Predict_FAST();
 void Correct_FAST();
+void NewPointCov(int old_state,CvMat *h,int xpix,int ypix);
+
 };
 
 #endif

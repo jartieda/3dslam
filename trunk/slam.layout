@@ -5,10 +5,10 @@
 		<Cursor position="2681" topLine="80"/>
 	</File>
 	<File name="src\freecam.cpp" open="1" top="0">
-		<Cursor position="959" topLine="19"/>
+		<Cursor position="826" topLine="23"/>
 	</File>
 	<File name="src\kalman.cpp" open="1" top="1">
-		<Cursor position="100" topLine="0"/>
+		<Cursor position="33641" topLine="919"/>
 	</File>
 	<File name="src\kalman.h" open="1" top="0">
 		<Cursor position="248" topLine="6"/>
@@ -20,7 +20,7 @@
 		<Cursor position="95" topLine="0"/>
 	</File>
 	<File name="src\model.cpp" open="1" top="0">
-		<Cursor position="211" topLine="15"/>
+		<Cursor position="211" topLine="25"/>
 	</File>
 	<File name="src\model.h" open="1" top="0">
 		<Cursor position="253" topLine="18"/>
@@ -53,6 +53,6 @@
 		<Cursor position="931" topLine="75"/>
 	</File>
 	<File name="test1\test2.cpp" open="1" top="0">
-		<Cursor position="5210" topLine="184"/>
+		<Cursor position="8371" topLine="303"/>
 	</File>
 </CodeBlocks_layout_file>

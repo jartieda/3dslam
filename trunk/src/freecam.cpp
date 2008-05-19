@@ -30,13 +30,13 @@ CFreeCam::CFreeCam()
 
 //covarianzas de las posicion
    for (int i=0;i<3;i++){
-      cvmSet(ProcessNoiseCov,2*i,2*i,0.005);
-      cvmSet(ProcessNoiseCov,2*i+1,2*i+1,0.005);
+      cvmSet(ProcessNoiseCov,2*i,2*i,0.02);
+      cvmSet(ProcessNoiseCov,2*i+1,2*i+1,0.002);
    }
 //covarianzas del angulo
    for (int i=3;i<6;i++){
-      cvmSet(ProcessNoiseCov,2*i,2*i,0.001);
-      cvmSet(ProcessNoiseCov,2*i+1,2*i+1,0.001);
+      cvmSet(ProcessNoiseCov,2*i,2*i,0.02);
+      cvmSet(ProcessNoiseCov,2*i+1,2*i+1,0.002);
    }
 }
 

@@ -14,12 +14,15 @@
 #include "../src/particlefilter.h"
 #include "../src/trackerfile.h"
 
-#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
+#define RHO_INIT_DIST 0.2
+
+//#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
 //#define DATA "c:\\datos\\slam\\kkk%0.4d.tif"
 //#define DATA "F:\\SLAM\\Datos\\heli\\kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg"
-//#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
+#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
+#define LINUX
 //	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
 //	sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
 //  sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
@@ -58,6 +61,8 @@ IplImage* frame = 0;
 IplImage* frameold = 0;
 IplImage* framecopy=0;
 
+FILE *gplot=0;
+
 /// variable para contar la iteracion;
 int iter=1;
 
@@ -95,13 +100,21 @@ void conect()
 }
 void param_init()
 {
-  mDataCam.SetFx(629.49);
+///Cámaras sony?
+/*mDataCam.SetFx(629.49);
   mDataCam.SetFy(630.74);
   mDataCam.SetCx(337.8743788);
   mDataCam.SetCy(241.0742116);
   mDataCam.frame_width=640;
+  mDataCam.frame_height=480;*/
+///Camara firewire escuela
+  mDataCam.SetFx(837.9529);
+  mDataCam.SetFy(838.6889);
+  mDataCam.SetCx(315.5322);
+  mDataCam.SetCy(277.6592);
+  mDataCam.frame_width=640;
   mDataCam.frame_height=480;
-
+///Camara Genérica
   /*mDataCam.SetFx(1000);
     mDataCam.SetFy(1000);
     mDataCam.SetCx(320);
@@ -110,8 +123,8 @@ void param_init()
     mDataCam.frame_height=480;*/
 
   double dist[4];
-  dist[0]=-0.1928;
-  dist[1]=0.1373;
+  dist[0]=0;
+  dist[1]=0;
   dist[2]=0.;
   dist[3]=0.;
 
@@ -128,18 +141,23 @@ void param_init()
   trans=cvCreateMat(3,1,CV_32FC1);
   trans2=cvCreateMat(3,1,CV_32FC1);
 
-  CvMat *temp=mVehicle.getMeasurementVector();
-
-  cvmSet(rotation,0,0,cvmGet(temp,3,0));
-  cvmSet(rotation,1,0,cvmGet(temp,4,0));
-  cvmSet(rotation,2,0,cvmGet(temp,5,0));
+  if (mVehicle.getMeasurementNum()==0){
+    cvmSet(rotation,0,0,0);
+    cvmSet(rotation,1,0,0);
+    cvmSet(rotation,2,0,0);
+    cvmSet(trans,0,0,0);
+    cvmSet(trans,1,0,0);
+    cvmSet(trans,2,0,0);
+  }else{	
+    CvMat *temp=mVehicle.getMeasurementVector();
+    cvmSet(rotation,0,0,cvmGet(temp,3,0));
+    cvmSet(rotation,1,0,cvmGet(temp,4,0));
+    cvmSet(rotation,2,0,cvmGet(temp,5,0)); 
+    cvmSet(trans,0,0,cvmGet(temp,0,0));
+    cvmSet(trans,1,0,cvmGet(temp,1,0));
+    cvmSet(trans,2,0,cvmGet(temp,2,0));
+  }
   mDataCam.SetRotation(rotation);
-
-  cvmSet(trans,0,0,cvmGet(temp,0,0));
-  cvmSet(trans,1,0,cvmGet(temp,1,0));
- // cvmSet(trans,2,0,cvmGet(temp,2,0));//-(-911));
-  cvmSet(trans,2,0,-20);
-
   mDataCam.SetTranslation(trans);
 
   mTracker.setDataCam(&mDataCam);
@@ -192,16 +210,7 @@ void init_ptos()
 
    mUpdater.Add(frame,frameold);
 
-   CvMat *rotation;
-   CvMat *trans;
-   rotation=cvCreateMat(3,1,CV_32FC1);
-   trans=cvCreateMat(3,1,CV_32FC1);
    //inicializacion de la posición de la camara con funciones de opencv
-   CvMat *image_points;
-   CvMat *object_points;
-   image_points=cvCreateMat(2,mMap.visible,CV_32FC1);
-   object_points=cvCreateMat(3,mMap.visible,CV_32FC1);
-   int i =0;
    cout <<"marcas visibles en init "<<mMap.visible<<endl;
 
    CvMat *h;
@@ -215,16 +224,9 @@ void init_ptos()
      (*It)->wz=cvmGet(mDataCam.translation,2,0);
      (*It)->theta=atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0)));
      (*It)->phi=atan2(cvmGet(h,0,0),cvmGet(h,2,0));
-     (*It)->rho=1./0.2;
+     (*It)->rho=1./RHO_INIT_DIST;
      (*It)->state=st_inited;
      mMap.inited++;
-     cvmSet(object_points,0,i,(*It)->wx);
-     cvmSet(object_points,1,i,(*It)->wy);
-     cvmSet(object_points,2,i,(*It)->wz);
-     cvmSet(image_points,0,i,(*It)->pto.x);
-     cvmSet(image_points,1,i,(*It)->pto.y);
-     i++;
-     cout<<i<<endl;
    }
 
    cout<<"kalman ini"<<endl;
@@ -241,7 +243,7 @@ void data_out()
   #ifndef KALMAN
    mDataOut.Particle(framecopy);
   #else
-  mDataOut.Disp_out(framecopy);
+   mDataOut.Disp_out(framecopy);
   #endif
 
   mDataOut.Feat();
@@ -253,7 +255,13 @@ void data_out()
    sprintf(nombre,"frame%.2d.png",iter);
    cvSaveImage(nombre ,framecopy);
    cvShowImage( "CamShiftDemo", framecopy );
-
+#ifdef LINUX 
+    char gplotstr[300];
+    if (gplot==0) gplot= popen("/usr/bin/gnuplot","w");
+    sprintf(gplotstr,"splot 'disp%d.txt' u 1:2:3, 'cam.txt' u 1:2:3 w l \n",mDataOut.iter-1);
+    fprintf(gplot,gplotstr);
+    fflush(gplot);
+#endif
    /* splot 'post' u 2:4:6 w l,'post' u 14:15:16, 'post' u 17:18:19, 'post' u 20:21:22, 'post' u 23:24:25, 'post' u 26:27:28, 'post' u 30:31:32, 'post' u 33:34:35, 'post' u 36:37:38, 'post' u 39:40:41*/
 }
 int main (int argc, char **argv)
@@ -263,45 +271,40 @@ int main (int argc, char **argv)
 
 
 conect();
-	cout<<"param_init"<<endl;
+cout<<"param_init"<<endl;
 param_init();
-	cout<<"init_video"<<endl;
-init_video( argc, argv);
-	cout<<"init_ptos"<<endl;
 
+cout<<"init_video"<<endl;
+init_video( argc, argv);
+
+cout<<"init_ptos"<<endl;
 init_ptos();
-///test 1
-//cvSetErrMode(2);
+
 int n=0;
 int i;
-//iter=8;
+char filein[400];
 
 while(1)
 {
-iter+=3;
-cout <<"ITERACION: "<< iter<<endl;
-//	frame = cvQueryFrame( capture );
-	char filein[400];
-sprintf(filein,DATA,iter);
-        cvCopy(frame,frameold);
+    iter+=3;
+    cout <<"ITERACION: "<< iter<<endl;
+    //	frame = cvQueryFrame( capture );
+    sprintf(filein,DATA,iter);
+    cvCopy(frame,frameold);
     frame=cvLoadImage(filein, CV_LOAD_IMAGE_COLOR );
 
-//  compruebo que no se ha acabado el video
-  if(frame==NULL) break;
+    //  compruebo que no se ha acabado el video
+    if(frame==NULL) break;
 
 
-//   match frame
+    //   match frame
     mModelCam.ProjectPoints();
     mTracker.Match(frame);//entre los puntos de la imagen anterior y los de esta
 
     mUpdater.Add(frame,frameold);
-  //mUpdater.AddByHand(frame);
-   //   ADD
-//esto anadiría puntos ya anadidos....
 
-   i=0;
-
-   n++;
+    i=0;
+    n++;
 
    mUpdater.remove();
 
