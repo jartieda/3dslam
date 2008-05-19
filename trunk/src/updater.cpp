@@ -49,7 +49,7 @@ CUpdater::CUpdater()
    border=20;
    num_feat_min=10;
    num_feat_max=30;
-   point_sep=5;//FIXME ESTO PONERLO A 50 OTRA VEZ!!!!!!
+   point_sep=50;//FIXME ESTO PONERLO A 50 OTRA VEZ!!!!!!
    calidad_min_punto=2;
    //   depth=0.02;
 depth=0.2;
@@ -519,8 +519,23 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 int CUpdater::Add(IplImage *f,IplImage *f2)
 {
   int cornercount;
-  cornercount=num_feat_min-pMap->visible;//bbdd.size();
-  cout<< "faltan "<<cornercount<<"esquinas"<<endl;
+
+  int inited_vis=0;
+  int inited_no_vis=0;
+
+  for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
+	It != pMap->bbdd.end(); It++ )
+    {
+      if ((*It)->state==st_inited){
+        inited_vis++;
+      }
+      if ((*It)->state==st_no_view){
+        inited_no_vis++;
+      }
+    }
+
+  cornercount=num_feat_min-inited_vis;//bbdd.size();
+  cout<< "faltan "<<cornercount<<"esquinas"<<num_feat_min<<" "<<pMap->visible<<endl;
   int insert=0;
   if (cornercount>0)
     {

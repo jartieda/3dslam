@@ -38,8 +38,8 @@ CDataCam mDataCam;
 CModelCam mModelCam;
 CMap mMap;
 CUpdater mUpdater;
-CTrackerFile mTracker;
-//CTracker_surf mTracker;
+//CTrackerFile mTracker;
+CTracker_surf mTracker;
 CFreeCam mVehicle;
 #ifndef KALMAN
 CParticleFilter mEstimator;
@@ -313,9 +313,9 @@ while(1)
    mEstimator.Predict();
    mModelCam.ProjectPoints();
 
-//   mEstimator.Test();
+   mEstimator.Test();
    cout<<"ransac"<<endl;
-//   mUpdater.TestRANSAC();
+   mUpdater.TestRANSAC();
 
    mEstimator.UpdateMatrixSize();
 
