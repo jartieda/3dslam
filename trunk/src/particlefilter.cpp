@@ -21,10 +21,10 @@ CParticleFilter::CParticleFilter():num_max_variables(400),num_max_particles(100)
    for(int i=12;i<num_max_variables;i++) var_modelo[i]=0.0;
 
    int ii=0;
-    for (double i =-2; i<2; i+=0.02){
+   for (double i =-2; i<2; i+=0.02){
          ERF[ii++]=erf(i);
          cout<<"erf( "<<ii-1<<") "<<ERF[ii-1]<<endl;
-     }
+   }
    pred_measure=new double* [num_max_measurements];
    for (int i =0; i<num_max_particles;i++){
        pred_measure[i]=new double[num_max_particles];
@@ -32,7 +32,6 @@ CParticleFilter::CParticleFilter():num_max_variables(400),num_max_particles(100)
    measure=new double [num_max_measurements];
    reject=new bool [num_max_particles];
    state=new double [num_max_variables];
-
    weights=new double [num_max_particles];
 
    trans=cvCreateMat(3,1,CV_32FC1);
@@ -60,6 +59,7 @@ void CParticleFilter::Predict()
 
      for (int n_part=0; n_part<num_particles; n_part++)
      {
+	ProjectParticle( n_part);
          /** A*x(:,n_part)+B+W **/
          /** FIXME Esta parte es completamente cerrada a nuestro problema **/
          noise(rand_num,var_modelo,num_variables);
@@ -73,7 +73,7 @@ void CParticleFilter::Predict()
                  temp[n_var]+=A[n_var][n_var2]*particles[n_var2][n_part];
              }
              temp[n_var]+=rand_num[n_var];
-//             cout<<"rand_num "<<rand_num[n_var]<<" var "<<var_modelo[n_var]<<endl;
+             cout<<"rand_num "<<rand_num[n_var]<<" var "<<var_modelo[n_var]<<endl;
          }
          for (int n_var=0;n_var<num_variables;n_var++){
 //             cout<<"particle old "<<particles[n_var][n_part];
@@ -87,12 +87,6 @@ void CParticleFilter::Predict()
 void CParticleFilter::Correct()
 {
      cout<<"correct start"<<endl;
-     CvMat *obj;
-     CvMat *img;
-     obj = cvCreateMat(1,6,CV_32FC1);
-     img = cvCreateMat(4,2,CV_32FC1);
-     int n_var=pModel->getStateNum();
-     int n_meas=0;
      int n_feat;
      double measure_[pMap->bbdd.size()*2];
      cout<<"get measurement"<<endl;
@@ -107,107 +101,71 @@ void CParticleFilter::Correct()
         	cout<<"ID "<<(*It)->ID<<"pto.x "<<(*It)->pto.x<<" pto.y "<<(*It)->pto.y;
         }
      }
-    int kk;
+     int kk;
      for (int n_part=0; n_part<num_particles; n_part++)
      {
-         /** calculo de el valor de medida correspondiente a esta parícula **/
-         /** En nuestro caso es el modelo de la cámara **/
-         n_meas=0;
-         n_var=0;
-         kk=0;
-         for(int i =0; i<3;i++){
-            cvmSet(trans,i,0,particles[n_var++][n_part]);
-            n_var++;
-//            cout<<"trans "<<particles[n_var-2][n_part]<<endl;
-         }
+	ProjectParticle(n_part);
+       reject[n_part]=false;
+       int p=0;
+       int m=0;
 
-         for(int i =0; i<3;i++){
-            cvmSet(rotation,i,0,particles[n_var++][n_part]);
-            n_var++;
-//            cout<<"rotation "<<particles[n_var-2][n_part]<<endl;
-         }
+       double w=0;
+       double err=0;
+       weights[n_part]=0;
+       for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+       {
+	 w=0;
+  	 if((*It)->state==st_inited){
+	    //      cout<<"pred_measure "<<pred_measure[p][n_part]<<" measure "<<measure_[m]<< endl;
+	    err=(pred_measure[p][n_part]-measure_[m])*(pred_measure[p][n_part]-measure_[m]);
+	    //  cout<<"err"<<err<<endl;
+	    weights[n_part]+=(err);
 
-         pDataCam->SetRotation(rotation);
-         pDataCam->SetTranslation(trans);
+	    if (sqrt(err)>threshold){
+	         reject[n_part]=true;
+	         //cout<<"true"<<endl;
+	    }else{
+	         //cout<<"false"<<endl;
+	    }
+	    m+=2;
+	  }
+	  p+=2;
+        }
+        weights[n_part]=sqrt(weights[n_part]);
 
-     for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
-     {
-              for (int i=0; i<6; i++){
-                  cvmSet(obj,0,i,particles[n_var++][n_part]);
-//                  cout<<"obj ("<<(n_var-1)<<") "<<particles[n_var-1][n_part]<<endl;
-              }
+        cout<<"wights dist "<<weights[n_part]<<endl;
+        //double sigma=20;
+        //weights[n_part]=(1/(sqrt(sigma*2*3.14159)))*exp((-weights[n_part]*weights[n_part])/(sigma*1));
+        //cout<<"weights "<<weights[n_part]<<endl;
 
-              pModelCam->cvProject_1_pto(obj,img,NULL,NULL,NULL);
-              for (int i=0;i<2;i++){
-                 pred_measure[n_meas++][n_part]=cvmGet(img,0,i);
-             //    cout<<"meas ("<<(n_meas-1)<<") "<<pred_measure[n_meas-1][n_part]<<endl;
-              }
-              for(int i=0;i<2;i++){
-               //   cout<<"real meas("<<kk<<") " <<measure_[kk++]<<endl;
-              }
-
-     }
-          reject[n_part]=false;
-     int p=0;
-     int m=0;
-
-     double w=0;
-     double err=0;
-    weights[n_part]=0;
-     for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
-     {
-         w=0;
-        if((*It)->state==st_inited){
-        //      cout<<"pred_measure "<<pred_measure[p][n_part]<<" measure "<<measure_[m]<< endl;
-            err=(pred_measure[p][n_part]-measure_[m])*(pred_measure[p][n_part]-measure_[m]);
-          //  cout<<"err"<<err<<endl;
-            weights[n_part]+=(err);
-
-            if (sqrt(err)>threshold){
-                 reject[n_part]=true;
-                 cout<<"true"<<endl;
-            }else{
-                 cout<<"false"<<endl;
-            }
-            m+=2;
-          }
-          p+=2;
-     }
-      weights[n_part]=sqrt(weights[n_part]);
-
-      cout<<"wights dist "<<weights[n_part]<<endl;
-      double sigma=20;
-      weights[n_part]=(1/(sqrt(sigma*2*3.14159)))*exp((-weights[n_part]*weights[n_part])/(sigma*1));
-      cout<<"weights "<<weights[n_part]<<endl;
-
-      }//end particles
+     }//end particles
 
       /** normalize weights **/
-      double suma=0;
-      for (int i=0;i<num_particles;i++){
-          suma+=weights[i];
-          cout<<"weights "<<weights[i]<<endl;
-      }
-      cout<<"suma weights "<<suma<<endl;
-      for (int i=0;i<num_particles;i++){
-          weights[i]/=suma;
-          cout<<"weights normalized"<<weights[i]<<endl;
-      }
+      //double suma=0;
+      //for (int i=0;i<num_particles;i++){
+      //    suma+=weights[i];
+      //    cout<<"weights "<<weights[i]<<endl;
+      //}
+      //cout<<"suma weights "<<suma<<endl;
+      //for (int i=0;i<num_particles;i++){
+      //    weights[i]/=suma;
+      //    cout<<"weights normalized"<<weights[i]<<endl;
+      //}
 
-//      int n_v;
+      int n_v;
       for (int v=0; v<num_variables;v++){
           state[v]=0;
-          //n_v=0;
+          n_v=0;
           for (int n_part=0; n_part<num_particles; n_part++){
               if (reject[n_part]==false){
-                 state[v]+=(weights[n_part]*particles[v][n_part]);
-            //       state[v]+=particles[v][n_part];
-            //       n_v++;
+               //  state[v]+=(weights[n_part]*particles[v][n_part]);
+                   state[v]+=particles[v][n_part];
+                   n_v++;
               }else{
                 cout<<"rejected "<<n_part<<endl;
               }
           }
-        //  if (n_v!=0) state[v]/=n_v;
+          if (n_v!=0) state[v]/=n_v;
       }
 
       for (int i=0; i<num_particles;i++)
@@ -279,8 +237,6 @@ void CParticleFilter::Correct()
   pDataCam->SetTranslation(trans);
 
   pModelCam->ProjectPoints();
-     cvReleaseMat(&obj);
-     cvReleaseMat(&img);
 /** Añado partículas nuevas en los sitios de las rechazadas **/
 for (int n_part=0; n_part<num_particles; n_part++){
 //    for (int v=0; v<num_variables;v++){
@@ -315,12 +271,12 @@ void CParticleFilter::initParticle(int part)
     for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       //if((*It)->state==st_inited){
-    	particles[kstate++][part]=(*It)->wx+Random(-0.0001,0.0001);
-    	particles[kstate++][part]=(*It)->wy+Random(-0.0001,0.0001);
-    	particles[kstate++][part]=(*It)->wz+Random(-0.0001,0.0001);
-    	particles[kstate++][part]=(*It)->theta+Random(-0.00005,0.00005);
-    	particles[kstate++][part]=(*It)->phi+Random(-0.00005,0.00005);
-    	particles[kstate++][part]=(*It)->rho+Random(-1./0.19,20);
+    	particles[kstate++][part]=(*It)->wx+Random(-0.01,0.01);
+        particles[kstate++][part]=(*It)->wy+Random(-0.01,0.01);
+        particles[kstate++][part]=(*It)->wz+Random(-0.01,0.01);
+        particles[kstate++][part]=(*It)->theta+Random(-0.00005,0.00005);
+        particles[kstate++][part]=(*It)->phi+Random(-0.00005,0.00005);
+        particles[kstate++][part]=(*It)->rho+Random(1/10,1/1);
       //}
     }
 }
@@ -339,8 +295,9 @@ void CParticleFilter::initState()
   {
     initParticle(part);
   }
-     for(int i=0;i<6;i++) var_modelo[i]=0.0001;
-     for(int i=6;i<12;i++) var_modelo[i]=0.00001;
+     for(int i=0;i<3;i++) var_modelo[2*i]=0.1;
+
+     for(int i=0;i<3;i++) var_modelo[6+2*i]=0.1;
      for(int i=12;i<num_max_variables;i++) var_modelo[i]=0.0;
 }
 void CParticleFilter::setModel(CModel *p)
@@ -378,12 +335,12 @@ void CParticleFilter::noise(double *v, double *s, int l)
      for (int i =0; i<l; i++){
          ii=0;
          p=rand()/(RAND_MAX + 1.0);
-//         cout<<"noise p "<<p<<endl;
+         cout<<"noise p "<<p<<endl;
          while (ERF[ii]<(2*p-1)&&(ii<200)) ii++;
-//         cout<<"noise ERF["<<ii<<"] "<<ERF[ii]<<endl;
+         cout<<"noise ERF["<<ii<<"] "<<ERF[ii]<<endl;
          double m = 0;
          v[i]=m+s[i]*raiz_2*((ii-100)/50.0);
-//         cout<<"noise s "<<s[i]<<endl;
+         cout<<"noise s "<<s[i]<<" v "<<v[i]<<endl;
      }
 }
 void CParticleFilter::UpdateMatrixSize()
@@ -403,5 +360,53 @@ void CParticleFilter::UpdateMatrixSize()
     }
   num_measurements=inited_vis*2+pModel->getMeasurementNum();
   num_variables=(inited_no_vis+inited_vis)*fdims+pModel->getStateNum();
+
+}void CParticleFilter::ProjectParticle(int n_part)
+{
+     CvMat *obj;
+     CvMat *img;
+     obj = cvCreateMat(1,6,CV_32FC1);
+     img = cvCreateMat(4,2,CV_32FC1);
+     int n_var=pModel->getStateNum();
+     int n_meas=0;
+     int kk;
+         /** calculo de el valor de medida correspondiente a esta parícula **/
+         /** En nuestro caso es el modelo de la cámara **/
+         n_meas=0;
+         n_var=0;
+         kk=0;
+         for(int i =0; i<3;i++){
+            cvmSet(trans,i,0,particles[n_var++][n_part]);
+            n_var++;
+//            cout<<"trans "<<particles[n_var-2][n_part]<<endl;
+         }
+
+         for(int i =0; i<3;i++){
+            cvmSet(rotation,i,0,particles[n_var++][n_part]);
+            n_var++;
+//            cout<<"rotation "<<particles[n_var-2][n_part]<<endl;
+         }
+
+         pDataCam->SetRotation(rotation);
+         pDataCam->SetTranslation(trans);
+
+     	for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+     	{
+              for (int i=0; i<6; i++){
+                  cvmSet(obj,0,i,particles[n_var++][n_part]);
+//                  cout<<"obj ("<<(n_var-1)<<") "<<particles[n_var-1][n_part]<<endl;
+              }
+              pModelCam->cvProject_1_pto(obj,img,NULL,NULL,NULL);
+              for (int i=0;i<2;i++){
+                 pred_measure[n_meas++][n_part]=cvmGet(img,0,i);
+             //    cout<<"meas ("<<(n_meas-1)<<") "<<pred_measure[n_meas-1][n_part]<<endl;
+              }
+              for(int i=0;i<2;i++){
+               //   cout<<"real meas("<<kk<<") " <<measure_[kk++]<<endl;
+              }
+
+     	}
+     cvReleaseMat(&obj);
+     cvReleaseMat(&img);
 
 }

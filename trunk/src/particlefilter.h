@@ -29,13 +29,15 @@ int num_particles; ///number of particles per variable
 int num_variables; ///number of variables
 int num_measurements; ///number of measurements
 double *weights;
+double **particles; ///pointer to a dynamically allocated array of particles
 
 protected:
+void ProjectParticle(int n_part);
+
 void initParticle(int part);
 int num_max_variables;
 int num_max_particles;
 int num_max_measurements;
-double **particles; ///pointer to a dynamically allocated array of particles
 double **A;
 /*int n_var;
 int n_meas;

@@ -14,7 +14,7 @@
 #include "../src/particlefilter.h"
 #include "../src/trackerfile.h"
 
-#define RHO_INIT_DIST 0.2
+#define RHO_INIT_DIST 1
 
 //#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
 //#define DATA "c:\\datos\\slam\\kkk%0.4d.tif"
@@ -30,7 +30,7 @@
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg",iter);
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/univ-alberta-vision-sift/ualberta-csc-flr3-vision/image%0.4d.png",iter);
 
-#define KALMAN
+//#define KALMAN
 
 using namespace std;
 
@@ -38,8 +38,8 @@ CDataCam mDataCam;
 CModelCam mModelCam;
 CMap mMap;
 CUpdater mUpdater;
-//CTrackerFile mTracker;
-CTracker_surf mTracker;
+CTrackerFile mTracker;
+//CTracker_surf mTracker;
 CFreeCam mVehicle;
 #ifndef KALMAN
 CParticleFilter mEstimator;
@@ -283,7 +283,7 @@ init_ptos();
 int n=0;
 int i;
 char filein[400];
-
+   
 while(1)
 {
     iter+=3;
@@ -309,13 +309,24 @@ while(1)
    mUpdater.remove();
 
    mEstimator.UpdateMatrixSize();
+   data_out();
+   cout<<"waitkey antes predict"<<endl;
+   c = cvWaitKey(0);//esto probablemente se pueda quitar
+   if( c == 27 )//si presiono escape salgo del programa limpiamente
+     break;
 
    mEstimator.Predict();
+   data_out();
+   cout<<"waitkey post predict"<<endl;
+   c = cvWaitKey(0);//esto probablemente se pueda quitar
+   if( c == 27 )//si presiono escape salgo del programa limpiamente
+     break;
+
    mModelCam.ProjectPoints();
 
-   mEstimator.Test();
+//  mEstimator.Test();
    cout<<"ransac"<<endl;
-   mUpdater.TestRANSAC();
+//  mUpdater.TestRANSAC();
 
    mEstimator.UpdateMatrixSize();
 
@@ -330,7 +341,7 @@ while(1)
    cout<<"dataout"<<endl;
 
    data_out();
-   cout<<"waitkey"<<endl;
+   cout<<"waitkey correct"<<endl;
    c = cvWaitKey(0);//esto probablemente se pueda quitar
    if( c == 27 )//si presiono escape salgo del programa limpiamente
      break;

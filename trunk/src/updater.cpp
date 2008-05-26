@@ -49,7 +49,7 @@ CUpdater::CUpdater()
    border=20;
    num_feat_min=10;
    num_feat_max=30;
-   point_sep=50;//FIXME ESTO PONERLO A 50 OTRA VEZ!!!!!!
+   point_sep=5;//FIXME ESTO PONERLO A 50 OTRA VEZ!!!!!!
    calidad_min_punto=2;
    //   depth=0.02;
 depth=0.2;
@@ -398,8 +398,9 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
    bool encontrado;
    int j=0;
    int insert=0;
+   int surf_encontrado=0;
    unsigned char key[dim];
-   for (int i=0; i<faltan; i++)
+   for (int i=0; i<1000000; i++)
      {
        if(j<count){
          do {
@@ -446,7 +447,7 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
                //return -1;
              }
              if (n_key2==0) encontrado = true; /// En el caso de tracker file FIXME
-
+	     if(encontrado==true) surf_encontrado++;
         /////////////////////////////////////////////////
         /////////////////////////////////////////////////
 
@@ -501,9 +502,10 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		   insert++;
 		 }
 	       j++;
-       }while(!encontrado&& j<count);
+       }while(!encontrado && j<count);
       }//endif
     }//end for
+cout<<"surf: "<< "encontrados: "<< surf_encontrado<< " aceptados: "<<insert<<endl;
      if (keys!=0)   delete (keys);
      if (keys2!=0)   delete (keys2);
    //cvReleaseMat(&keys);

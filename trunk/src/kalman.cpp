@@ -1,9 +1,12 @@
 #include "kalman.h"
-//covarianzas de las features solor
+//covarianzas de las features solo
 #define MEAS_COV 1
-#define PROC_COV 0.0020
-#define ERROR_COV 0.025
-#define MODEL_ERROR_COV 0.025
+//process_noise_cov
+#define PROC_COV 0.01
+//error_cov_pre inicializacion completa. no importante. 
+#define ERROR_COV 0.0
+//error_cov_post y  superior izquierda (camara)
+#define MODEL_ERROR_COV 0.000 
 /** imprime una matriz **/
 void printMat(CvMat *m)
 {
@@ -1155,7 +1158,6 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     double h0=cvmGet(h,0,0);
     double h1=cvmGet(h,1,0);
     double h2=cvmGet(h,2,0);
-cout<<"7"<<endl;
     dm_dt=cvCreateMat(6,3,CV_32FC1);
     dm_dr=cvCreateMat(6,3,CV_32FC1);
     dm_dpix=cvCreateMat(6,2,CV_32FC1);
@@ -1163,7 +1165,6 @@ cout<<"7"<<endl;
     /** Derivada de feature respecto posicion **/
     cvSetIdentity(dm_dt,cvRealScalar(0));
     for (int i =0; i<3;i++) cvmSet(dm_dt,i,i,1);
-cout<<"6"<<endl;
     
     /** Derivada de feature respecto rotacion **/
     CvMat *dTh_dh=cvCreateMat(1,3,CV_32FC1);
@@ -1216,80 +1217,62 @@ cout<<"6"<<endl;
     CvMat *dPh_dr = cvCreateMat(1,3,CV_32FC1);
     cvGEMM(dTh_dh,dh_dr,1,NULL,0,dTh_dr,0);
     cvGEMM(dPh_dh,dh_dr,1,NULL,0,dPh_dr,0);
- cout<<"5"<<endl;
     
     /** derivade de feature respecto de pixel visto **/
     CvMat *dh_dpix_ =cvCreateMat(3,3,CV_32FC1);//Aunque es de 3x3 solo se usa las 2 1º cols.
     CvMat *dh_dpix =cvCreateMatHeader(3,2,CV_32FC1);
     cvGetSubRect(dh_dpix_,dh_dpix,cvRect(0, 0, 2,3));//Aunque es de 3x3 solo se usa las 2 1º cols.
- cout<<".1"<<endl;
 
     cvGEMM(pDataCam->rotMat,InvF,1,NULL,0,dh_dpix_,CV_GEMM_A_T);
- cout<<".2"<<endl;
 
     CvMat *dTh_dpix=cvCreateMat(1,2,CV_32FC1);
     cvGEMM(dTh_dh,dh_dpix,1,NULL,0,dTh_dpix,0);
-cout<<".3"<<endl;
 
     CvMat *dPh_dpix=cvCreateMat(1,2,CV_32FC1);
     cvGEMM(dPh_dh,dh_dpix,1,NULL,0,dPh_dpix,0);
-cout<<"4"<<endl;
     
     /** construccion de la jacobiana **/
     CvMat *Jacob = cvCreateMat(old_state+fdims,old_state+3,CV_32FC1);
-cvSetIdentity(Jacob,cvRealScalar(0));
+    cvSetIdentity(Jacob,cvRealScalar(0));
     //inserto P_old
     for (int i =0; i<old_state;i++)
 	cvmSet(Jacob,i,i,1);//sub-matriz identidad
-cout<<"3"<<endl;
     //inserto dm_dt
     for (int i =0; i<3;i++)
 	for (int j = 0; j<6; j++){
 	    cvmSet(Jacob,j+old_state,2*i,cvmGet(dm_dt,j,i));
 	}
- cout<<".1"<<endl;
 
     //inserto dm_dr
     for (int i =0; i<3;i++){
          cvmSet(Jacob,old_state+3,2*i+6,cvmGet(dTh_dr,0,i));
          cvmSet(Jacob,old_state+4,2*i+6,cvmGet(dPh_dr,0,i));
     }
- cout<<".2"<<endl;
 
     //inserto dh_dpix
     for (int i =0; i<2;i++){
         cvmSet(Jacob,old_state+3,old_state+i,cvmGet(dTh_dpix,0,i));
         cvmSet(Jacob,old_state+4,old_state+i,cvmGet(dPh_dpix,0,i));
     }
- cout<<".3"<<endl;
 
     //inserto dh_drho=1
     cvmSet(Jacob,old_state+fdims-1,old_state+3-1,1);
- cout<<".4"<<endl;
-    printMat(Jacob);
     /** matrix varianzas bruto **/
-cout<<"2"<<endl;
     CvMat *temp_cov =cvCreateMat(old_state+3,old_state+3,CV_32FC1);
     cvSetIdentity(temp_cov,cvRealScalar(0));
     for (int i =0; i<old_state;i++)
  	for(int j =0; j<old_state;j++)
 	    cvmSet(temp_cov,j,i,cvmGet(pKalman->error_cov_post,j,i));
-    cvmSet(temp_cov,old_state,old_state,1);//error de determinacion de un pixel
-    cvmSet(temp_cov,old_state+1,old_state+1,1);//error de determinación de un pixel
+    cvmSet(temp_cov,old_state,old_state,3);//error de determinacion de un pixel
+    cvmSet(temp_cov,old_state+1,old_state+1,3);//error de determinación de un pixel
     cvmSet(temp_cov,old_state+2,old_state+2,0.5);//sigma rho cuadrado
- cout<<".1"<<endl;
-printMat(temp_cov);
     CvMat *temp_cov2 =cvCreateMat(old_state+fdims,old_state+3,CV_32FC1);
     cvGEMM(Jacob,temp_cov,1,NULL,0,temp_cov2,0);
- cout<<".2"<<endl;
 
     CvMat *state_post=cvCreateMatHeader(old_state+fdims,old_state+fdims,CV_32FC1);
     cvGetSubRect(pKalman->error_cov_post,state_post,cvRect(0, 0, old_state+fdims,old_state+fdims));
-cout<<".3"<<endl;
 
     cvGEMM(temp_cov2,Jacob,1,NULL,0,state_post,CV_GEMM_B_T);
-cout<<"1"<<endl;
-    printMat(pKalman->error_cov_post);
     cvReleaseMat(&temp_cov);
     cvReleaseMat(&temp_cov2);
     cvReleaseMat(&Jacob);

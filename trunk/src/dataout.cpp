@@ -140,6 +140,13 @@ void CDataOut::R_Out()
 }
 void CDataOut::Particle(IplImage *framecopy)
 {
+    char ndisp[100];
+  CvMat* vect2=cvCreateMat(1,6,CV_32FC1);
+  CvMat* m = cvCreateMat(3,1,CV_32FC1);
+
+    sprintf(ndisp,"disp%d.txt",iter++);
+    DispFile.open(ndisp);
+    int s;
     CvScalar c[pMap->bbdd.size()];
     for (int j =0; j<pMap->bbdd.size();j++)
     {
@@ -148,21 +155,44 @@ void CDataOut::Particle(IplImage *framecopy)
     for (int p=0; p<pParticleFilter->num_particles;p++)
     {
         int i=0;
+	s=12;
         for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
             It != pMap->bbdd.end(); It++ )
         {
 
-            if (framecopy != NULL){
-                 /*  cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
+          if (framecopy != NULL){
+                /*  cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
                                                 pParticleFilter->pred_measure[i+1][p]),
                             1,c[i/2],1 );*/
                    cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
                                                 pParticleFilter->pred_measure[i+1][p]),
                             1,cvScalar(0,0,pParticleFilter->weights[p]*10001.0),1 );
-            }
-            i+=2;
+          }
+          i+=2;
+	  cvmSet(m,0,0,cos(pParticleFilter->particles[s+3][p])*sin(pParticleFilter->particles[s+4][p]));
+  	  cvmSet(m,1,0,-sin(pParticleFilter->particles[s+3][p]));
+	  cvmSet(m,2,0,cos(pParticleFilter->particles[s+3][p])*cos(pParticleFilter->particles[s+4][p]));
+    	  cvNormalize( m, m);
+    	  cvmSet(vect2,0,0,((pParticleFilter->particles[s][p])+cvmGet(m,0,0)/(pParticleFilter->particles[s+5][p])));
+    	  cvmSet(vect2,0,1,((pParticleFilter->particles[s+1][p])+cvmGet(m,1,0)/(pParticleFilter->particles[s+5][p])));
+   	  cvmSet(vect2,0,2,((pParticleFilter->particles[s+2][p])+cvmGet(m,2,0)/(pParticleFilter->particles[s+5][p])));
+	  s+=6;
+	  DispFile<<cvmGet(vect2,0,0)<<" ";
+          DispFile<<cvmGet(vect2,0,1)<<" ";
+          DispFile<<cvmGet(vect2,0,2)<<" ";
+	  DispFile<< s/6<<endl;
+
         }
+	  DispFile<<pParticleFilter->particles[0][p]<<" ";
+	  DispFile<<pParticleFilter->particles[2][p]<<" ";
+	  DispFile<<pParticleFilter->particles[4][p]<<" ";
+	  DispFile<<"0";
+	  DispFile<<endl;	
     }
+    cvReleaseMat(&m);
+    cvReleaseMat(&vect2);
+    DispFile.close();
+
 }
 void CDataOut::Disp_out(IplImage *framecopy)
 {
@@ -216,7 +246,7 @@ void CDataOut::Disp_out(IplImage *framecopy)
     	  cvNormalize( m, m);
     	  cvmSet (vect2,0,0,((cvmGet(res6,0,0)+(*It)->wx)+cvmGet(m,0,0)/(cvmGet(res6,5,0)+(*It)->rho)));
     	  cvmSet(vect2,0,1,((cvmGet(res6,1,0)+(*It)->wy)+cvmGet(m,1,0)/(cvmGet(res6,5,0)+(*It)->rho)));
-   	      cvmSet(vect2,0,2,((cvmGet(res6,2,0)+(*It)->wz)+cvmGet(m,2,0)/(cvmGet(res6,5,0)+(*It)->rho)));
+   	  cvmSet(vect2,0,2,((cvmGet(res6,2,0)+(*It)->wz)+cvmGet(m,2,0)/(cvmGet(res6,5,0)+(*It)->rho)));
 
         DispFile<<cvmGet(vect2,0,0)<<" ";
         DispFile<<cvmGet(vect2,0,1)<<" ";

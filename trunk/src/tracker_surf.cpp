@@ -138,7 +138,7 @@ surf.find_features( grey,feat, levels);
 
 *keys = new int[64*feat->total];// cvCreateMat(feat->total,64,CV_32FC1) ;
 *points = cvCreateMat(feat->total,4,CV_32FC1) ;
-
+cout<<"surf: "<< "feat_total: "<<feat->total<<endl;
 cout<<"end2"<<endl;
 float ang;
 int *desc;
