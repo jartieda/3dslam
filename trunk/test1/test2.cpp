@@ -19,9 +19,9 @@
 //#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
 //#define DATA "c:\\datos\\slam\\kkk%0.4d.tif"
 //#define DATA "F:\\SLAM\\Datos\\heli\\kkk%0.4d.tif"
-//#define DATA "/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif"
+#define DATA "/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif"
 //#define DATA "/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg"
-#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
+//#define DATA "/media/WOXTER/SLAM/Datos/Vuelo28032008ArgandadelRey/vuelo6/original%0.4d.tif"
 #define LINUX
 //	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
 //	sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
@@ -30,7 +30,7 @@
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg",iter);
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/univ-alberta-vision-sift/ualberta-csc-flr3-vision/image%0.4d.png",iter);
 
-//#define KALMAN
+#define KALMAN
 
 using namespace std;
 
@@ -38,8 +38,8 @@ CDataCam mDataCam;
 CModelCam mModelCam;
 CMap mMap;
 CUpdater mUpdater;
-CTrackerFile mTracker;
-//CTracker_surf mTracker;
+//CTrackerFile mTracker;
+CTracker_surf mTracker;
 CFreeCam mVehicle;
 #ifndef KALMAN
 CParticleFilter mEstimator;
@@ -309,24 +309,14 @@ while(1)
    mUpdater.remove();
 
    mEstimator.UpdateMatrixSize();
-   data_out();
-   cout<<"waitkey antes predict"<<endl;
-   c = cvWaitKey(0);//esto probablemente se pueda quitar
-   if( c == 27 )//si presiono escape salgo del programa limpiamente
-     break;
 
    mEstimator.Predict();
-   data_out();
-   cout<<"waitkey post predict"<<endl;
-   c = cvWaitKey(0);//esto probablemente se pueda quitar
-   if( c == 27 )//si presiono escape salgo del programa limpiamente
-     break;
 
    mModelCam.ProjectPoints();
 
-//  mEstimator.Test();
+//   mEstimator.Test();
    cout<<"ransac"<<endl;
-//  mUpdater.TestRANSAC();
+//   mUpdater.TestRANSAC();
 
    mEstimator.UpdateMatrixSize();
 

@@ -1263,9 +1263,9 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     for (int i =0; i<old_state;i++)
  	for(int j =0; j<old_state;j++)
 	    cvmSet(temp_cov,j,i,cvmGet(pKalman->error_cov_post,j,i));
-    cvmSet(temp_cov,old_state,old_state,3);//error de determinacion de un pixel
-    cvmSet(temp_cov,old_state+1,old_state+1,3);//error de determinación de un pixel
-    cvmSet(temp_cov,old_state+2,old_state+2,0.5);//sigma rho cuadrado
+    cvmSet(temp_cov,old_state,old_state,4);//error de determinacion de un pixel
+    cvmSet(temp_cov,old_state+1,old_state+1,4);//error de determinación de un pixel
+    cvmSet(temp_cov,old_state+2,old_state+2,0.3);//sigma rho cuadrado
     CvMat *temp_cov2 =cvCreateMat(old_state+fdims,old_state+3,CV_32FC1);
     cvGEMM(Jacob,temp_cov,1,NULL,0,temp_cov2,0);
 
