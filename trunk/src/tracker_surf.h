@@ -21,24 +21,18 @@ public:
 CTracker_surf();
 ~CTracker_surf();
 
-//void setDataCam(CDataCam* p);
-//void setMap(CMap* p);
 void Match(IplImage *f);
 int Init(IplImage *img,int **keys,CvMat **points);
+/** Obtiene el descriptor asociado a un punto con una escala detrminada **/
 void Descriptor(IplImage *img, CvPoint *point,int s, int *key);
- int getFeatDim();
+/** Devuelve el tamaño en bytes del vector de características **/
+int getFeatDim();
 private:
 
 IplImage *img;
 IplImage *fImg;
-//cvNamedWindow("vent",1);
-
-//Estas variables deberían formar parte de una futura clase abstracta
-//CDataCam *pDataCam;
-//CMap * pMap;
-
 
 CSurf surf;
-    int levels;
+int levels;
 };
 #endif

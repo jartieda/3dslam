@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include <jni.h>
+#include <time.h>
 
 #include "../src/datacam.h"
 #include "../src/modelcam.h"
@@ -8,11 +11,15 @@
 #include "../src/kalman.h"
 #include "../src/updater.h"
 #include "../src/tracker_surf.h"
+#include "../src/tracker_harris.h"
 #include "../src/freecam.h"
 #include "../src/dataout.h"
 #include "highgui.h"
 #include "../src/particlefilter.h"
 #include "../src/trackerfile.h"
+#include "../src/xmlParser.h"
+
+
 
 #define RHO_INIT_DIST 1
 
@@ -25,7 +32,7 @@
 #define LINUX
 //	sprintf(filein,"G:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg",iter);
 //	sprintf(filein,"G:\\SLAM\\Datos\\renders\\escal%0.4d.jpg",iter);//G:\SLAM\Datos\renders
-//  sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
+//      sprintf(filein,"c:\\datos\\slam\\kkk%0.4d.tif",iter);//G:\SLAM\Datos\renders
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/heli/kkk%0.4d.tif",iter);
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg",iter);
 //	sprintf(filein,"/media/WOXTER/SLAM/Datos/univ-alberta-vision-sift/ualberta-csc-flr3-vision/image%0.4d.png",iter);
@@ -39,7 +46,8 @@ CModelCam mModelCam;
 CMap mMap;
 CUpdater mUpdater;
 //CTrackerFile mTracker;
-CTracker_surf mTracker;
+//CTracker_surf mTracker;
+CTracker *pTracker;
 CFreeCam mVehicle;
 #ifndef KALMAN
 CParticleFilter mEstimator;
@@ -48,13 +56,14 @@ CKalman mEstimator;
 #endif
 CDataOut mDataOut;
 
+XMLNode xMainNode;
 
 int ptox[1000][120];
 int ptoy[1000][120];
 
 ///video variables
 	CvCapture* capture = 0;
-
+bool video = true ; ///< define si se usa un origen de video o de seq. de imagenes
 char c;//donde se guarda las teclas pulsadas
 //variables deonde se deja el frame y copia para dibujar en ella
 IplImage* frame = 0;
@@ -67,11 +76,109 @@ FILE *gplot=0;
 int iter=1;
 
 float randomVector(float max, float min);
+/** Variables interfaz grafica java **/
+jobject startobj; ///< objeto start
+jmethodID startcons, openMethod, setImage;///< variable clase start
+JNIEnv* env;
 
+using namespace std;
+JNIEnv* create_vm() {
+	JavaVM* jvm;
+	JavaVMInitArgs args;
+	JavaVMOption options[3];
+
+	/* There is a new JNI_VERSION_1_4, but it doesn't add anything for the purposes of our example. */
+	args.version = JNI_VERSION_1_6;
+	args.nOptions = 2;
+//	options[0].optionString = "-Djava.class.path=C:\\programas\\JavaApplication4\\dist\\JavaApplication4.jar;java.class.path=c:\\programas\\JavaApplication4\\build\\classes\\javaapplication4;\"c:\\Archivos de programa\\NetBeans 6.0.1\\platform7\\modules\\org-netbeans-api-visual.jar\";\"c:\\Archivos de programa\\NetBeans 6.0.1\\platform7\\lib\\org-openide-util.jar\"" ;
+	options[0].optionString = "-Djava.class.path=/media/WOXTER/SLAM/Programas/JavaApplication4/build/classes/:/media/WOXTER/SLAM/Programas/JavaApplication4/build/classes/javaapplication4/:/opt/netbeans-6.1/platform8/modules/org-netbeans-api-visual.jar:/opt/netbeans-6.1/platform8/lib/org-openide-util.jar:/media/WOXTER/SLAM/Programas/JavaApplication4/dist/JavaApplication4.jar" ;
+
+//options[1].optionString = "-Djava.library.path=C:\\Sun\\SDK\\jdk\\jre\\bin\\client";  /* set native library path */
+    options[1].optionString = "-verbose:lll";                   /* print JNI-related messages */
+
+    args.options = options;
+    args.ignoreUnrecognized = JNI_FALSE;
+
+    cout<<"jni_createvm="<<JNI_CreateJavaVM(&jvm, (void **)&env, &args)<<endl;
+    return env;
+}
+
+void invoke_class() {
+	jclass cls;
+	jclass startcls;
+	jmethodID mainMethod;
+	jmethodID runMethod;
+	jobjectArray applicationArgs;
+	jstring applicationArg0;
+cout<<"0"<<endl;
+	applicationArgs = env->NewObjectArray( 1, env->FindClass( "java/lang/String"), NULL);
+	applicationArg0 = env->NewStringUTF( "From-C-program");
+	env->SetObjectArrayElement(applicationArgs, 0, applicationArg0);
+	
+cout<<"1 "<<env<<endl;
+	cls = env->FindClass( "javaapplication4/Main");
+	if (cls ==0){
+	 if (env->ExceptionOccurred()) {
+	       env->ExceptionDescribe();
+	    }
+	 exit(-1);
+	}
+cout<<"2 class "<<cls<<endl;
+	startcls = env->FindClass( "javaapplication4/start");
+	if (startcls ==0){
+	 if (env->ExceptionOccurred()) {
+	       env->ExceptionDescribe();
+	    }
+	 exit(-1);
+	}
+cout<<"2 startclass "<<startcls<<endl;
+
+    jmethodID cons = env->GetMethodID(cls, "<init>", "()V");
+cout<<"a"<<endl;
+    jobject obj = env->NewObject(cls, cons);
+cout<<"b"<<endl;
+        mainMethod = env->GetStaticMethodID( cls, "main", "([Ljava/lang/String;)V");
+     	runMethod = env->GetMethodID( cls, "run", "()V");
+cout<<"c "<<mainMethod<<endl;
+	if (runMethod==0) {
+	    if (env->ExceptionOccurred()) {
+	       env->ExceptionDescribe();
+	    }
+	    exit(-1);
+	}
+
+    startcons = env->GetMethodID(startcls, "<init>", "()V");
+    startobj = env->NewObject(startcls, startcons);
+    openMethod = env->GetMethodID( startcls, "open", "()V");
+    setImage = env->GetMethodID(startcls,"setImage","(Ljava/lang/String;)V");
+
+    cout<<"c "<<openMethod<<endl;
+	if (openMethod==0) {
+	    if (env->ExceptionOccurred()) {
+	       env->ExceptionDescribe();
+	    }
+	    exit(-1);
+	}
+	if (setImage==0) {
+	    if (env->ExceptionOccurred()) {
+	       env->ExceptionDescribe();
+	    }
+	    exit(-1);
+	}
+cout<<"precall"<<endl;
+	env->CallVoidMethod(startobj,openMethod);
+
+
+	//env->CallStaticVoidMethod( cls, mainMethod, applicationArgs);
+cout<<"callvoidmethod"<<endl;
+	//env->CallVoidMethod( cls, runMethod);
+cout<<"3 class "<<cls<<endl;
+
+}
 
 void conect()
 {
-
+  
   mModelCam.setDataCam(&mDataCam);
   mModelCam.setMap(&mMap);
 
@@ -82,12 +189,13 @@ void conect()
 
   mUpdater.setDataCam(&mDataCam);
   mUpdater.setMap(&mMap);
-  mUpdater.setTracker((CTracker*)&mTracker);
+  
+  mUpdater.setTracker((CTracker*)pTracker);
   mUpdater.setModelCam(&mModelCam);
 
   mDataOut.setDataCam(&mDataCam);
   mDataOut.setMap(&mMap);
-  mDataOut.setTracker((CTracker*)&mTracker);
+  mDataOut.setTracker((CTracker*)pTracker);
   mDataOut.setModelCam(&mModelCam);
   #ifndef KALMAN
   mDataOut.setParticle(&mEstimator);
@@ -95,7 +203,7 @@ void conect()
   mDataOut.setKalman(&mEstimator);//FIXME!!!!
   #endif
 
-  mTracker.setDataCam(&mDataCam);
+  pTracker->setDataCam(&mDataCam);
 
 }
 void param_init()
@@ -160,8 +268,8 @@ void param_init()
   mDataCam.SetRotation(rotation);
   mDataCam.SetTranslation(trans);
 
-  mTracker.setDataCam(&mDataCam);
-  mTracker.setMap(&mMap);
+  pTracker->setDataCam(&mDataCam);
+  pTracker->setMap(&mMap);
 
 }
 
@@ -176,24 +284,27 @@ void init_video(int argc, char **argv)
 
   cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, 250000 );
   //capture = cvCreateFileCapture(  "/media/WOXTER/airview/valdelaguna/vuelo-1/crop120sec.mpg");
-  /*   capture = cvCreateFileCapture( argv[1]);
-       if (capture==0)
-       {
-       cout<< "no se puede abrir el fichero de video "<<endl;
-       exit(0);
-       }
-  */
+  capture = cvCreateFileCapture( argv[1]);
+  if (capture==0)
+  {
+   cout<< "no se puede abrir el fichero de video "<<endl;
+   video = false ;
+  }else
+  {
+    video = true; 
+  }
+
   //abrir una ventana para visualizar
   cvNamedWindow( "CamShiftDemo", 1 );
-  //obtencion del primer fram
-  //frame = cvQueryFrame( capture );
-  //iter++;
-  char filein[400];
-  sprintf(filein,DATA,iter);
-  printf("%s\n",filein);
-
-  frameold=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
-  frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
+  if (video == true ) {
+     //obtencion del primer fram
+     frame = cvQueryFrame( capture );
+  }else {  
+     char filein[400];
+     sprintf(filein,DATA,iter);
+     printf("%s\n",filein);     frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
+  }
+  frameold = cvCloneImage(frame);
   framecopy=cvCreateImage(cvGetSize(frame),8,3);//copia para poder tocar
   cvCopy( frame,framecopy);
 
@@ -202,10 +313,15 @@ void init_video(int argc, char **argv)
 
 void init_ptos()
 {
-   char filein[400];
-   sprintf(filein,DATA,iter);
-   printf("%s\n",filein);
-   frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
+  if (video == true ) {
+     //obtencion del primer fram
+     frame = cvQueryFrame( capture );
+  }else {  
+     char filein[400];
+     sprintf(filein,DATA,iter);
+     printf("%s\n",filein);     frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
+  }
+
    cvCopy( frame,framecopy);
 
    mUpdater.Add(frame,frameold);
@@ -268,6 +384,31 @@ int main (int argc, char **argv)
 {
 
 //cvSetErrMode( CV_ErrModeSilent  );
+xMainNode=XMLNode::openFileHelper("config.xml","slam");
+  const char * t;
+  t=xMainNode.getChildNode("tracker").getText();
+if (!strcmp(t,"tracker_harris"))
+{
+   pTracker= new CTracker_harris();
+}else if  (!strcmp(t,"tracker_surf"))
+{
+   pTracker= new CTracker_surf();
+}else {
+	cout<< "error no hay tracker"<<endl;
+}
+  cout<<"TRACKER IS : "<<t<<endl;
+
+  t=xMainNode.getChildNode("gui").getText();
+if (!strcmp(t,"true"))
+{
+    cout<< "hey"<<endl;
+    env = create_vm();
+    cout<< "adios env="<<env<<endl;
+    invoke_class( );
+    cout<<"invoca clases"<<endl;
+}
+
+  cout<<"TRACKER IS : "<<t<<endl;
 
 
 conect();
@@ -289,9 +430,22 @@ while(1)
     iter+=3;
     cout <<"ITERACION: "<< iter<<endl;
     //	frame = cvQueryFrame( capture );
-    sprintf(filein,DATA,iter);
     cvCopy(frame,frameold);
-    frame=cvLoadImage(filein, CV_LOAD_IMAGE_COLOR );
+    if (video == true ) {
+       //obtencion del primer fram
+       frame = cvQueryFrame( capture );
+    }else {  
+       char filein[400];
+       sprintf(filein,DATA,iter);
+       printf("%s\n",filein);
+	printf("precalvoid\n");
+       env->CallVoidMethod(startobj,setImage,env->NewStringUTF(filein));	    if (env->ExceptionOccurred()) {
+	       env->ExceptionDescribe();
+	    }
+	    exit(-1);
+
+       frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
+    } 
 
     //  compruebo que no se ha acabado el video
     if(frame==NULL) break;
@@ -299,7 +453,7 @@ while(1)
 
     //   match frame
     mModelCam.ProjectPoints();
-    mTracker.Match(frame);//entre los puntos de la imagen anterior y los de esta
+    pTracker->Match(frame);//entre los puntos de la imagen anterior y los de esta
 
     mUpdater.Add(frame,frameold);
 

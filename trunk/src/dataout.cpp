@@ -3,10 +3,9 @@
 CDataOut::CDataOut():iter(0),hScale(0.5),vScale(0.5),lineWidth(2)
 {
   FeatFile.open("feat.txt");
-     RFile.open("plot.r");
-     CamFile.open("cam.txt");
-      cvInitFont(&font,CV_FONT_HERSHEY_SIMPLEX|CV_FONT_ITALIC, hScale,vScale,0,lineWidth);
-
+  RFile.open("plot.r");
+  CamFile.open("cam.txt");
+  cvInitFont(&font,CV_FONT_HERSHEY_SIMPLEX|CV_FONT_ITALIC, hScale,vScale,0,lineWidth);
 }
 CDataOut::~CDataOut()
 {
