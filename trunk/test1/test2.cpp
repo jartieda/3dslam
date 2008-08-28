@@ -1,3 +1,20 @@
+/****************************************************************************/
+/*! \mainpage 3D SLAM Project
+ * \section intro_sec Introduction
+ *
+ * This project is an implementation of visual simultaneous location and mapping
+
+ * Copyright (c) 2008, Jorge Artieda Trigueros
+ * All rights reserved.
+ *
+ * @version     V1.0
+ * @author      Jorge Atieda Trigueros
+ *
+ * \section tutorial Turorial
+ * <a href="../../slam.html">To be created...</a>
+ ****************************************************************************/
+
+
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -114,7 +131,7 @@ cout<<"0"<<endl;
 	applicationArgs = env->NewObjectArray( 1, env->FindClass( "java/lang/String"), NULL);
 	applicationArg0 = env->NewStringUTF( "From-C-program");
 	env->SetObjectArrayElement(applicationArgs, 0, applicationArg0);
-	
+
 cout<<"1 "<<env<<endl;
 	cls = env->FindClass( "javaapplication4/Main");
 	if (cls ==0){
@@ -178,7 +195,7 @@ cout<<"3 class "<<cls<<endl;
 
 void conect()
 {
-  
+
   mModelCam.setDataCam(&mDataCam);
   mModelCam.setMap(&mMap);
 
@@ -189,7 +206,7 @@ void conect()
 
   mUpdater.setDataCam(&mDataCam);
   mUpdater.setMap(&mMap);
-  
+
   mUpdater.setTracker((CTracker*)pTracker);
   mUpdater.setModelCam(&mModelCam);
 
@@ -256,11 +273,11 @@ void param_init()
     cvmSet(trans,0,0,0);
     cvmSet(trans,1,0,0);
     cvmSet(trans,2,0,0);
-  }else{	
+  }else{
     CvMat *temp=mVehicle.getMeasurementVector();
     cvmSet(rotation,0,0,cvmGet(temp,3,0));
     cvmSet(rotation,1,0,cvmGet(temp,4,0));
-    cvmSet(rotation,2,0,cvmGet(temp,5,0)); 
+    cvmSet(rotation,2,0,cvmGet(temp,5,0));
     cvmSet(trans,0,0,cvmGet(temp,0,0));
     cvmSet(trans,1,0,cvmGet(temp,1,0));
     cvmSet(trans,2,0,cvmGet(temp,2,0));
@@ -291,7 +308,7 @@ void init_video(int argc, char **argv)
    video = false ;
   }else
   {
-    video = true; 
+    video = true;
   }
 
   //abrir una ventana para visualizar
@@ -299,7 +316,7 @@ void init_video(int argc, char **argv)
   if (video == true ) {
      //obtencion del primer fram
      frame = cvQueryFrame( capture );
-  }else {  
+  }else {
      char filein[400];
      sprintf(filein,DATA,iter);
      printf("%s\n",filein);     frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
@@ -316,7 +333,7 @@ void init_ptos()
   if (video == true ) {
      //obtencion del primer fram
      frame = cvQueryFrame( capture );
-  }else {  
+  }else {
      char filein[400];
      sprintf(filein,DATA,iter);
      printf("%s\n",filein);     frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
@@ -371,7 +388,7 @@ void data_out()
    sprintf(nombre,"frame%.2d.png",iter);
    cvSaveImage(nombre ,framecopy);
    cvShowImage( "CamShiftDemo", framecopy );
-#ifdef LINUX 
+#ifdef LINUX
     char gplotstr[300];
     if (gplot==0) gplot= popen("/usr/bin/gnuplot","w");
     sprintf(gplotstr,"splot 'disp%d.txt' u 1:2:3, 'cam.txt' u 1:2:3 w l \n",mDataOut.iter-1);
@@ -424,7 +441,7 @@ init_ptos();
 int n=0;
 int i;
 char filein[400];
-   
+
 while(1)
 {
     iter+=3;
@@ -434,7 +451,7 @@ while(1)
     if (video == true ) {
        //obtencion del primer fram
        frame = cvQueryFrame( capture );
-    }else {  
+    }else {
        char filein[400];
        sprintf(filein,DATA,iter);
        printf("%s\n",filein);
@@ -445,7 +462,7 @@ while(1)
 	    exit(-1);
 
        frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
-    } 
+    }
 
     //  compruebo que no se ha acabado el video
     if(frame==NULL) break;

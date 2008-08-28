@@ -7,7 +7,7 @@
 	<File name="src\freecam.cpp" open="1" top="0">
 		<Cursor position="826" topLine="23"/>
 	</File>
-	<File name="src\kalman.cpp" open="1" top="1">
+	<File name="src\kalman.cpp" open="1" top="0">
 		<Cursor position="33641" topLine="919"/>
 	</File>
 	<File name="src\kalman.h" open="1" top="0">
@@ -52,7 +52,7 @@
 	<File name="src\updater.cpp" open="1" top="0">
 		<Cursor position="931" topLine="75"/>
 	</File>
-	<File name="test1\test2.cpp" open="1" top="0">
-		<Cursor position="8371" topLine="303"/>
+	<File name="test1\test2.cpp" open="1" top="1">
+		<Cursor position="454" topLine="0"/>
 	</File>
 </CodeBlocks_layout_file>

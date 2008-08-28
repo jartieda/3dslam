@@ -1,21 +1,3 @@
-/****************************************************************************/
-/*! \mainpage My Personal Index Page
- * \section intro_sec Introduction
- *
- * This is a basic XML parser written in ANSI C++ for portability.
- * It works by using recursion and a node tree for breaking
- * down the elements of an XML document.
- 
- * Copyright (c) 2002, Frank Vanden Berghen
- * All rights reserved.
- * See the file <a href="../../AFPL-license.txt">AFPL-license.txt</a> about the licensing terms
- *
- * @version     V2.38
- * @author      Frank Vanden Berghen
- *
- * \section tutorial Turorial 
- * <a href="../../xmlParser.html">Tutorial</a>
- ****************************************************************************/
 
 #ifndef __INCLUDE_XML_NODE__
 #define __INCLUDE_XML_NODE__
@@ -148,7 +130,7 @@ typedef int XMLElementPosition;
 struct XMLNodeContents;
 
 /// Main Class representing a XML node
-/** 
+/**
  * All operations are formed using this class.
  * \note Constructors are protected, so use instead one of these four methods to get your first instance of XMLNode:
  * <ul>
@@ -176,8 +158,8 @@ typedef struct XMLDLLENTRY XMLNode
 
     /// Parse an XML string and return the root of a XMLNode tree representing the string.
     static XMLNode parseString   (XMLCSTR  lpXMLString, XMLCSTR tag=NULL, XMLResults *pResults=NULL);
-    /**< The "parseString" function parse an XML string and return the root of a XMLNode tree. The "opposite" of this function is 
-     * the function "createXMLString" that re-creates an XML string from an XMLNode tree. If the XML document is corrupted, the 
+    /**< The "parseString" function parse an XML string and return the root of a XMLNode tree. The "opposite" of this function is
+     * the function "createXMLString" that re-creates an XML string from an XMLNode tree. If the XML document is corrupted, the
      * "parseString" method will initialize the "pResults" variable with some information that can be used to trace the error.
      * If you still want to parse the file, you can use the APPROXIMATE_PARSING option as explained inside the note at the
      * beginning of the "xmlParser.cpp" file.
@@ -186,11 +168,11 @@ typedef struct XMLDLLENTRY XMLNode
      * @param tag  the name of the first tag inside the XML file. If the tag parameter is omitted, this function returns a node that represents the head of the xml document including the declaration term (<? ... ?>).
      * @param pResults a pointer to a XMLResults variable that will contain some information that can be used to trace the XML parsing error. You can have a user-friendly explanation of the parsing error with the "getError" function.
      */
-    
+
     /// Parse an XML file and return the root of a XMLNode tree representing the file.
     static XMLNode parseFile     (XMLCSTR     filename, XMLCSTR tag=NULL, XMLResults *pResults=NULL);
-    /**< The "parseFile" function parse an XML file and return the root of a XMLNode tree. The "opposite" of this function is 
-     * the function "writeToFile" that re-creates an XML file from an XMLNode tree. If the XML document is corrupted, the 
+    /**< The "parseFile" function parse an XML file and return the root of a XMLNode tree. The "opposite" of this function is
+     * the function "writeToFile" that re-creates an XML file from an XMLNode tree. If the XML document is corrupted, the
      * "parseFile" method will initialize the "pResults" variable with some information that can be used to trace the error.
      * If you still want to parse the file, you can use the APPROXIMATE_PARSING option as explained inside the note at the
      * beginning of the "xmlParser.cpp" file.
@@ -199,43 +181,43 @@ typedef struct XMLDLLENTRY XMLNode
      * @param tag the name of the first tag inside the XML file. If the tag parameter is omitted, this function returns a node that represents the head of the xml document including the declaration term (<? ... ?>).
      * @param pResults a pointer to a XMLResults variable that will contain some information that can be used to trace the XML parsing error. You can have a user-friendly explanation of the parsing error with the "getError" function.
      */
-    
+
     /// Parse an XML file and return the root of a XMLNode tree representing the file. A very crude error checking is made. An attempt to guess the Char Encoding used in the file is made.
     static XMLNode openFileHelper(XMLCSTR     filename, XMLCSTR tag=NULL);
-    /**< The "openFileHelper" function reports to the screen all the warnings and errors that occurred during parsing of the XML file. 
-     * This function also tries to guess char Encoding (UTF-8, ASCII or SHIT-JIS) based on the first 200 bytes of the file. Since each 
-     * application has its own way to report and deal with errors, you should rather use the "parseFile" function to parse XML files 
-     * and program yourself thereafter an "error reporting" tailored for your needs (instead of using the very crude "error reporting" 
+    /**< The "openFileHelper" function reports to the screen all the warnings and errors that occurred during parsing of the XML file.
+     * This function also tries to guess char Encoding (UTF-8, ASCII or SHIT-JIS) based on the first 200 bytes of the file. Since each
+     * application has its own way to report and deal with errors, you should rather use the "parseFile" function to parse XML files
+     * and program yourself thereafter an "error reporting" tailored for your needs (instead of using the very crude "error reporting"
      * mechanism included inside the "openFileHelper" function).
      *
      * If the XML document is corrupted, the "openFileHelper" method will:
      *         - display an error message on the console (or inside a messageBox for windows).
      *         - stop execution (exit).
-     * I strongly suggest that you write your own "openFileHelper" method tailored to your needs. If you still want to parse 
+     * I strongly suggest that you write your own "openFileHelper" method tailored to your needs. If you still want to parse
      * the file, you can use the APPROXIMATE_PARSING option as explained inside the note at the beginning of the "xmlParser.cpp" file.
-     * 
+     *
      * @param filename the path of the XML file to parse.
      * @param tag the name of the first tag inside the XML file. If the tag parameter is omitted, this function returns a node that represents the head of the xml document including the declaration term (<? ... ?>).
      */
 
     static XMLCSTR getError(XMLError error); ///< this gives you a user-friendly explanation of the parsing error
 
-    /// Create an XML string starting from the current XMLNode. 
-    XMLSTR createXMLString(int nFormat=1, int *pnSize=NULL) const; 
+    /// Create an XML string starting from the current XMLNode.
+    XMLSTR createXMLString(int nFormat=1, int *pnSize=NULL) const;
     /**< If nFormat==0, no formatting is required otherwise this returns an user friendly XML string from a given element
      *   with appropriate white spaces and carriage returns. if pnSize is given it returns the size in character of the string. */
 
     /// Save the content of an xmlNode inside a file
-    XMLError writeToFile(XMLCSTR filename, 
-                         const char *encoding=NULL, 
-                         char nFormat=1) const;                    
-    /**< If nFormat==0, no formatting is required otherwise this returns an user friendly XML string from a given element with appropriate white spaces and carriage returns. 
-     * If the global parameter "characterEncoding==encoding_UTF8", then the "encoding" parameter is ignored and always set to "utf-8". 
-     * If the global parameter "characterEncoding==encoding_ShiftJIS", then the "encoding" parameter is ignored and always set to "SHIFT-JIS". 
-     * If "_XMLWIDECHAR=1", then the "encoding" parameter is ignored and always set to "utf-16". 
+    XMLError writeToFile(XMLCSTR filename,
+                         const char *encoding=NULL,
+                         char nFormat=1) const;
+    /**< If nFormat==0, no formatting is required otherwise this returns an user friendly XML string from a given element with appropriate white spaces and carriage returns.
+     * If the global parameter "characterEncoding==encoding_UTF8", then the "encoding" parameter is ignored and always set to "utf-8".
+     * If the global parameter "characterEncoding==encoding_ShiftJIS", then the "encoding" parameter is ignored and always set to "SHIFT-JIS".
+     * If "_XMLWIDECHAR=1", then the "encoding" parameter is ignored and always set to "utf-16".
      * If no "encoding" parameter is given the "ISO-8859-1" encoding is used. */
     /* @} */
- 
+
     /** @defgroup navigate Navigate the XMLNode structure
      * @{ */
     XMLCSTR getName() const;                                       ///< name of the node
@@ -278,11 +260,11 @@ typedef struct XMLDLLENTRY XMLNode
     static XMLAttribute emptyXMLAttribute;
 
     /** @defgroup xmlModify Create or Update the XMLNode structure
-     *  The functions in this group allows you to create from scratch (or update) a XMLNode structure. Start by creating your top 
-     *  node with the "createXMLTopNode" function and then add new nodes with the "addChild" function. The parameter 'pos' gives 
-     *  the position where the childNode, the text or the XMLClearTag will be inserted. The default value (pos=-1) inserts at the 
+     *  The functions in this group allows you to create from scratch (or update) a XMLNode structure. Start by creating your top
+     *  node with the "createXMLTopNode" function and then add new nodes with the "addChild" function. The parameter 'pos' gives
+     *  the position where the childNode, the text or the XMLClearTag will be inserted. The default value (pos=-1) inserts at the
      *  end. The value (pos=0) insert at the beginning (Insertion at the beginning is slower than at the end). <br>
-     * 
+     *
      *  REMARK: 0 <= pos < nChild()+nText()+nClear() <br>
      */
 
@@ -294,7 +276,7 @@ typedef struct XMLDLLENTRY XMLNode
     XMLNode        addChild(XMLNode nodeToAdd, XMLElementPosition pos=-1);                          ///< If the "nodeToAdd" has some parents, it will be detached from it's parents before being attached to the current XMLNode
     XMLAttribute  *addAttribute(XMLCSTR lpszName, XMLCSTR lpszValuev);                              ///< Add a new attribute
     XMLCSTR        addText(XMLCSTR lpszValue, XMLElementPosition pos=-1);                           ///< Add a new text content
-    XMLClear      *addClear(XMLCSTR lpszValue, XMLCSTR lpszOpen=NULL, XMLCSTR lpszClose=NULL, XMLElementPosition pos=-1); 
+    XMLClear      *addClear(XMLCSTR lpszValue, XMLCSTR lpszOpen=NULL, XMLCSTR lpszClose=NULL, XMLElementPosition pos=-1);
     /**< Add a new clear tag
      * @param lpszOpen default value "<![CDATA["
      * @param lpszClose default value "]]>"
@@ -328,7 +310,7 @@ typedef struct XMLDLLENTRY XMLNode
     void deleteAttribute(int i=0);                   ///< Delete the ith attribute of the current XMLNode
     void deleteAttribute(XMLCSTR lpszName);          ///< Delete the attribute with the given name (the "strcmp" function is used to find the right attribute)
     void deleteAttribute(XMLAttribute *anAttribute); ///< Delete the attribute with the name "anAttribute->lpszName" (the "strcmp" function is used to find the right attribute)
-    void deleteText(int i=0);                        ///< Delete the Ith text content of the current XMLNode 
+    void deleteText(int i=0);                        ///< Delete the Ith text content of the current XMLNode
     void deleteText(XMLCSTR lpszValue);              ///< Delete the text content "lpszValue" inside the current XMLNode (direct "pointer-to-pointer" comparison is used to find the right text)
     void deleteClear(int i=0);                       ///< Delete the Ith clear tag inside the current XMLNode
     void deleteClear(XMLCSTR lpszValue);             ///< Delete the clear tag "lpszValue" inside the current XMLNode (direct "pointer-to-pointer" comparison is used to find the clear tag)
@@ -337,8 +319,8 @@ typedef struct XMLDLLENTRY XMLNode
 
     /** @defgroup xmlWOSD ???_WOSD functions.
      * @ingroup xmlModify
-     *  The strings given as parameters for the "add" and "update" methods that have a name with 
-     *  the postfix "_WOSD" (that means "WithOut String Duplication")(for example "addText_WOSD") 
+     *  The strings given as parameters for the "add" and "update" methods that have a name with
+     *  the postfix "_WOSD" (that means "WithOut String Duplication")(for example "addText_WOSD")
      *  will be free'd by the XMLNode class. For example, it means that this is incorrect:
      *  \code
      *     xNode.addText_WOSD("foo");
@@ -398,18 +380,18 @@ typedef struct XMLDLLENTRY XMLNode
     /** @} */
 
     /// Enumeration for XML character encoding.
-    typedef enum XMLCharEncoding 
-    { 
-        encoding_UTF8=1, 
-        encoding_ascii=2, 
-        encoding_ShiftJIS=3 
+    typedef enum XMLCharEncoding
+    {
+        encoding_UTF8=1,
+        encoding_ascii=2,
+        encoding_ShiftJIS=3
     } XMLCharEncoding;
 
     /** \addtogroup conversions
      * @{ */
 
     /// Sets the global options for the conversions
-    static char setGlobalOptions(XMLCharEncoding characterEncoding=XMLNode::encoding_UTF8, char guessWideCharChars=1, 
+    static char setGlobalOptions(XMLCharEncoding characterEncoding=XMLNode::encoding_UTF8, char guessWideCharChars=1,
                                  char dropWhiteSpace=1, char removeCommentsInMiddleOfText=1);
     /**< The "setGlobalOptions" function allows you to change four global parameters that affect string & file
      * parsing. First of all, you most-probably will never have to change these 3 global parameters.
@@ -437,7 +419,7 @@ typedef struct XMLDLLENTRY XMLNode
      *     dropWhiteSpace=0. A note of caution: if you set "dropWhiteSpace=0", the parser will be
      *     slower and your code will be more complex.
      *
-     * @param removeCommentsInMiddleOfText To explain this parameter, let's consider this code: 
+     * @param removeCommentsInMiddleOfText To explain this parameter, let's consider this code:
      * \code
      *        XMLNode x=XMLNode::parseString("<a>foo<!-- hello -->bar<!DOCTYPE world >chu</a>","a");
      * \endcode
@@ -530,7 +512,7 @@ typedef struct XMLNodeContents
 
 /** Duplicate (copy in a new allocated buffer) the source string. This is
  * a very handy function when used with all the "XMLNode::*_WOSD" functions (\link xmlModify \endlink).
- * @param cbData If !=0 then cbData is the number of chars to duplicate. New strings allocated with 
+ * @param cbData If !=0 then cbData is the number of chars to duplicate. New strings allocated with
  * this function should be free'd using the "freeXMLString" function. */
 XMLDLLENTRY XMLSTR stringDup(XMLCSTR source, int cbData=-1);
 
@@ -540,8 +522,8 @@ XMLDLLENTRY void freeXMLString(XMLSTR t); // {free(t);}
 /** @defgroup atoX ato? like functions
  * The "xmlto?" functions are equivalents to the atoi, atol, atof functions.
  * The only difference is: If the variable "xmlString" is NULL, than the return value
- * is "defautValue". These 4 functions are only here as "convenience" functions for the 
- * user (they are not used inside the XMLparser). If you don't need them, you can 
+ * is "defautValue". These 4 functions are only here as "convenience" functions for the
+ * user (they are not used inside the XMLparser). If you don't need them, you can
  * delete them without any trouble.
  *
  * @{ */
@@ -552,19 +534,19 @@ XMLDLLENTRY double  xmltof(XMLCSTR xmlString,double defautValue=.0);
 XMLDLLENTRY XMLCSTR xmltoa(XMLCSTR xmlString,XMLCSTR defautValue=_CXML(""));
 /** @} */
 
-/** @defgroup ToXMLStringTool Helper class to create XML files using "printf", "fprintf", "cout",... functions. 
+/** @defgroup ToXMLStringTool Helper class to create XML files using "printf", "fprintf", "cout",... functions.
  * @{ */
-/// Helper class to create XML files using "printf", "fprintf", "cout",... functions. 
+/// Helper class to create XML files using "printf", "fprintf", "cout",... functions.
 /** The ToXMLStringTool class helps you creating XML files using "printf", "fprintf", "cout",... functions.
  * The "ToXMLStringTool" class is processing strings so that all the characters
- * &,",',<,> are replaced by their XML equivalent: 
+ * &,",',<,> are replaced by their XML equivalent:
  * \verbatim &amp;, &quot;, &apos;, &lt;, &gt; \endverbatim
  * Using the "ToXMLStringTool class" and the "fprintf function" is THE most efficient
  * way to produce VERY large XML documents VERY fast.
- * \note If you are creating from scratch an XML file using the provided XMLNode class 
- * you must not use the "ToXMLStringTool" class (because the "XMLNode" class does the 
+ * \note If you are creating from scratch an XML file using the provided XMLNode class
+ * you must not use the "ToXMLStringTool" class (because the "XMLNode" class does the
  * processing job for you during rendering).*/
-typedef struct XMLDLLENTRY ToXMLStringTool 
+typedef struct XMLDLLENTRY ToXMLStringTool
 {
 public:
     ToXMLStringTool(): buf(NULL),buflen(0){}
@@ -585,9 +567,9 @@ private:
 } ToXMLStringTool;
 /** @} */
 
-/** @defgroup XMLParserBase64Tool Helper class to include binary data inside XML strings using "Base64 encoding". 
+/** @defgroup XMLParserBase64Tool Helper class to include binary data inside XML strings using "Base64 encoding".
  * @{ */
-/// Helper class to include binary data inside XML strings using "Base64 encoding". 
+/// Helper class to include binary data inside XML strings using "Base64 encoding".
 /** The "XMLParserBase64Tool" class allows you to include any binary data (images, sounds,...)
  * into an XML document using "Base64 encoding". This class is completely
  * separated from the rest of the xmlParser library and can be removed without any problem.
@@ -596,7 +578,7 @@ private:
  * b64-encoded text included inside the XML file, use "decode". Alternatively, these
  * functions can also be used to "encrypt/decrypt" some critical data contained inside
  * the XML (it's not a strong encryption at all, but sometimes it can be useful). */
-typedef struct XMLDLLENTRY XMLParserBase64Tool 
+typedef struct XMLDLLENTRY XMLParserBase64Tool
 {
 public:
     XMLParserBase64Tool(): buf(NULL),buflen(0){}
@@ -617,10 +599,10 @@ public:
     /// returns the number of bytes which will be decoded from "inString".
     static unsigned int decodeSize(XMLCSTR inString, XMLError *xe=NULL);
 
-    /** 
+    /**
      * The "decode" function returns a pointer to a buffer containing the binary data decoded from "inString"
      * The output buffer will be free'd when the XMLParserBase64Tool object is deleted.
-     * All output buffer are sharing the same memory space. 
+     * All output buffer are sharing the same memory space.
      * @param inString If "instring" is malformed, NULL will be returned */
     unsigned char* decode(XMLCSTR inString, int *outByteLen=NULL, XMLError *xe=NULL); ///< returns a pointer to an internal buffer containing the binary data decoded from "inString"
 
