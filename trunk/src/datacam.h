@@ -4,6 +4,7 @@
 #include <cv.h>
 #include <iostream>
 
+namespace SLAM{
 /**
 @brief Par&aacute;metros intr&iacute;nsecos y extr&iacute;nsecos de la c&aacute;mara
 @author Jorge Artieda
@@ -27,11 +28,12 @@ CvMat *rotation;///< vector de rotacion
 CvMat *rotMat;///< matriz de rotacion
 CvMat *translation;///<vector de translacion relativo
 
-CvMat *calibration;///<matriz de calibracion 
+CvMat *calibration;///<matriz de calibracion
 CvMat *distortion;///<matriz de distrosion
 //CvMat *abs_pos;
 int frame_width;
 int frame_height;
 
 };
+}
 #endif

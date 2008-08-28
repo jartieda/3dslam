@@ -4,7 +4,7 @@
 #include "cv.h"
 #include <list>
 #include "model.h"
-
+namespace SLAM{
 using namespace std;
 
 /**
@@ -21,5 +21,5 @@ public:
 protected:
 
 };
-
+}
 #endif

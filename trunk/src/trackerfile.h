@@ -2,7 +2,7 @@
 #define CTRACKERFILE_H
 
 #include "tracker.h"
-
+namespace SLAM{
 class CTrackerFile : public CTracker
 {
     public:
@@ -19,5 +19,5 @@ class CTrackerFile : public CTracker
         bool first;
     private:
 };
-
+}
 #endif // CTRACKERFILE_H

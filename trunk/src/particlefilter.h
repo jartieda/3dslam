@@ -6,7 +6,7 @@
 #include "model.h"
 #include "cv.h"
 #include "estimator.h"
-
+namespace SLAM{
 /**
 @author Jorge Artieda
 @brief implementaci&oacute;n del filtro de kalman
@@ -60,4 +60,6 @@ int fdims; ///dimension of one point
 CvMat *trans;///<translacion  para devolver los valores de la camara
 
 };
+}
+
 #endif

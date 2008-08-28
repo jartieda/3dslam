@@ -2,11 +2,11 @@
 #define CELEMPUNTO_H
 #include "cv.h"
 #include <list>
-
+namespace SLAM{
 using namespace std;
 /**
  * tipo enumerado para describir los diferentes estados de un punto en su inicializaci&oacute;n <br>
- * 
+ *
 **/
 enum st_enum {
 	st_empty,///< punto creado 0
@@ -28,12 +28,12 @@ public:
    CvPoint pto;///<posicion del punto en la imagen visto por la camara real
    CvPoint old_pto;///<ultima posción visto el punto
    int ID;///<identificador del punto. número sequencial.
-   
+
    double wx,wy,wz;///<Posicion del punto en el espacio
    double theta,phi,rho;///<inverse depth parametrization...
-   
+
    double wx_s,wy_s,wz_s;///<Estimaci&oacute;n del error de est punto
-   double projx, projy;///<Puntos proyectados por modelo de la camara   
+   double projx, projy;///<Puntos proyectados por modelo de la camara
 
    CvMat *dpdr; ///<derivada del punto respecto de la rotacion
    CvMat *dpdt; ///<derivada del punto respecto de la translacion
@@ -42,5 +42,5 @@ public:
    unsigned char *key; ///<indentificador sift o surf
    int count; ///<número de veces que ha sido visto un punto
 };
-
+}
 #endif

@@ -1,5 +1,5 @@
 #include "dataout.h"
-
+namespace SLAM{
 CDataOut::CDataOut():iter(0),hScale(0.5),vScale(0.5),lineWidth(2)
 {
   FeatFile.open("feat.txt");
@@ -186,7 +186,7 @@ void CDataOut::Particle(IplImage *framecopy)
 	  DispFile<<pParticleFilter->particles[2][p]<<" ";
 	  DispFile<<pParticleFilter->particles[4][p]<<" ";
 	  DispFile<<"0";
-	  DispFile<<endl;	
+	  DispFile<<endl;
     }
     cvReleaseMat(&m);
     cvReleaseMat(&vect2);
@@ -353,4 +353,5 @@ float CDataOut::randomVector(float max,float min)
      float y = max-min;
 return  x+ (y*rand()/(RAND_MAX+1.0));
 
+}
 }

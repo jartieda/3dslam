@@ -1,5 +1,5 @@
 #include "particlefilter.h"
-
+namespace SLAM{
 /**
 * @fn constructor
 * initializates memory for particles as a double array particles[variable][particle]
@@ -409,4 +409,5 @@ void CParticleFilter::UpdateMatrixSize()
      cvReleaseMat(&obj);
      cvReleaseMat(&img);
 
+}
 }

@@ -11,7 +11,7 @@
 #include "modelcam.h"
 #include "kalman.h"
 #include "particlefilter.h"
-
+namespace SLAM{
 /**
 @brief Almacena salidas del algoritmo
 @author Jorge Artieda
@@ -57,5 +57,5 @@ double vScale;
 int    lineWidth;
 char strID[10];
 };
-
+}
 #endif

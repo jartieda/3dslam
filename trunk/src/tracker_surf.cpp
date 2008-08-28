@@ -1,7 +1,7 @@
 #include "tracker_surf.h"
 
 using namespace std;
-
+namespace SLAM{
 CTracker_surf::CTracker_surf()
 {
    storage = cvCreateMemStorage(0);
@@ -107,7 +107,7 @@ for( int i = 0; i < feat->total; i++ )
             {
               (*It)->state=st_no_view;
               pMap->visible--;
-            } //end if proj dentro borde 
+            } //end if proj dentro borde
 	}//end for cada elemento del mapa
 	cvShowImage("win",grey2);
 	cvWaitKey(100);
@@ -186,4 +186,5 @@ void CTracker_surf::Descriptor(IplImage *img, CvPoint *point,int s, int *key)
      }
         delete desc;
      cvReleaseImage(&grey);
+}
 }

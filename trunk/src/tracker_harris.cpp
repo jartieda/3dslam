@@ -1,5 +1,6 @@
 #include "tracker_harris.h"
-
+namespace SLAM{
+    using namespace SLAM;
 using namespace std;
 
 CTracker_harris::CTracker_harris()
@@ -17,12 +18,12 @@ CTracker_harris::~CTracker_harris()
 }
 /**
  * sigue los puntos del mapa usando el metodo de la correlaci&oacute;n <br>
- * Se buscan los puntos alrededor de una zona de 100x100 de la última posición vista del punto. 
- * El punto se busca usando este método en la imagen de gris y en una imagen de bordes. El punto se actualiza si la diferncia entre ambos 
+ * Se buscan los puntos alrededor de una zona de 100x100 de la última posición vista del punto.
+ * El punto se busca usando este método en la imagen de gris y en una imagen de bordes. El punto se actualiza si la diferncia entre ambos
  * m&eacute;todos es menor que 40 <br>
  * Si el punto esta inicializado se marca como no view <br>
- * FIXME si no esta inicializado no se hace nada 
- * FIXME hay que buscar el punto alrededor de la zona proyectada por el kalman 
+ * FIXME si no esta inicializado no se hace nada
+ * FIXME hay que buscar el punto alrededor de la zona proyectada por el kalman
 **/
 void CTracker_harris::Match(IplImage *f)
 {
@@ -30,17 +31,17 @@ void CTracker_harris::Match(IplImage *f)
    grey=cvCreateImage( cvGetSize(f), 8, 1 );
    CvPoint temp;
    cvCvtColor(f,grey,CV_RGB2GRAY);
-	
+
    IplImage *patron,*patron_border;
    patron = cvCreateImageHeader( cvSize(10,10),8,1);
    patron_border = cvCreateImage( cvSize(10,10),8,1);
-	
-   for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
+
+   for ( std::list<CElempunto*>::iterator It=pMap->bbdd.begin();
          It != pMap->bbdd.end(); It++ )
    {
         if((*It)->state!=st_empty){
 	patron->imageData=(char*)(*It)->key;
-			
+
         cvGetRectSubPix( grey, zonabusca,cvPointTo32f((*It)->pto) );
         //cvMatchTemplate( zonabusca, (*It)->patron,corr, CV_TM_CCORR_NORMED );
 	cvMatchTemplate( zonabusca, patron,corr, CV_TM_CCORR_NORMED );
@@ -54,7 +55,7 @@ void CTracker_harris::Match(IplImage *f)
 
         cvMatchTemplate( zonabusca, patron_border,corr, CV_TM_CCORR_NORMED );
         cvMinMaxLoc( corr, &minVal, &maxVal, &minLoc, &maxLoc, 0 );
-		
+
 	double dx=temp.x-(maxLoc.x+(*It)->pto.x-cvGetSize(corr).width/2);
 	double dy=temp.y-(maxLoc.y+(*It)->pto.y-cvGetSize(corr).height/2);
 	cout<<"dx: "<<dx <<" dy: "<<dy<<endl;
@@ -90,8 +91,8 @@ void CTracker_harris::Match(IplImage *f)
 		{
 			(*It)->state=st_inited;
 		}
-	}        
-      } //if !empty    
+	}
+      } //if !empty
    }//end for
    cvReleaseImage(&grey);
    cvReleaseImage(&patron_border);
@@ -104,22 +105,22 @@ void CTracker_harris::Init(IplImage *f,CvMat **keys,CvMat **points)
    //cvCvtColor(f,grey,CV_RGB2GRAY);
    CvPoint2D32f corners[100];
    IplImage *grey, *eig_image, *temp, *patron;
-   grey=cvCreateImage( cvGetSize(f), 8, 1 );   
-   patron=cvCreateImage( cvSize(10,10), 8, 1 );   
+   grey=cvCreateImage( cvGetSize(f), 8, 1 );
+   patron=cvCreateImage( cvSize(10,10), 8, 1 );
    eig_image = cvCreateImage( cvGetSize(f), 32, 1 );
    temp=cvCreateImage(cvGetSize(f),32,1);
    cvCvtColor(f,grey,CV_RGB2GRAY);
-   
+
    CvPoint pts[30];
-	
+
    cvGoodFeaturesToTrack(grey,eig_image,temp,corners,&cornercount,0.1, 40, NULL);
-	
+
     *keys = cvCreateMat(cornercount,128,CV_32FC1) ;
     *points = cvCreateMat(cornercount,4,CV_32FC1) ;
 	cout<<"esquinas encontradas"<<cornercount<<endl;
    for (int i=0;i<cornercount;i++){
       pts[i]=cvPointFrom32f( corners[i]);
-	  cvGetRectSubPix( grey, patron,corners[i] );//  
+	  cvGetRectSubPix( grey, patron,corners[i] );//
 	  for (int j=0;j<100;j++)
 	  {
 		  cvmSet(*keys,i,j,*(patron->imageData+j));
@@ -129,29 +130,29 @@ void CTracker_harris::Init(IplImage *f,CvMat **keys,CvMat **points)
 	  cvmSet(*points,i,2,10);
 	  cvmSet(*points,i,3,0);
    }
-   
+
    cvReleaseImage(&grey);
    cvReleaseImage(&eig_image);
    cvReleaseImage(&temp);
-	
+
 }
 
 /** Obtiene el descriptor asociado a un punto con una escala detrminada **/
 void  CTracker_harris::Descriptor(IplImage *img, CvPoint *point,int s, int *key)
 {
 IplImage *grey,*patron;
-   grey=cvCreateImage( cvGetSize(img), 8, 1 );   
+   grey=cvCreateImage( cvGetSize(img), 8, 1 );
    cvCvtColor(img,grey,CV_RGB2GRAY);
-   patron=cvCreateImage( cvSize(10,10), 8, 1 );   
-	CvScalar a; 
-	cvGetRectSubPix( grey, patron,cvPoint2D32f(point->x,point->y) );// 
+   patron=cvCreateImage( cvSize(10,10), 8, 1 );
+	CvScalar a;
+	cvGetRectSubPix( grey, patron,cvPoint2D32f(point->x,point->y) );//
    for (int i = 0 ; i<10; i++)
 	for ( int j = 0; j<10; j++)
 	{
 		a= cvGet2D( patron, i , j);
-	  	key[i*10+j]= a.val[0]; 
+	  	key[i*10+j]= a.val[0];
 	}
-   
+
 }
 /** Devuelve el tamaño en bytes del vector de características **/
 int  CTracker_harris::getFeatDim()
@@ -163,4 +164,4 @@ int CTracker_harris::Init(IplImage *img,int **keys,CvMat **points)
 {
 
 }
-
+}

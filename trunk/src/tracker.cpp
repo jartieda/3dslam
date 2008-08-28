@@ -1,12 +1,12 @@
 #include "tracker.h"
-
+namespace SLAM{
 using namespace std;
 
 CTracker::CTracker()
 {
 
 }
- 
+
 CTracker::~CTracker()
 {
 
@@ -24,4 +24,6 @@ void CTracker::setModelCam(CModelCam *p)
 void CTracker::setMap(CMap *p)
 {
 	pMap=p;
+}
+
 }

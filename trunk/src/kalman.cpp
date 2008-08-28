@@ -1,12 +1,14 @@
 #include "kalman.h"
+
+namespace SLAM{
 //covarianzas de las features solo
 #define MEAS_COV 1
 //process_noise_cov
 #define PROC_COV 0.01
-//error_cov_pre inicializacion completa. no importante. 
+//error_cov_pre inicializacion completa. no importante.
 #define ERROR_COV 0.0
 //error_cov_post y  superior izquierda (camara)
-#define MODEL_ERROR_COV 0.000 
+#define MODEL_ERROR_COV 0.000
 /** imprime una matriz **/
 void printMat(CvMat *m)
 {
@@ -905,7 +907,7 @@ void CKalman::UpdateMatrixSize()
     /**
      ** Covarianza del estado del proceso a posteriori se inicializa usando valores
      ** propagados por el modelo
-     ** FIXME IMPLEMENTACIÓN DEPENDIENTE DE LA PARAMETRIZACIÓN 
+     ** FIXME IMPLEMENTACIÓN DEPENDIENTE DE LA PARAMETRIZACIÓN
      **/
 
     int startpoint=(oldDP-pModel->getStateNum())/fdims;
@@ -1003,7 +1005,7 @@ void CKalman::UpdateMatrixSize()
    		cvmSet(h,1,0,-sin((*It)->theta));
    		cvmSet(h,2,0,cos((*It)->theta)*cos((*It)->phi));
    		cvNormalize( h,h);
-		
+
 		NewPointCov(estado_recorrido,h,(*It)->pto.x,(*It)->pto.y);
 		estado_recorrido+=6;
 	  }
@@ -1165,7 +1167,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     /** Derivada de feature respecto posicion **/
     cvSetIdentity(dm_dt,cvRealScalar(0));
     for (int i =0; i<3;i++) cvmSet(dm_dt,i,i,1);
-    
+
     /** Derivada de feature respecto rotacion **/
     CvMat *dTh_dh=cvCreateMat(1,3,CV_32FC1);
     double d=h0*h0+h2*h2;
@@ -1173,7 +1175,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     cvmSet(dTh_dh,0,0,k*h1*h0/sqrt(d*d*d));
     cvmSet(dTh_dh,0,1,k*-1/sqrt(d));
     cvmSet(dTh_dh,0,2,k*h1*h2/sqrt(d*d*d));
-    
+
     CvMat *dPh_dh=cvCreateMat(1,3,CV_32FC1);
     double k2=1/sqrt(1+(h0/h2)*(h0/h2));
     cvmSet(dPh_dh,0,0,k2/h2);
@@ -1190,7 +1192,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     cvGetSubRect(RotJ,RotJ_dr0,cvRect(0, 0, 3,3));
     cvGetSubRect(RotJ,RotJ_dr1,cvRect(0, 3, 3,3));
     cvGetSubRect(RotJ,RotJ_dr2,cvRect(0, 6, 3,3));
-    
+
 
     CvMat *InvF =cvCreateMat(3,3,CV_32FC1);
     cvInv(pDataCam->calibration, InvF);
@@ -1202,11 +1204,11 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     CvMat *temp= cvCreateMat(3,1,CV_32FC1);
     cvGEMM(InvF,Pix,1,NULL,0,temp,0);
     CvMat *dh_dr0=cvCreateMat(3,1,CV_32FC1);
-    cvGEMM(RotJ_dr0,temp,1,NULL,0,dh_dr0,0);	
+    cvGEMM(RotJ_dr0,temp,1,NULL,0,dh_dr0,0);
     CvMat *dh_dr1=cvCreateMat(3,1,CV_32FC1);
-    cvGEMM(RotJ_dr1,temp,1,NULL,0,dh_dr1,0);	
+    cvGEMM(RotJ_dr1,temp,1,NULL,0,dh_dr1,0);
     CvMat *dh_dr2=cvCreateMat(3,1,CV_32FC1);
-    cvGEMM(RotJ_dr2,temp,1,NULL,0,dh_dr2,0);	
+    cvGEMM(RotJ_dr2,temp,1,NULL,0,dh_dr2,0);
     for (int i =0 ; i<3;i++){
         cvmSet(dh_dr,i,0,cvmGet(dh_dr0,i,0));
         cvmSet(dh_dr,i,1,cvmGet(dh_dr1,i,0));
@@ -1217,7 +1219,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     CvMat *dPh_dr = cvCreateMat(1,3,CV_32FC1);
     cvGEMM(dTh_dh,dh_dr,1,NULL,0,dTh_dr,0);
     cvGEMM(dPh_dh,dh_dr,1,NULL,0,dPh_dr,0);
-    
+
     /** derivade de feature respecto de pixel visto **/
     CvMat *dh_dpix_ =cvCreateMat(3,3,CV_32FC1);//Aunque es de 3x3 solo se usa las 2 1º cols.
     CvMat *dh_dpix =cvCreateMatHeader(3,2,CV_32FC1);
@@ -1230,7 +1232,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
 
     CvMat *dPh_dpix=cvCreateMat(1,2,CV_32FC1);
     cvGEMM(dPh_dh,dh_dpix,1,NULL,0,dPh_dpix,0);
-    
+
     /** construccion de la jacobiana **/
     CvMat *Jacob = cvCreateMat(old_state+fdims,old_state+3,CV_32FC1);
     cvSetIdentity(Jacob,cvRealScalar(0));
@@ -1288,7 +1290,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     cvReleaseMat(&dm_dt);
     cvReleaseMat(&dm_dr);
     cvReleaseMat(&dm_dpix);
-	
+
 }
 /** imprime todas all matrices de pKalman **/
 void CKalman::Print(int iter)
@@ -1336,4 +1338,5 @@ void CKalman::Print(int iter)
   im2=cvGetImage(pKalman->error_cov_post,im);
   cvShowImage("kalman_cov_pre",im);
 
+}
 }

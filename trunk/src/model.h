@@ -5,7 +5,7 @@
 #include "map.h"
 
 #include <list>
-
+namespace SLAM{
 using namespace std;
 /**
 @author Jorge Artieda
@@ -46,5 +46,5 @@ protected:
         CMap *pMap; ///<puntero a datos del mapa
 
 };
-
+}
 #endif

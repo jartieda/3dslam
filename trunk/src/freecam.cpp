@@ -1,5 +1,5 @@
 #include "freecam.h"
-
+namespace SLAM{
 /**
  * Cosntructor <br>
  * Crea las matrices<br>
@@ -29,7 +29,7 @@ CFreeCam::CFreeCam()
 	cvSetIdentity( ProcessNoiseCov, cvRealScalar(1) );
 
 //covarianzas de las posicion
-   for (int i=0;i<3;i++){ 
+   for (int i=0;i<3;i++){
       cvmSet(ProcessNoiseCov,2*i,2*i,10);
       cvmSet(ProcessNoiseCov,2*i+1,2*i+1,0.05);
    }
@@ -52,4 +52,5 @@ CFreeCam::~CFreeCam()
 CvMat* CFreeCam:: getMeasurementVector()
 {
 	return MeasurementVector;
+}
 }

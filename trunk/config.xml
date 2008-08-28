@@ -3,10 +3,10 @@
 	tracker_surf
 </tracker>
 <data>
-	/media/WOXTER/SLAM/Datos/December62007-ArgandaDelRey/imagenes1/image%0.4d.jpg
+	g:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg
 </data>
 <gui>
-	true
+	false
 </gui>
 
 </slam>

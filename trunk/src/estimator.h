@@ -5,7 +5,7 @@
 #include "map.h"
 #include "model.h"
 #include "cv.h"
-
+namespace SLAM{
 /**
 @author Jorge Artieda
 @brief implementaci&oacute;n del filtro de estimación abstracto
@@ -14,7 +14,7 @@
 class CEstimator {
 
 public:
-       
+
 virtual void Predict()=0;
 virtual void Correct()=0;
 virtual void Test()=0;
@@ -34,4 +34,5 @@ CMap *pMap; ///<puntero a datos del mapa
 void setMap(CMap *p); ///< enlaza kalman con mapa
 
 };
+}
 #endif

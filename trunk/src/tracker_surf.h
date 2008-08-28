@@ -3,11 +3,13 @@
 
 #include <cv.h>
 #include <iostream>
-#include "datacam.h" 
+#include "datacam.h"
 #include "map.h"
 
 #include "surf.h"
 #include "tracker.h"
+
+namespace SLAM{
 /**
 @author Jorge Artieda
 @brief Seeded Up Robust Features
@@ -35,4 +37,5 @@ IplImage *fImg;
 CSurf surf;
 int levels;
 };
+}
 #endif

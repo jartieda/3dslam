@@ -1,6 +1,6 @@
 #include "map.h"
 
-
+namespace SLAM{
 /** Constructor <br>
  * ID=0, visible=0, inited=0
  **/
@@ -20,7 +20,7 @@ CMap::~CMap()
 /*!
     \fn CMap::add_key()
 	Añade un punto con una clave de una longitud determinada <br>
-	@param pts punto que se añade 
+	@param pts punto que se añade
 	@key clave que representa al punto en el mapa
  	@length tamano de la clabe en bytes
  */
@@ -42,8 +42,8 @@ void CMap::add_key(CvPoint pts, unsigned char *key,int length)
 		pelempunto->key[dd]=key[dd];
 
       bbdd.push_back(pelempunto);
-      visible ++;      
-   
+      visible ++;
+
 }
 
 /*!
@@ -70,4 +70,5 @@ void CMap::add3D(double x, double y, double z)
       bbdd.push_back(pelempunto);
       visible++;
       inited++;
+}
 }

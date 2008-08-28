@@ -1,5 +1,5 @@
 #include "datacam.h"
-
+namespace SLAM{
 using namespace std;
 /**
  * Constructor <br>
@@ -67,5 +67,6 @@ void CDataCam::SetRotation(CvMat *v)
 void CDataCam::SetTranslation(CvMat *v)
 {
    cvCopy(v,translation);
-      
+
+}
 }

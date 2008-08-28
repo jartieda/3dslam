@@ -4,20 +4,21 @@
 **/
 
 #include "surf.h"
+namespace SLAM{
 using namespace std;
 /**
  * constructor. Initializes thresholds
  **/
 CSurf::CSurf():det_thres(5),cur_thres(0)
 {
-              
+
 }
-/** 
+/**
 * Destructor. Do nothing
 **/
 CSurf::~CSurf()
 {
-              
+
 }
 /** @bief non maximum suppression
  ** @param det array containing the information of the hessian determinant at several levels
@@ -28,14 +29,14 @@ CSurf::~CSurf()
  **/
 void CSurf::non_max_sup(double *det, IplImage **max, CvSeq* feat,int levels)
 {
-   CvPoint3D32f fp3; 
+   CvPoint3D32f fp3;
    int suppressed;
    double pix;
    int s=1;
    int pix_size = 4;//(det[1]->depth & 255) >> 3;
    cout<<"pix_size "<<pix_size<<endl;
    uchar* ptr ;
-   double old_det;    
+   double old_det;
    for (int level=0; level<levels;level++)
    {
 	s=level+1;
@@ -72,34 +73,34 @@ void CSurf::non_max_sup(double *det, IplImage **max, CvSeq* feat,int levels)
                     }
 	    }
             if (suppressed==255){
-            /** the maximum is accepted if det[] is greater than det_thres and 
-            * the ratio between the maximum and the second bigger is greater 
+            /** the maximum is accepted if det[] is greater than det_thres and
+            * the ratio between the maximum and the second bigger is greater
             * than cur_thres
             **/
 //		cout<<"max: "<<cvGetReal2D(det[level],j,i)<<endl;
 		       if (det[level*img->width*img->height+j*img->width+i]>det_thres){
-                  if(pix/old_det>cur_thres){                                                                                 
+                  if(pix/old_det>cur_thres){
                     fp3 =cvPoint3D32f(i,j,level+1);
                     cvSeqPush( feat,(void*) &fp3);
                   }
 		       }
             }
            // cvSetReal2D(max[level],j,i,suppressed);
-        }  
+        }
     //cvShowImage("win",max[level]);
     //cvWaitKey(100);
-    }   
+    }
 }
 /** @brief Calculates bloc filter using integral images
 ** @param x x coordinate of the upper left pixel of the block
 * @param y y coordinate of the upper left pixel of the block
-* @param h height of the block 
-* @param w width of the block 
+* @param h height of the block
+* @param w width of the block
 * @param I integral image
-* 
-* This function calculates the sum of the values contained in the the rectangle 
-* defined by x,y,w and h. The algorithm is based on integral images that can be 
-* calculated using cvIntegral function. 
+*
+* This function calculates the sum of the values contained in the the rectangle
+* defined by x,y,w and h. The algorithm is based on integral images that can be
+* calculated using cvIntegral function.
 * @return sum of all the pixels in the block
 **/
 double CSurf::block(int x, int y, int h, int w,IplImage *I)
@@ -107,12 +108,12 @@ double CSurf::block(int x, int y, int h, int w,IplImage *I)
         int pix_size = 4;//(I->depth & 255) >> 3;
         uchar* ptr = (uchar*)I->imageData;
         long int * ptr1,*ptr2,*ptr3,*ptr4;
-       
+
         ptr1 = ( long int*)(ptr +  y*I->widthStep + x*pix_size);
         ptr2 = ( long int*)(ptr +  (y+h)*I->widthStep + (x+w)*pix_size);
         ptr3 = ( long int*)(ptr +  y*I->widthStep + (x+w)*pix_size);
         ptr4 = ( long int*)(ptr +  (y+h)*I->widthStep + x*pix_size);
-    
+
     //return cvGet2D(I,y,x).val[0]+cvGet2D( I,y+h, x+w).val[0]- cvGet2D(I,y,x+w).val[0]- cvGet2D( I,y+h, x).val[0];
 	return *ptr1+*ptr2-*ptr3-*ptr4;
 
@@ -121,10 +122,10 @@ double CSurf::block(int x, int y, int h, int w,IplImage *I)
 * @param x x coordinate of the feature
 * @param y y cooredinate of the feature
 * @param s scale at which the feature was found
-* 
-* This function estimates an orientatio that is repeteable. This orientation is 
-* used to get orientation invariance of the features. The algorithm first 
-* estimate vertical and horizontal haar wavelet response using integral images. 
+*
+* This function estimates an orientatio that is repeteable. This orientation is
+* used to get orientation invariance of the features. The algorithm first
+* estimate vertical and horizontal haar wavelet response using integral images.
 * Then the orientation is calculed as the greater sum of orientations in a sliding
 * window of angle pi/3
 * @return orientation of the feature in radians
@@ -133,7 +134,7 @@ float CSurf::orientation(int x, int y, int s)
 {
        //IplImage* circle;
        //circle=cvCreateImage(cvSize(6*s,6*s),IPL_DEPTH_8U,1);
-       //cvGetRectSubPix( img, circle, cvPoint2D32f(x,y) ); 
+       //cvGetRectSubPix( img, circle, cvPoint2D32f(x,y) );
        int hor[36];
        int ver[36];
        float angle[36];
@@ -144,13 +145,13 @@ float CSurf::orientation(int x, int y, int s)
        int k=0;
        for (int i=-3*s; i<3*s; i+=s)
          for (int j=-3*s; j<3*s; j+=s)
-         {   
+         {
               hor[k]=(int)wl_horz(i+x,j+y,s);
               ver[k]=(int)wl_vert(i+x,j+y,s);
               angle[k]=atan2(ver[k],hor[k]);
               k++;
          }
-       
+
        float pitercios = 3.14159/3.0;
        float dospi=3.14159*2.0;
        float sumx,sumy;
@@ -168,7 +169,7 @@ float CSurf::orientation(int x, int y, int s)
                    sumy+=ver[j];
                }
            }
-         
+
            mod=sumx*sumx+sumy*sumy;
            if (mod>old_mod)
            {
@@ -176,7 +177,7 @@ float CSurf::orientation(int x, int y, int s)
               orient=i;
            }
        }
-       
+
        return orient;
 }
 
@@ -205,14 +206,14 @@ double CSurf::wl_horz(int x, int y,int s)
 }
 /** @brief this function calculates the surf-64 descriptor for a given feature
 * @param x x coordinate
-* @param y y coordinate 
+* @param y y coordinate
 * @param s scale of the feature
-* @param dir orientation of the feature 
+* @param dir orientation of the feature
 * This function calcualtes the surf-64 descritpor for a feature at the given position
-* scale and orientation. **/ 
+* scale and orientation. **/
 int *CSurf::descriptor(int x, int y, int s,float dir)
 {
-int *desc; 
+int *desc;
 desc = new int[64];
 for (int i =0; i<64;i++) desc[i]=0;
 IplImage *region;
@@ -239,7 +240,7 @@ src[2].x=cd*-10*s+sd*-10*s+x;
 src[2].y=-sd*-10*s+cd*-10*s+y;
 src[3].x=cd*-10*s+sd*10*s+x;
 src[3].y=-sd*-10*s+cd*10*s+y;
- 
+
 dst[0].x=10.0*s;
 dst[0].y=-10.0*s;
 dst[1].x=10.0*s;
@@ -298,7 +299,7 @@ cvMul(gauss,dx,dx);
 cvMul(gauss,dy,dy);
 
 float tx,ty;
-/** Finally the descriptor is calculated as the sum of dx, dy, |dx| and |dy| responses in 
+/** Finally the descriptor is calculated as the sum of dx, dy, |dx| and |dy| responses in
 * each of the 16 squares of a 4 by 4 grid sampled int 5*s grid. **/
 for (int rx=0; rx<4; rx++)
     for (int ry=0; ry<4; ry++)
@@ -316,7 +317,7 @@ for (int rx=0; rx<4; rx++)
 		desc[(rx*4+ry)*4+1]+=(int)ty;
 		desc[(rx*4+ry)*4+2]+=(int)fabs(tx);
 		desc[(rx*4+ry)*4+3]+=(int)fabs(ty);
-	    } 
+	    }
     }
     double mod=0;
     for (int i=0; i<64; i++)
@@ -324,7 +325,7 @@ for (int rx=0; rx<4; rx++)
         mod=mod+((float)desc[i]*(float)desc[i]);
     }
     mod=sqrt(mod);
-   
+
     for (int i=0; i<64; i++)
     {
         desc[i]=(int)(desc[i]*255.0/mod);
@@ -344,7 +345,7 @@ float CSurf::horiz(int x, int y,int s, IplImage* region)
 //     IplImage* kernel;
 //     kernel=cvCreateImage(cvSize(2*s,2*s),8,1);
      int *kernel = new int [2*s*2*s];
-     float sum=0; 
+     float sum=0;
      for (int i=0; i<2*s; i++){
 	for (int j=0; j<s;j++)
 	  {
@@ -361,7 +362,7 @@ float CSurf::horiz(int x, int y,int s, IplImage* region)
  	    if ((x+i<region->width)&&(y+j<region->height))
      		sum+=cvGetReal2D(region, x+i,y+j)*kernel[i*2*s+j];
 	}
-     } 
+     }
 	delete(kernel);
 //     cvReleaseImage(&kernel);
      return sum ;
@@ -371,7 +372,7 @@ float CSurf::vert(int x, int y, int s, IplImage* region)
      //IplImage* kernel;
      //kernel=cvCreateImage(cvSize(2*s,2*s),8,1);
      int *kernel=new int [2*s*2*s];
-     float sum=0; 
+     float sum=0;
      for (int j=0; j<2*s; j++){
 	for (int i=0; i<s;i++)
 	  {
@@ -382,7 +383,7 @@ float CSurf::vert(int x, int y, int s, IplImage* region)
 		kernel[i*2*s+j]=1;
 	  }
      }
-     
+
      for (int i=0; i<2*s; i++){
 	for (int j=0; j<2*s;j++)
 	{
@@ -391,18 +392,18 @@ float CSurf::vert(int x, int y, int s, IplImage* region)
 	}
      }
 //     cvReleaseImage(&kernel);
-	delete (kernel); 
+	delete (kernel);
      return sum ;
 }
-/** @brief simple nearest neightbour classifier 
+/** @brief simple nearest neightbour classifier
 * @param query vector of 64 integer to classify
 * @param example_pairs vector of 64*samples in which the query vectors are classified
 * @param n_examples number fo samples in example_pairs vector
-* This function is a simple classifier based on the euclidean distance. Best 
-* match is the one with less distance to the samples. 
-* @return the number of the category or -1 if it's not found. 
+* This function is a simple classifier based on the euclidean distance. Best
+* match is the one with less distance to the samples.
+* @return the number of the category or -1 if it's not found.
  **/
-int CSurf::nearest_neighbor_classify(int *query, int *example_pairs,int n_examples) 
+int CSurf::nearest_neighbor_classify(int *query, int *example_pairs,int n_examples)
 {
 
 // PUT YOUR NEAREST NEIGHBOR CLASSIFIER HERE, ASSIGN CLASS LABEL TO query_point[0]
@@ -430,7 +431,7 @@ int CSurf::nearest_neighbor_classify(int *query, int *example_pairs,int n_exampl
       suma_min = suma;
       nearest_neighbour = i;
     }else if (suma < suma_sec)
-    {  
+    {
       suma_sec = suma;
     }
   }
@@ -445,18 +446,18 @@ int CSurf::nearest_neighbor_classify(int *query, int *example_pairs,int n_exampl
 	}else {
   		return -1;
 	}
-	
+
 }
 
-/** @brief simple nearest neightbour classifier 
+/** @brief simple nearest neightbour classifier
 * @param query vector of 64 integer to classify
 * @param example_pairs vector of 64*samples in which the query vectors are classified
 * @param n_examples number fo samples in example_pairs vector
-* This function is a simple classifier based on the euclidean distance. Best 
-* match is the one with less distance to the samples. 
-* @return a list of n number of the categories or -1 if it's not found. 
+* This function is a simple classifier based on the euclidean distance. Best
+* match is the one with less distance to the samples.
+* @return a list of n number of the categories or -1 if it's not found.
  **/
-int CSurf::nearest_neighbor_2(int *query, int *example_pairs,int n_examples,CvPoint p,CvMat *newmat,float dist) 
+int CSurf::nearest_neighbor_2(int *query, int *example_pairs,int n_examples,CvPoint p,CvMat *newmat,float dist)
 {
 
 // PUT YOUR NEAREST NEIGHBOR CLASSIFIER HERE, ASSIGN CLASS LABEL TO query_point[0]
@@ -490,7 +491,7 @@ int CSurf::nearest_neighbor_2(int *query, int *example_pairs,int n_examples,CvPo
           suma_min = suma;
           nearest_neighbour = i;
         }else if (suma < suma_sec)
-        {  
+        {
           suma_sec = suma;
         }
     }
@@ -500,24 +501,24 @@ int CSurf::nearest_neighbor_2(int *query, int *example_pairs,int n_examples,CvPo
         cout<<example_pairs[nearest_neighbour*64+j]<<" : "<<query[j]<<endl;*/
     //query->data[0] = example_pairs[nearest_neighbour].data[0];
     /** If a result has a distance less than 15000 and a ratio between the minimum distance
-     * and the second best greater than 0.9 the point is rejected as not found 
+     * and the second best greater than 0.9 the point is rejected as not found
      **/
 	if ((suma_min <150000)&&((suma_min/suma_sec)<0.9)){
   		return nearest_neighbour;
 	}else {
   		return -1;
 	}
-	
-	
+
+
 }
 
-/** @brief extract surf features from an image 
+/** @brief extract surf features from an image
 * @param img image
 * @param feat sequence of returned features
 * @param levels number of levels of the pyramid.
 * This funcion extracts surf features from an image. Function is based on Integral
-* images to improve the performance of the filters. 
-**/ 
+* images to improve the performance of the filters.
+**/
 void CSurf::find_features(IplImage* _img,CvSeq*feat,int levels)
 {
     img = _img;
@@ -528,20 +529,20 @@ void CSurf::find_features(IplImage* _img,CvSeq*feat,int levels)
     dxx=new float[(img->width+1)*(img->height+1)];//cvCreateImage(cvSize(img->width+1,img->height+1),IPL_DEPTH_64F,1);
     dyy=new float[(img->width+1)*(img->height+1)];//cvCreateImage(cvSize(img->width+1,img->height+1),IPL_DEPTH_64F,1);
     dxy=new float[(img->width+1)*(img->height+1)];//cvCreateImage(cvSize(img->width+1,img->height+1),IPL_DEPTH_64F,1);
-    
+
    /* for(int level=0;level<levels;level++){
        max[level]=cvCreateImage(cvSize(img->width,img->height),IPL_DEPTH_8U,1);
 	   cvZero(max[level]);
     }*/
-    double *det = new double[levels*img->width*img->height];  
+    double *det = new double[levels*img->width*img->height];
     cvIntegral(img,integral);
-    
+
     cvNamedWindow( "win");
     /*cvShowImage("win",img);
     cvWaitKey(10);
     */
     int s=1;
-    double a; 
+    double a;
     double b;
     double c;
     for (int level=0; level<levels;level++)
@@ -551,36 +552,36 @@ void CSurf::find_features(IplImage* _img,CvSeq*feat,int levels)
         for(int j=0; j<img->height-(9*s+1);j++)
         {
 	    dyy[j*(img->width+1)+i]=(-1*block(i,j,3*s,9*s,integral)
-                                     +2*block(i,j+3*s,3*s,9*s,integral) 
+                                     +2*block(i,j+3*s,3*s,9*s,integral)
                                      -1*block(i,j+6*s,3*s,9*s,integral))/(s*s);
             dxx[j*(img->width+1)+i]=(-1*block(i,j,9*s,3*s,integral)
-                                     +2*block(i+3*s,j,9*s,3*s,integral) 
+                                     +2*block(i+3*s,j,9*s,3*s,integral)
                                      -1*block(i+6*s,j,9*s,3*s,integral))/(s*s);
             dxy[j*(img->width+1)+i]=( 1*block(i+1,j+1,3*s,3*s,integral)
-                                     -1*block(i+1,j+3*s+2,3*s,3*s,integral) 
-                                     -1*block(i+3*s+2,j+1,3*s,3*s,integral) 
+                                     -1*block(i+1,j+3*s+2,3*s,3*s,integral)
+                                     -1*block(i+3*s+2,j+1,3*s,3*s,integral)
                                      +1*block(i+3*s+2,j+3*s+2,3*s,3*s,integral))/(s*s);
             /*
             cvSet2D(dyy,j,i,cvScalar((-1*block(i,j,3*s,9*s,integral)
-                                     +2*block(i,j+3*s,3*s,9*s,integral) 
+                                     +2*block(i,j+3*s,3*s,9*s,integral)
                                      -1*block(i,j+6*s,3*s,9*s,integral))/(s*s)));
             cvSet2D(dxx,j,i,cvScalar((-1*block(i,j,9*s,3*s,integral)
-                                     +2*block(i+3*s,j,9*s,3*s,integral) 
+                                     +2*block(i+3*s,j,9*s,3*s,integral)
                                      -1*block(i+6*s,j,9*s,3*s,integral))/(s*s)));
             cvSet2D(dxy,j,i,cvScalar(( 1*block(i+1,j+1,3*s,3*s,integral)
-                                     -1*block(i+1,j+3*s+2,3*s,3*s,integral) 
-                                     -1*block(i+3*s+2,j+1,3*s,3*s,integral) 
+                                     -1*block(i+1,j+3*s+2,3*s,3*s,integral)
+                                     -1*block(i+3*s+2,j+1,3*s,3*s,integral)
                                      +1*block(i+3*s+2,j+3*s+2,3*s,3*s,integral))/(s*s)));
-              */                       
+              */
             a=dxx[j*(img->width+1)+i];//cvGetReal2D(dxx,j,i);
             b=dyy[j*(img->width+1)+i];//cvGetReal2D(dyy,j,i);
             c=dxy[j*(img->width+1)+i];//cvGetReal2D(dyy,j,i);
 //            cvSet2D(det[level],j+(int)(4.5*s+0.5),i+(int)(4.5*s+0.5),cvScalar((a*b-0.9*cvGetReal2D(dxy,j,i))/65000.0));//*cvGet2D(dxx,j,i).val[0]
             det[level*img->width*img->height+(j+(int)(4.5*s+0.5))*img->width+i+(int)(4.5*s+0.5)]=
                               (a*b-(0.9*c*0.9*c))/(65000.0);
-           
+
         }
-        
+
       /*   cvShowImage("win",dyy);
          cvWaitKey(100);
          cvShowImage("win",dxx);
@@ -604,13 +605,14 @@ void CSurf::gaussian(IplImage* img)
 int w = img->width;
 int h = img->height;
 float x,y;
-float c; 
+float c;
 c=w/2;
 for (int i =0; i<w; i++)
     for (int j=0; j<h;j++)
       {
              x=i-w/2.;
-             y=j-h/2.;          
+             y=j-h/2.;
              cvSetReal2D(img, j,i, exp(-(x*x+y*y)/(2*c*c)));
-      }    
+      }
+}
 }

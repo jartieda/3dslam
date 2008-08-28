@@ -4,21 +4,24 @@
 #include "modelcam.h"
 #include <vector>
 #include "highgui.h"
+
+namespace SLAM{
 /**
 @author Jorge Artieda
 @brief Clase para el mantenimiento del mapa
 */
+
 struct param
 {
   double px[6];
-  double py[6]; 
-      
+  double py[6];
+
 };
 struct point
 {
        double ground[2];
-       double img[2];   
-       int ID;    
+       double img[2];
+       int ID;
 };
 class CUpdater{
 public:
@@ -58,3 +61,4 @@ double point_sep;
 double calidad_min_punto;
 double depth;
 };
+}

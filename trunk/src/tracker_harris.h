@@ -3,16 +3,16 @@
 
 #include <cv.h>
 #include <iostream>
-#include "datacam.h" 
+#include "datacam.h"
 #include "map.h"
 #include "tracker.h"
-
+namespace SLAM{
 /**
 @author Jorge Artieda
 @brief Seguidor de puntos usando el metodo de harris
 */
 
-class CTracker_harris:public CTracker {
+class CTracker_harris:public SLAM::CTracker {
 public:
 
 CTracker_harris();
@@ -38,4 +38,6 @@ CvPoint minLoc;
 CvPoint maxLoc;
 
 };
+
+}
 #endif

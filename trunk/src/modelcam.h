@@ -5,6 +5,7 @@
 #include <iostream>
 #include "datacam.h"
 #include "map.h"
+namespace SLAM{
 /**
 @author Jorge Artieda
 @brief Ecuaciones del modelo de c&aacute;mara pin-hole
@@ -40,4 +41,5 @@ private:
 CDataCam *pDataCam;
 CMap * pMap;
 };
+}
 #endif

@@ -3,6 +3,8 @@
 //#define FORIGEN "F:\\SLAM\\Datos\\datos_manuales\\redatos%0.3d.txt"
 //#define FORIGEN "F:\\SLAM\\Datos\\dat2\\dat\\redatos%0.4d.txt"
 #define FORIGEN "/media/WOXTER/SLAM/Datos/dat2/dat/redatos%0.4d.txt"
+
+namespace SLAM{
 CTrackerFile::CTrackerFile():first(true),frame(0)
 {
     //ctor
@@ -104,3 +106,4 @@ CTrackerFile::~CTrackerFile()
  int CTrackerFile::getFeatDim(){
       return 64;///realmente no almaceno ningun punto.
  }
+}

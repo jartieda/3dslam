@@ -1,5 +1,5 @@
 #include "model.h"
-
+namespace SLAM{
 CModel::CModel()
 {
 }
@@ -54,4 +54,5 @@ void CModel::setDataCam(CDataCam *p)
 void CModel::setMap(CMap *p)
 {
 	pMap=p;
+}
 }

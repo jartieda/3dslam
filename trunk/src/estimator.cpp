@@ -1,5 +1,5 @@
 #include "estimator.h"
-
+namespace SLAM{
 void CEstimator::setModelCam(CModelCam *p)
 {
   pModelCam=p;
@@ -13,4 +13,4 @@ void CEstimator::setMap(CMap *p)
 {
   pMap=p;
 }
-
+}

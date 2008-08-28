@@ -2,6 +2,8 @@
 #define CMAP_H
 #include "elempunto.h"
 #include <list>
+
+namespace SLAM{
 using namespace std;
 /**
 @author Jorge Artieda
@@ -9,7 +11,7 @@ using namespace std;
 */
 class CMap{
 public:
-    
+
     list<CElempunto*> bbdd;
     CMap();
     ~CMap();
@@ -20,9 +22,10 @@ public:
        return ++ID;
     }
     int visible;
-    int inited;///<numero de puntos iniciads puntos iniciados 
+    int inited;///<numero de puntos iniciads puntos iniciados
     int ID;
-      
+
 };
+}
 
 #endif

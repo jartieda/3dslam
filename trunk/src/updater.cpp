@@ -17,6 +17,8 @@ void on_mouse( int event, int x, int y, int flags, void* param )
 
      }
 }
+namespace SLAM{
+
 /**
 * constructor
  * @param pMap puntero al mapa que se actualizará
@@ -677,4 +679,5 @@ int CUpdater::rematch()
 {
 
   return 0;
+}
 }

@@ -1,5 +1,5 @@
 #include "modelcam.h"
-
+namespace SLAM{
 using namespace std;
 
 CModelCam::CModelCam()
@@ -780,4 +780,5 @@ void CModelCam::getJInit(CvMat *Jpos, CvMat *Jpix, CvPoint pto)
      cvReleaseMat(&inv);
 	 cvReleaseMat(&temp1);
 
+}
 }

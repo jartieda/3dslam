@@ -3,10 +3,10 @@
 
 #include <cv.h>
 #include <iostream>
-#include "datacam.h" 
+#include "datacam.h"
 #include "map.h"
 #include "modelcam.h"
-
+namespace SLAM{
 /**
 @author Jorge Artieda
 @brief Clase abstracta para implementar seguidores
@@ -34,4 +34,5 @@ CModelCam *pModelCam;
 CMap * pMap;
 
 };
+}
 #endif

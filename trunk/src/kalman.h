@@ -8,11 +8,12 @@
 #include "estimator.h"
 #include "highgui.h"
 
+namespace SLAM{
+
 /**
 @author Jorge Artieda
 @brief implementaci&oacute;n del filtro de kalman
 */
-
 class CKalman: public CEstimator {
 
 public:
@@ -45,5 +46,5 @@ void Correct_FAST();
 void NewPointCov(int old_state,CvMat *h,int xpix,int ypix);
 
 };
-
+}
 #endif
