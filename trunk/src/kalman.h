@@ -22,7 +22,7 @@ CKalman();
 
 void Predict();
 void Correct();
-void Test();
+void Test();///<test de mahalanobis
 void initState();
 CvKalman *pKalman;///<estructura que contiene las variables internas del kalman
 CvKalman *pKalmanMem;///<estructura que contiene un kalman gigante para reservar memoria

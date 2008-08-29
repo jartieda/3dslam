@@ -15,7 +15,11 @@
 				<Option deps_output=".deps"/>
 				<Option type="1"/>
 				<Option compiler="0"/>
+				<Option projectLinkerOptionsRelation="2"/>
 				<Option projectResourceIncludeDirsRelation="1"/>
+				<Linker>
+					<Add directory="C:\Archivos de programa\OpenCV\lib"/>
+				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
@@ -81,9 +85,6 @@
 		<Unit filename="src\kalman.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
-			<Breakpoint line="785" enabled="1" pass="0" />
-			<Breakpoint line="796" enabled="1" pass="0" />
-			<Breakpoint line="818" enabled="1" pass="0" />
 		</Unit>
 		<Unit filename="src\kalman.h">
 			<Option compilerVar="CPP"/>
@@ -151,6 +152,16 @@
 			<Option link="0"/>
 			<Option target="default"/>
 		</Unit>
+		<Unit filename="src\tracker_harris.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="src\tracker_harris.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
 		<Unit filename="src\tracker_surf.cpp">
 			<Option compilerVar="CPP"/>
 			<Option target="default"/>
@@ -177,6 +188,26 @@
 		</Unit>
 		<Unit filename="src\updater.h">
 			<Option compilerVar="CPP"/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="src\vehicle.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="src\vehicle.h">
+			<Option compilerVar=""/>
+			<Option compile="0"/>
+			<Option link="0"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="src\xmlParser.cpp">
+			<Option compilerVar="CPP"/>
+			<Option target="default"/>
+		</Unit>
+		<Unit filename="src\xmlParser.h">
+			<Option compilerVar=""/>
 			<Option compile="0"/>
 			<Option link="0"/>
 			<Option target="default"/>

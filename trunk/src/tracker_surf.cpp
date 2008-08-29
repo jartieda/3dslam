@@ -76,7 +76,7 @@ for( int i = 0; i < feat->total; i++ )
 
 	         if(n==-1)//en caso de no encorar fallo
 	         {
-                     cout<<"no match "<<endl;
+                 //cout<<"no match "<<endl;
 	             if((*It)->state==st_inited)
          	     {
              		std::cout << "borropuntos: "<<(*It)->pto.x<<" "<<(*It)->pto.y<<std::endl;

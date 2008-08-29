@@ -435,7 +435,7 @@ int CSurf::nearest_neighbor_classify(int *query, int *example_pairs,int n_exampl
       suma_sec = suma;
     }
   }
-    cout<<" suma_min: "<<suma_min<<" nearest_neighbour "<<nearest_neighbour<<" suma_sec "<<suma_sec<<" ratio "<<suma_min/suma_sec<<endl;
+    //cout<<" suma_min: "<<suma_min<<" nearest_neighbour "<<nearest_neighbour<<" suma_sec "<<suma_sec<<" ratio "<<suma_min/suma_sec<<endl;
     for (int j=0; j<64 ; j++)
         cout<<example_pairs[nearest_neighbour*64+j]<<" : "<<query[j]<<endl;
     //query->data[0] = example_pairs[nearest_neighbour].data[0];

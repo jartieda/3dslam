@@ -4,6 +4,8 @@
 #include <cv.h>
 #include <iostream>
 #include <fstream>
+#include <string>
+
 
 #include "map.h"
 #include "kalman.h"
@@ -19,7 +21,7 @@ namespace SLAM{
 class CDataOut {
 public:
 
-CDataOut();
+CDataOut(string res);
 ~CDataOut();
 void Draw(IplImage *img);
 void R_Out();
@@ -36,6 +38,8 @@ void setTracker(CTracker *p);
 void setKalman(CKalman *p);
 void setParticle(CParticleFilter *p);
 float randomVector(float max,float min);
+
+string resdir;
 
 protected:
 

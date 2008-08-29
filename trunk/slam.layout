@@ -1,58 +1,114 @@
 <?xml version="1.0"?>
 <!DOCTYPE CodeBlocks_layout_file>
 <CodeBlocks_layout_file>
-	<File name="src\dataout.cpp" open="1" top="0">
-		<Cursor position="2681" topLine="80"/>
+	<File name="src\datacam.cpp" open="0" top="0">
+		<Cursor position="1548" topLine="41"/>
+	</File>
+	<File name="src\datacam.h" open="0" top="0">
+		<Cursor position="722" topLine="8"/>
+	</File>
+	<File name="src\dataout.cpp" open="0" top="0">
+		<Cursor position="4342" topLine="117"/>
+	</File>
+	<File name="src\dataout.h" open="0" top="0">
+		<Cursor position="391" topLine="18"/>
+	</File>
+	<File name="src\elempunto.cpp" open="0" top="0">
+		<Cursor position="362" topLine="0"/>
+	</File>
+	<File name="src\elempunto.h" open="0" top="0">
+		<Cursor position="1477" topLine="16"/>
+	</File>
+	<File name="src\estimator.cpp" open="0" top="0">
+		<Cursor position="224" topLine="0"/>
+	</File>
+	<File name="src\estimator.h" open="0" top="0">
+		<Cursor position="325" topLine="7"/>
 	</File>
 	<File name="src\freecam.cpp" open="1" top="0">
-		<Cursor position="826" topLine="23"/>
+		<Cursor position="364" topLine="12"/>
 	</File>
-	<File name="src\kalman.cpp" open="1" top="0">
-		<Cursor position="33641" topLine="919"/>
+	<File name="src\freecam.h" open="1" top="0">
+		<Cursor position="246" topLine="0"/>
 	</File>
-	<File name="src\kalman.h" open="1" top="0">
-		<Cursor position="248" topLine="6"/>
+	<File name="src\kalman.cpp" open="0" top="0">
+		<Cursor position="47226" topLine="1318"/>
 	</File>
-	<File name="src\map.cpp" open="1" top="0">
-		<Cursor position="205" topLine="0"/>
+	<File name="src\kalman.h" open="0" top="0">
+		<Cursor position="373" topLine="15"/>
 	</File>
-	<File name="src\map.h" open="1" top="0">
-		<Cursor position="95" topLine="0"/>
+	<File name="src\map.cpp" open="0" top="0">
+		<Cursor position="1104" topLine="41"/>
 	</File>
-	<File name="src\model.cpp" open="1" top="0">
-		<Cursor position="211" topLine="25"/>
+	<File name="src\map.h" open="0" top="0">
+		<Cursor position="513" topLine="0"/>
 	</File>
-	<File name="src\model.h" open="1" top="0">
-		<Cursor position="253" topLine="18"/>
+	<File name="src\model.cpp" open="0" top="0">
+		<Cursor position="828" topLine="27"/>
 	</File>
-	<File name="src\modelcam.cpp" open="1" top="0">
-		<Cursor position="7061" topLine="195"/>
+	<File name="src\model.h" open="0" top="0">
+		<Cursor position="1461" topLine="20"/>
 	</File>
-	<File name="src\particlefilter.cpp" open="1" top="0">
-		<Cursor position="509" topLine="375"/>
+	<File name="src\modelcam.cpp" open="0" top="0">
+		<Cursor position="29686" topLine="753"/>
 	</File>
-	<File name="src\particlefilter.h" open="1" top="0">
-		<Cursor position="757" topLine="18"/>
+	<File name="src\modelcam.h" open="0" top="0">
+		<Cursor position="1105" topLine="13"/>
 	</File>
-	<File name="src\tracker.h" open="1" top="0">
-		<Cursor position="385" topLine="0"/>
+	<File name="src\particlefilter.cpp" open="0" top="0">
+		<Cursor position="7618" topLine="243"/>
 	</File>
-	<File name="src\tracker_surf.cpp" open="1" top="0">
-		<Cursor position="4611" topLine="118"/>
+	<File name="src\particlefilter.h" open="0" top="0">
+		<Cursor position="388" topLine="11"/>
 	</File>
-	<File name="src\tracker_surf.h" open="1" top="0">
-		<Cursor position="246" topLine="6"/>
+	<File name="src\surf.cpp" open="0" top="0">
+		<Cursor position="15152" topLine="471"/>
 	</File>
-	<File name="src\trackerfile.cpp" open="1" top="0">
-		<Cursor position="1789" topLine="48"/>
+	<File name="src\surf.h" open="0" top="0">
+		<Cursor position="1923" topLine="20"/>
 	</File>
-	<File name="src\trackerfile.h" open="1" top="0">
-		<Cursor position="530" topLine="0"/>
+	<File name="src\tracker.cpp" open="0" top="0">
+		<Cursor position="304" topLine="0"/>
 	</File>
-	<File name="src\updater.cpp" open="1" top="0">
-		<Cursor position="931" topLine="75"/>
+	<File name="src\tracker.h" open="0" top="0">
+		<Cursor position="716" topLine="7"/>
 	</File>
-	<File name="test1\test2.cpp" open="1" top="1">
-		<Cursor position="454" topLine="0"/>
+	<File name="src\tracker_harris.cpp" open="0" top="0">
+		<Cursor position="2637" topLine="48"/>
 	</File>
+	<File name="src\tracker_surf.cpp" open="0" top="0">
+		<Cursor position="2668" topLine="108"/>
+	</File>
+	<File name="src\tracker_surf.h" open="0" top="0">
+		<Cursor position="737" topLine="10"/>
+	</File>
+	<File name="src\trackerfile.cpp" open="0" top="0">
+		<Cursor position="3132" topLine="57"/>
+	</File>
+	<File name="src\trackerfile.h" open="0" top="0">
+		<Cursor position="524" topLine="0"/>
+	</File>
+	<File name="src\updater.cpp" open="0" top="0">
+		<Cursor position="8933" topLine="263"/>
+	</File>
+	<File name="src\updater.h" open="0" top="0">
+		<Cursor position="378" topLine="22"/>
+	</File>
+	<File name="src\vehicle.cpp" open="1" top="1">
+		<Cursor position="2076" topLine="58"/>
+	</File>
+	<File name="src\vehicle.h" open="1" top="0">
+		<Cursor position="534" topLine="7"/>
+	</File>
+	<File name="src\xmlParser.cpp" open="0" top="0">
+		<Cursor position="7743" topLine="167"/>
+	</File>
+	<File name="src\xmlParser.h" open="0" top="0">
+		<Cursor position="4668" topLine="149"/>
+	</File>
+	<File name="test1\test2.cpp" open="0" top="0">
+		<Cursor position="16473" topLine="561"/>
+	</File>
+	<Expand folder="/Sources/src"/>
+	<Expand folder="/Sources"/>
 </CodeBlocks_layout_file>

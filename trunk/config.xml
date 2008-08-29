@@ -3,11 +3,23 @@
 	tracker_surf
 </tracker>
 <data>
-	g:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg
+	G:\\SLAM\\Datos\\univ-alberta-vision-sift\\ualberta-csc-flr3-vision\\image%0.4d.png
 </data>
 <gui>
 	false
 </gui>
+<frame_increment>
+    1
+</frame_increment>
+<waitkey>
+    100
+</waitkey>
+<tests>
+    <ransac></ransac>
+</tests>
+<resdir>
+    ..\\resdir\\
+</resdir>
 
 </slam>
 

@@ -74,7 +74,7 @@ CParticleFilter mEstimator;
 #else
 CKalman mEstimator;
 #endif
-CDataOut mDataOut;
+CDataOut *pDataOut;
 
 XMLNode xMainNode;
 
@@ -232,16 +232,16 @@ void conect()
     mUpdater.setTracker((CTracker*)pTracker);
     mUpdater.setModelCam(&mModelCam);
 
-    mDataOut.setDataCam(&mDataCam);
-    mDataOut.setMap(&mMap);
-    mDataOut.setTracker((CTracker*)pTracker);
-    mDataOut.setModelCam(&mModelCam);
+    pDataOut->setDataCam(&mDataCam);
+    pDataOut->setMap(&mMap);
+    pDataOut->setTracker((CTracker*)pTracker);
+    pDataOut->setModelCam(&mModelCam);
 #ifndef KALMAN
 
-    mDataOut.setParticle(&mEstimator);
+    pDataOut->setParticle(&mEstimator);
 #else
 
-    mDataOut.setKalman(&mEstimator);//FIXME!!!!
+    pDataOut->setKalman(&mEstimator);//FIXME!!!!
 #endif
 
     pTracker->setDataCam(&mDataCam);
@@ -409,29 +409,29 @@ void data_out()
 
     //dibjo puntos encontrados
     cvCopy( frame,framecopy);
-    mDataOut.Draw(framecopy);
+    pDataOut->Draw(framecopy);
 #ifndef KALMAN
 
-    mDataOut.Particle(framecopy);
+    pDataOut->Particle(framecopy);
 #else
 
-    mDataOut.Disp_out(framecopy);
+    pDataOut->Disp_out(framecopy);
 #endif
 
-    mDataOut.Feat();
-    mDataOut.Frame();
-    mDataOut.Cam();
+    pDataOut->Feat();
+    pDataOut->Frame();
+    pDataOut->Cam();
 
     char nombre[100];
     //muestro imagen y compruebo salida
-    sprintf(nombre,"frame%.2d.png",iter);
+    sprintf(nombre,(pDataOut->resdir+"frame%.2d.png").c_str(),iter);
     cvSaveImage(nombre ,framecopy);
     cvShowImage( "CamShiftDemo", framecopy );
 #ifdef LINUX
     char gplotstr[300];
     if (gplot==0)
         gplot= popen("/usr/bin/gnuplot","w");
-    sprintf(gplotstr,"splot 'disp%d.txt' u 1:2:3, 'cam.txt' u 1:2:3 w l \n",mDataOut.iter-1);
+    sprintf(gplotstr,"splot 'disp%d.txt' u 1:2:3, 'cam.txt' u 1:2:3 w l \n",pDataOut->iter-1);
     fprintf(gplot,gplotstr);
     fflush(gplot);
 #endif
@@ -478,7 +478,36 @@ int main (int argc, char **argv)
     }
 #endif
 
-    cout<<"TRACKER IS : "<<t<<endl;
+    t=xMainNode.getChildNode("frame_increment").getText();
+    int frame_increment=1;
+    sscanf(t,"%d",&frame_increment);
+    cout<<"FRAME INCREMENT IS : "<<frame_increment<<endl;
+
+    t=xMainNode.getChildNode("waitkey").getText();
+    int waitkey=0;
+    sscanf(t,"%d",&waitkey);
+    cout<<"WAITKEY IS : "<<waitkey<<endl;
+
+    bool mahalanobis = false;
+    if (xMainNode.getChildNode("tests").getChildNode("mahalanobis").isEmpty()==false)
+        mahalanobis = true;
+
+    cout<<"MAHALANOBIS: "<< mahalanobis<<endl;
+
+    bool ransac = false;
+    if( xMainNode.getChildNode("tests").getChildNode("ransac").isEmpty()==false)
+        ransac = true;
+    cout<<"RANSAC: "<< ransac <<endl;
+
+    t=xMainNode.getChildNode("resdir").getText();
+    string res;
+    if (t!=NULL)
+        res= t;
+    else
+        res="";
+    pDataOut = new CDataOut(res);
+    cout<<"RESDIR: "<<pDataOut->resdir<<endl;
+
 
 
     conect();
@@ -497,7 +526,7 @@ int main (int argc, char **argv)
 
     while(1)
     {
-        iter+=3;
+        iter+=frame_increment;
         cout <<"ITERACION: "<< iter<<endl;
         // frame = cvQueryFrame( capture );
         cvCopy(frame,frameold);
@@ -526,7 +555,6 @@ int main (int argc, char **argv)
         if(frame==NULL)
             break;
 
-
         //   match frame
         mModelCam.ProjectPoints();
         pTracker->Match(frame);//entre los puntos de la imagen anterior y los de esta
@@ -544,13 +572,14 @@ int main (int argc, char **argv)
 
         mModelCam.ProjectPoints();
 
-        //   mEstimator.Test();
-        cout<<"ransac"<<endl;
-        //   mUpdater.TestRANSAC();
+        if (mahalanobis) mEstimator.Test();
+
+        if (ransac) mUpdater.TestRANSAC();
 
         mEstimator.UpdateMatrixSize();
 
         mEstimator.Correct();
+
         mModelCam.ProjectPoints();
 
 #ifdef KALMAN
@@ -563,7 +592,7 @@ int main (int argc, char **argv)
 
         data_out();
         cout<<"waitkey correct"<<endl;
-        c = cvWaitKey(0);//esto probablemente se pueda quitar
+        c = cvWaitKey(waitkey);//esto probablemente se pueda quitar
         if( c == 27 )//si presiono escape salgo del programa limpiamente
             break;
     }

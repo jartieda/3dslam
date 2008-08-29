@@ -274,6 +274,7 @@ void CKalman::setModel(CModel *p)
 
 }
 
+/** Mahalanobis test **/
 void CKalman::Test()
 {
 
@@ -1330,13 +1331,13 @@ void CKalman::Print(int iter)
   cvConvertScale(im2, im3,555);
   cout<<"adios"<<endl;
   char fname[100];
-  sprintf(fname, "cov%d.tif",iter);
+/*  sprintf(fname, "cov%d.tif",iter);
   cvSaveImage(fname,im3);
   cvShowImage("kalman",im3);
   cvNamedWindow( "kalman_cov_pre", 1 );
 
   im2=cvGetImage(pKalman->error_cov_post,im);
   cvShowImage("kalman_cov_pre",im);
-
+*/
 }
 }

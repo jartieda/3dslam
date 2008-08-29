@@ -1,10 +1,11 @@
 #include "dataout.h"
 namespace SLAM{
-CDataOut::CDataOut():iter(0),hScale(0.5),vScale(0.5),lineWidth(2)
+CDataOut::CDataOut(string r):iter(0),hScale(0.5),vScale(0.5),lineWidth(2)
 {
-  FeatFile.open("feat.txt");
-  RFile.open("plot.r");
-  CamFile.open("cam.txt");
+    resdir = r;
+  FeatFile.open((resdir+"feat.txt").c_str());
+  RFile.open((resdir+"plot.r").c_str());
+  CamFile.open((resdir+"cam.txt").c_str());
   cvInitFont(&font,CV_FONT_HERSHEY_SIMPLEX|CV_FONT_ITALIC, hScale,vScale,0,lineWidth);
 }
 CDataOut::~CDataOut()
@@ -143,7 +144,7 @@ void CDataOut::Particle(IplImage *framecopy)
   CvMat* vect2=cvCreateMat(1,6,CV_32FC1);
   CvMat* m = cvCreateMat(3,1,CV_32FC1);
 
-    sprintf(ndisp,"disp%d.txt",iter++);
+    sprintf(ndisp,(resdir+"disp%d.txt").c_str(),iter++);
     DispFile.open(ndisp);
     int s;
     CvScalar c[pMap->bbdd.size()];
@@ -196,7 +197,7 @@ void CDataOut::Particle(IplImage *framecopy)
 void CDataOut::Disp_out(IplImage *framecopy)
 {
   char ndisp[100];
-  sprintf(ndisp,"disp%d.txt",iter++);
+  sprintf(ndisp,(resdir+"disp%d.txt").c_str(),iter++);
   DispFile.open(ndisp);
   int ii=0;
   CvMat *temp,*temp2,*temp3;
