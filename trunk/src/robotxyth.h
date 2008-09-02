@@ -8,11 +8,11 @@ class CRobotXYTh : public CVehicle
     public:
         CRobotXYTh();
         virtual ~CRobotXYTh();
-
-        virtual void ReadData(CvMat* Rob, CvMat* CamRob,CvMat* T);
+        virtual void ReadData();
 
     protected:
     private:
 };
 }
+
 #endif // CROBOTXYTH_H

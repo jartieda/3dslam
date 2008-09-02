@@ -412,7 +412,7 @@
 	<list>
 	"model.h"
 
-1219998860 g:\slam\programas\slamsvn\src\kalman.cpp
+1220359918 g:\slam\programas\slamsvn\src\kalman.cpp
 	"kalman.h"
 
 1220338286 g:\slam\programas\slamsvn\src\modelcam.cpp
@@ -450,7 +450,7 @@
 	<vector>
 	"highgui.h"
 
-1220342664 g:\slam\programas\slamsvn\test1\test2.cpp
+1220357164 g:\slam\programas\slamsvn\test1\test2.cpp
 	<stdio.h>
 	<iostream>
 	<fstream>
@@ -470,6 +470,7 @@
 	"../src/particlefilter.h"
 	"../src/trackerfile.h"
 	"../src/xmlParser.h"
+	"../src/robotxyth.h"
 
 1219912658 g:\slam\programas\slamsvn\src\tracker_harris.h
 	<cv.h>
@@ -699,18 +700,18 @@
 1220011974 d:\slam\programas\slamsvn\src\robotxyth.h
 	"vehicle.h"
 
-1220338286 g:\slam\programas\slamsvn\src\robotxyth.cpp
+1220359450 g:\slam\programas\slamsvn\src\robotxyth.cpp
 	"robotxyth.h"
 
-1220011974 g:\slam\programas\slamsvn\src\robotxyth.h
+1220359450 g:\slam\programas\slamsvn\src\robotxyth.h
 	"vehicle.h"
 
-1220011832 g:\slam\programas\slamsvn\src\vehicle.h
+1220359452 g:\slam\programas\slamsvn\src\vehicle.h
 	"cv.h"
 	<list>
 	"model.h"
 
-1220012050 g:\slam\programas\slamsvn\src\vehicle.cpp
+1220359464 g:\slam\programas\slamsvn\src\vehicle.cpp
 	"vehicle.h"
 
 1220011994 f:\slam\programas\slamsvn\src\robotxyth.cpp

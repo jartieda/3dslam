@@ -39,7 +39,7 @@
 #include "../src/particlefilter.h"
 #include "../src/trackerfile.h"
 #include "../src/xmlParser.h"
-
+#include "../src/robotxyth.h"
 #define RHO_INIT_DIST 1
 
 //#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
@@ -68,7 +68,7 @@ CUpdater mUpdater;
 //CTrackerFile mTracker;
 //CTracker_surf mTracker;
 CTracker *pTracker;
-CFreeCam mVehicle;
+CModel *pVehicle;
 #ifndef KALMAN
 CParticleFilter mEstimator;
 #else
@@ -224,7 +224,7 @@ void conect()
     mEstimator.setModelCam(&mModelCam);
     mEstimator.setDataCam(&mDataCam);
     mEstimator.setMap(&mMap);
-    mEstimator.setModel((CModel*)(&mVehicle));
+    mEstimator.setModel((CModel*)(pVehicle));
 
     mUpdater.setDataCam(&mDataCam);
     mUpdater.setMap(&mMap);
@@ -291,7 +291,7 @@ void param_init()
     trans=cvCreateMat(3,1,CV_32FC1);
     trans2=cvCreateMat(3,1,CV_32FC1);
 
-    if (mVehicle.getMeasurementNum()==0)
+    if (pVehicle->getMeasurementNum()==0)
     {
         cvmSet(rotation,0,0,0);
         cvmSet(rotation,1,0,0);
@@ -302,7 +302,7 @@ void param_init()
     }
     else
     {
-        CvMat *temp=mVehicle.getMeasurementVector();
+        CvMat *temp=pVehicle->getMeasurementVector();
         cvmSet(rotation,0,0,cvmGet(temp,3,0));
         cvmSet(rotation,1,0,cvmGet(temp,4,0));
         cvmSet(rotation,2,0,cvmGet(temp,5,0));
@@ -512,7 +512,16 @@ int main (int argc, char **argv)
     pDataOut = new CDataOut(res);
     cout<<"RESDIR: "<<pDataOut->resdir<<endl;
 
-
+    t=xMainNode.getChildNode("vehicle").getAttribute("id");
+    string vehicle_mode = t;
+    if (vehicle_mode == "FreeCam"){
+        pVehicle = new CFreeCam;
+    }else if (vehicle_mode == "RobotXYTh"){
+        pVehicle = new CRobotXYTh;
+        ((CRobotXYTh*)pVehicle)->set_filename((char*) xMainNode.getChildNode("vehicle").getChildNode("data").getText());
+        ((CRobotXYTh*)pVehicle)->set_iter(iter);
+    }
+    cout<<"VEHICLE: "<<t<<endl;
 
     conect();
     cout<<"param_init"<<endl;
@@ -531,6 +540,8 @@ int main (int argc, char **argv)
     while(1)
     {
         iter+=frame_increment;
+         ((CRobotXYTh*)pVehicle)->set_iter(iter);
+
         cout <<"ITERACION: "<< iter<<endl;
         // frame = cvQueryFrame( capture );
         cvCopy(frame,frameold);
