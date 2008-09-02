@@ -147,20 +147,21 @@
 	"highgui.h"
 	"../src/particlefilter.h"
 
-1205250972 f:\slam\programas\slamsvn\src\datacam.cpp
+1219911992 f:\slam\programas\slamsvn\src\datacam.cpp
 	"datacam.h"
 
-1205250170 f:\slam\programas\slamsvn\src\datacam.h
+1219911976 f:\slam\programas\slamsvn\src\datacam.h
 	<cv.h>
 	<iostream>
 
-1209537872 f:\slam\programas\slamsvn\src\dataout.cpp
+1219998588 f:\slam\programas\slamsvn\src\dataout.cpp
 	"dataout.h"
 
-1208766698 f:\slam\programas\slamsvn\src\dataout.h
+1219998610 f:\slam\programas\slamsvn\src\dataout.h
 	<cv.h>
 	<iostream>
 	<fstream>
+	<string>
 	"map.h"
 	"kalman.h"
 	"tracker.h"
@@ -168,15 +169,15 @@
 	"kalman.h"
 	"particlefilter.h"
 
-1205240532 f:\slam\programas\slamsvn\src\map.h
+1219911976 f:\slam\programas\slamsvn\src\map.h
 	"elempunto.h"
 	<list>
 
-1205240012 f:\slam\programas\slamsvn\src\elempunto.h
+1219911976 f:\slam\programas\slamsvn\src\elempunto.h
 	"cv.h"
 	<list>
 
-1209544426 f:\slam\programas\slamsvn\src\kalman.h
+1219922280 f:\slam\programas\slamsvn\src\kalman.h
 	"modelcam.h"
 	"map.h"
 	"model.h"
@@ -184,84 +185,84 @@
 	"estimator.h"
 	"highgui.h"
 
-1205240754 f:\slam\programas\slamsvn\src\modelcam.h
+1219911976 f:\slam\programas\slamsvn\src\modelcam.h
 	<cv.h>
 	<iostream>
 	"datacam.h"
 	"map.h"
 
-1205239120 f:\slam\programas\slamsvn\src\model.h
+1219911976 f:\slam\programas\slamsvn\src\model.h
 	"cv.h"
 	"modelcam.h"
 	"map.h"
 	<list>
 
-1208515278 f:\slam\programas\slamsvn\src\estimator.h
+1219911976 f:\slam\programas\slamsvn\src\estimator.h
 	"modelcam.h"
 	"map.h"
 	"model.h"
 	"cv.h"
 
-1208543772 f:\slam\programas\slamsvn\src\tracker.h
+1219911976 f:\slam\programas\slamsvn\src\tracker.h
 	<cv.h>
 	<iostream>
 	"datacam.h"
 	"map.h"
 	"modelcam.h"
 
-1208876210 f:\slam\programas\slamsvn\src\particlefilter.h
+1219911976 f:\slam\programas\slamsvn\src\particlefilter.h
 	"modelcam.h"
 	"map.h"
 	"model.h"
 	"cv.h"
 	"estimator.h"
 
-1207144566 f:\slam\programas\slamsvn\src\elempunto.cpp
+1219912034 f:\slam\programas\slamsvn\src\elempunto.cpp
 	"elempunto.h"
 	<iostream>
 
-1208447592 f:\slam\programas\slamsvn\src\estimator.cpp
+1219912040 f:\slam\programas\slamsvn\src\estimator.cpp
 	"estimator.h"
 
-1210662840 f:\slam\programas\slamsvn\src\freecam.cpp
+1219912050 f:\slam\programas\slamsvn\src\freecam.cpp
 	"freecam.h"
 
-1205240110 f:\slam\programas\slamsvn\src\freecam.h
+1219911976 f:\slam\programas\slamsvn\src\freecam.h
 	"cv.h"
 	<list>
 	"model.h"
 
-1210703060 f:\slam\programas\slamsvn\src\kalman.cpp
+1219998860 f:\slam\programas\slamsvn\src\kalman.cpp
 	"kalman.h"
 
-1205249552 f:\slam\programas\slamsvn\src\map.cpp
+1219912078 f:\slam\programas\slamsvn\src\map.cpp
 	"map.h"
 
-1205249532 f:\slam\programas\slamsvn\src\model.cpp
+1219912088 f:\slam\programas\slamsvn\src\model.cpp
 	"model.h"
 
-1209378208 f:\slam\programas\slamsvn\src\modelcam.cpp
+1219912098 f:\slam\programas\slamsvn\src\modelcam.cpp
 	"modelcam.h"
 
-1209541648 f:\slam\programas\slamsvn\src\particlefilter.cpp
+1219912112 f:\slam\programas\slamsvn\src\particlefilter.cpp
 	"particlefilter.h"
 
-1208606700 f:\slam\programas\slamsvn\src\surf.cpp
+1220284838 f:\slam\programas\slamsvn\src\surf.cpp
 	"surf.h"
 
-1207309046 f:\slam\programas\slamsvn\src\surf.h
+1219911976 f:\slam\programas\slamsvn\src\surf.h
 	<cv.h>
 	<highgui.h>
 	<cstdlib>
 	<iostream>
 
-1208543734 f:\slam\programas\slamsvn\src\tracker.cpp
+1219912142 f:\slam\programas\slamsvn\src\tracker.cpp
 	"tracker.h"
 
-1209500842 f:\slam\programas\slamsvn\src\tracker_surf.cpp
+1219920428 f:\slam\programas\slamsvn\src\tracker_surf.cpp
 	"tracker_surf.h"
 
-1207291434 f:\slam\programas\slamsvn\src\tracker_surf.h
+1219911976 f:\slam\programas\slamsvn\src\tracker_surf.h
 	<cv.h>
 	<iostream>
 	"datacam.h"
@@ -269,11 +270,11 @@
 	"surf.h"
 	"tracker.h"
 
-1210617376 f:\slam\programas\slamsvn\src\updater.cpp
+1219911438 f:\slam\programas\slamsvn\src\updater.cpp
 	"updater.h"
 	<iostream>
 
-1207233126 f:\slam\programas\slamsvn\src\updater.h
+1219911232 f:\slam\programas\slamsvn\src\updater.h
 	"map.h"
 	"kalman.h"
 	"tracker.h"
@@ -281,36 +282,41 @@
 	<vector>
 	"highgui.h"
 
-1210701976 f:\slam\programas\slamsvn\test1\test2.cpp
+1220008690 f:\slam\programas\slamsvn\test1\test2.cpp
 	<stdio.h>
 	<iostream>
 	<fstream>
+	<cstdlib>
+	<jni.h>
+	<time.h>
 	"../src/datacam.h"
 	"../src/modelcam.h"
 	"../src/map.h"
 	"../src/kalman.h"
 	"../src/updater.h"
 	"../src/tracker_surf.h"
+	"../src/tracker_harris.h"
 	"../src/freecam.h"
 	"../src/dataout.h"
 	"highgui.h"
 	"../src/particlefilter.h"
 	"../src/trackerfile.h"
+	"../src/xmlParser.h"
 
-1209481248 f:\slam\programas\slamsvn\src\trackerfile.cpp
+1219912760 f:\slam\programas\slamsvn\src\trackerfile.cpp
 	"trackerfile.h"
 
-1209198824 f:\slam\programas\slamsvn\src\trackerfile.h
+1219911976 f:\slam\programas\slamsvn\src\trackerfile.h
 	"tracker.h"
 
-1219911992 g:\slam\programas\slamsvn\src\datacam.cpp
+1220338286 g:\slam\programas\slamsvn\src\datacam.cpp
 	"datacam.h"
 
 1219911976 g:\slam\programas\slamsvn\src\datacam.h
 	<cv.h>
 	<iostream>
 
-1219912034 g:\slam\programas\slamsvn\src\elempunto.cpp
+1220338286 g:\slam\programas\slamsvn\src\elempunto.cpp
 	"elempunto.h"
 	<iostream>
 
@@ -343,13 +349,13 @@
 	"map.h"
 	<list>
 
-1219912078 g:\slam\programas\slamsvn\src\map.cpp
+1220338286 g:\slam\programas\slamsvn\src\map.cpp
 	"map.h"
 
-1219912088 g:\slam\programas\slamsvn\src\model.cpp
+1220338286 g:\slam\programas\slamsvn\src\model.cpp
 	"model.h"
 
-1219920426 g:\slam\programas\slamsvn\src\surf.cpp
+1220339988 g:\slam\programas\slamsvn\src\surf.cpp
 	"surf.h"
 
 1219911976 g:\slam\programas\slamsvn\src\surf.h
@@ -358,7 +364,7 @@
 	<cstdlib>
 	<iostream>
 
-1219912142 g:\slam\programas\slamsvn\src\tracker.cpp
+1220338286 g:\slam\programas\slamsvn\src\tracker.cpp
 	"tracker.h"
 
 1219911976 g:\slam\programas\slamsvn\src\tracker.h
@@ -368,7 +374,7 @@
 	"map.h"
 	"modelcam.h"
 
-1219998588 g:\slam\programas\slamsvn\src\dataout.cpp
+1220338286 g:\slam\programas\slamsvn\src\dataout.cpp
 	"dataout.h"
 
 1219998610 g:\slam\programas\slamsvn\src\dataout.h
@@ -398,7 +404,7 @@
 	"cv.h"
 	"estimator.h"
 
-1219912050 g:\slam\programas\slamsvn\src\freecam.cpp
+1220338286 g:\slam\programas\slamsvn\src\freecam.cpp
 	"freecam.h"
 
 1219911976 g:\slam\programas\slamsvn\src\freecam.h
@@ -409,10 +415,10 @@
 1219998860 g:\slam\programas\slamsvn\src\kalman.cpp
 	"kalman.h"
 
-1219912098 g:\slam\programas\slamsvn\src\modelcam.cpp
+1220338286 g:\slam\programas\slamsvn\src\modelcam.cpp
 	"modelcam.h"
 
-1219912112 g:\slam\programas\slamsvn\src\particlefilter.cpp
+1220338286 g:\slam\programas\slamsvn\src\particlefilter.cpp
 	"particlefilter.h"
 
 1219920428 g:\slam\programas\slamsvn\src\tracker_surf.cpp
@@ -426,13 +432,13 @@
 	"surf.h"
 	"tracker.h"
 
-1219912760 g:\slam\programas\slamsvn\src\trackerfile.cpp
+1220338288 g:\slam\programas\slamsvn\src\trackerfile.cpp
 	"trackerfile.h"
 
 1219911976 g:\slam\programas\slamsvn\src\trackerfile.h
 	"tracker.h"
 
-1219911438 g:\slam\programas\slamsvn\src\updater.cpp
+1220338288 g:\slam\programas\slamsvn\src\updater.cpp
 	"updater.h"
 	<iostream>
 
@@ -444,7 +450,7 @@
 	<vector>
 	"highgui.h"
 
-1219998944 g:\slam\programas\slamsvn\test1\test2.cpp
+1220342664 g:\slam\programas\slamsvn\test1\test2.cpp
 	<stdio.h>
 	<iostream>
 	<fstream>
@@ -488,6 +494,262 @@
 	<widec.h>
 	<widec.h>
 
-1219912322 g:\slam\programas\slamsvn\src\tracker_harris.cpp
+1220338286 g:\slam\programas\slamsvn\src\tracker_harris.cpp
 	"tracker_harris.h"
+
+1219911992 d:\slam\programas\slamsvn\src\datacam.cpp
+	"datacam.h"
+
+1219911976 d:\slam\programas\slamsvn\src\datacam.h
+	<cv.h>
+	<iostream>
+
+1219998588 d:\slam\programas\slamsvn\src\dataout.cpp
+	"dataout.h"
+
+1219998610 d:\slam\programas\slamsvn\src\dataout.h
+	<cv.h>
+	<iostream>
+	<fstream>
+	<string>
+	"map.h"
+	"kalman.h"
+	"tracker.h"
+	"modelcam.h"
+	"kalman.h"
+	"particlefilter.h"
+
+1219911976 d:\slam\programas\slamsvn\src\map.h
+	"elempunto.h"
+	<list>
+
+1219911976 d:\slam\programas\slamsvn\src\elempunto.h
+	"cv.h"
+	<list>
+
+1219922280 d:\slam\programas\slamsvn\src\kalman.h
+	"modelcam.h"
+	"map.h"
+	"model.h"
+	"cv.h"
+	"estimator.h"
+	"highgui.h"
+
+1219911976 d:\slam\programas\slamsvn\src\modelcam.h
+	<cv.h>
+	<iostream>
+	"datacam.h"
+	"map.h"
+
+1219911976 d:\slam\programas\slamsvn\src\model.h
+	"cv.h"
+	"modelcam.h"
+	"map.h"
+	<list>
+
+1219911976 d:\slam\programas\slamsvn\src\estimator.h
+	"modelcam.h"
+	"map.h"
+	"model.h"
+	"cv.h"
+
+1219911976 d:\slam\programas\slamsvn\src\tracker.h
+	<cv.h>
+	<iostream>
+	"datacam.h"
+	"map.h"
+	"modelcam.h"
+
+1219911976 d:\slam\programas\slamsvn\src\particlefilter.h
+	"modelcam.h"
+	"map.h"
+	"model.h"
+	"cv.h"
+	"estimator.h"
+
+1219912034 d:\slam\programas\slamsvn\src\elempunto.cpp
+	"elempunto.h"
+	<iostream>
+
+1219912040 d:\slam\programas\slamsvn\src\estimator.cpp
+	"estimator.h"
+
+1219912050 d:\slam\programas\slamsvn\src\freecam.cpp
+	"freecam.h"
+
+1219911976 d:\slam\programas\slamsvn\src\freecam.h
+	"cv.h"
+	<list>
+	"model.h"
+
+1219998860 d:\slam\programas\slamsvn\src\kalman.cpp
+	"kalman.h"
+
+1219912078 d:\slam\programas\slamsvn\src\map.cpp
+	"map.h"
+
+1219912088 d:\slam\programas\slamsvn\src\model.cpp
+	"model.h"
+
+1219912098 d:\slam\programas\slamsvn\src\modelcam.cpp
+	"modelcam.h"
+
+1219912112 d:\slam\programas\slamsvn\src\particlefilter.cpp
+	"particlefilter.h"
+
+1219920426 d:\slam\programas\slamsvn\src\surf.cpp
+	"surf.h"
+
+1219911976 d:\slam\programas\slamsvn\src\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+
+1219912142 d:\slam\programas\slamsvn\src\tracker.cpp
+	"tracker.h"
+
+1219912322 d:\slam\programas\slamsvn\src\tracker_harris.cpp
+	"tracker_harris.h"
+
+1219912658 d:\slam\programas\slamsvn\src\tracker_harris.h
+	<cv.h>
+	<iostream>
+	"datacam.h"
+	"map.h"
+	"tracker.h"
+
+1219920428 d:\slam\programas\slamsvn\src\tracker_surf.cpp
+	"tracker_surf.h"
+
+1219911976 d:\slam\programas\slamsvn\src\tracker_surf.h
+	<cv.h>
+	<iostream>
+	"datacam.h"
+	"map.h"
+	"surf.h"
+	"tracker.h"
+
+1219912760 d:\slam\programas\slamsvn\src\trackerfile.cpp
+	"trackerfile.h"
+
+1219911976 d:\slam\programas\slamsvn\src\trackerfile.h
+	"tracker.h"
+
+1219911438 d:\slam\programas\slamsvn\src\updater.cpp
+	"updater.h"
+	<iostream>
+
+1219911232 d:\slam\programas\slamsvn\src\updater.h
+	"map.h"
+	"kalman.h"
+	"tracker.h"
+	"modelcam.h"
+	<vector>
+	"highgui.h"
+
+1220005794 d:\slam\programas\slamsvn\src\vehicle.cpp
+	"vehicle.h"
+
+1220011832 d:\slam\programas\slamsvn\src\vehicle.h
+	"cv.h"
+	<list>
+	"model.h"
+
+1215280640 d:\slam\programas\slamsvn\src\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1219868286 d:\slam\programas\slamsvn\src\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1220008690 d:\slam\programas\slamsvn\test1\test2.cpp
+	<stdio.h>
+	<iostream>
+	<fstream>
+	<cstdlib>
+	<jni.h>
+	<time.h>
+	"../src/datacam.h"
+	"../src/modelcam.h"
+	"../src/map.h"
+	"../src/kalman.h"
+	"../src/updater.h"
+	"../src/tracker_surf.h"
+	"../src/tracker_harris.h"
+	"../src/freecam.h"
+	"../src/dataout.h"
+	"highgui.h"
+	"../src/particlefilter.h"
+	"../src/trackerfile.h"
+	"../src/xmlParser.h"
+
+1220011994 d:\slam\programas\slamsvn\src\robotxyth.cpp
+	"robotxyth.h"
+
+1220011974 d:\slam\programas\slamsvn\src\robotxyth.h
+	"vehicle.h"
+
+1220338286 g:\slam\programas\slamsvn\src\robotxyth.cpp
+	"robotxyth.h"
+
+1220011974 g:\slam\programas\slamsvn\src\robotxyth.h
+	"vehicle.h"
+
+1220011832 g:\slam\programas\slamsvn\src\vehicle.h
+	"cv.h"
+	<list>
+	"model.h"
+
+1220012050 g:\slam\programas\slamsvn\src\vehicle.cpp
+	"vehicle.h"
+
+1220011994 f:\slam\programas\slamsvn\src\robotxyth.cpp
+	"robotxyth.h"
+
+1220011974 f:\slam\programas\slamsvn\src\robotxyth.h
+	"vehicle.h"
+
+1220011832 f:\slam\programas\slamsvn\src\vehicle.h
+	"cv.h"
+	<list>
+	"model.h"
+
+1219912322 f:\slam\programas\slamsvn\src\tracker_harris.cpp
+	"tracker_harris.h"
+
+1219912658 f:\slam\programas\slamsvn\src\tracker_harris.h
+	<cv.h>
+	<iostream>
+	"datacam.h"
+	"map.h"
+	"tracker.h"
+
+1220012050 f:\slam\programas\slamsvn\src\vehicle.cpp
+	"vehicle.h"
+
+1215280640 f:\slam\programas\slamsvn\src\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1219868286 f:\slam\programas\slamsvn\src\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
 

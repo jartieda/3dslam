@@ -150,7 +150,7 @@ IplImage *grey,*patron;
 	for ( int j = 0; j<10; j++)
 	{
 		a= cvGet2D( patron, i , j);
-	  	key[i*10+j]= a.val[0];
+	  	key[i*10+j]= (int) a.val[0];
 	}
 
 }

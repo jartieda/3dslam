@@ -66,8 +66,10 @@ CvMat* CVehicle:: getMeasurementVector()
 
     CvMat *t1;
     t1=cvCreateMat(3,3,CV_32FC1);
+    CvMat *TransVect;
+    TransVect = cvCreateMat(3,1,CV_32FC1);
 
-
+    ReadData(RotRobSrob,RotCamRob,TransVect);
 
     cvMatMul( RotRobSrob,RotSrobScam,t1 );
     cvMatMul(RotCamRob,t1,RotCamScam);

@@ -33,16 +33,14 @@ void CSurf::non_max_sup(double *det, IplImage **max, CvSeq* feat,int levels)
    int suppressed;
    double pix;
    int s=1;
-   int pix_size = 4;//(det[1]->depth & 255) >> 3;
-   cout<<"pix_size "<<pix_size<<endl;
    uchar* ptr ;
    double old_det;
    for (int level=0; level<levels;level++)
    {
 	s=level+1;
 
-        for (int i=9*levels+1; i<img->width-(9*levels+1); i++)
-        for (int j=9*levels+1; j<img->height-(9*levels+1);j++)
+        for (int i=3*(2*(levels+1)+1); i<img->width -(3*(2*(levels+1)+1)); i++)
+        for (int j=3*(2*(levels+1)+1); j<img->height-(3*(2*(levels+1)+1));j++)
         {
 
             old_det=0;
@@ -185,23 +183,23 @@ double CSurf::wl_vert(int x, int y,int s)
 {
     //   cout<<"vert "<<x<<" "<<y<<" "<<s<<endl;
        double r;
-     //   if ((x-2*s>0)&&(y-2*s>0)&&(x+2*s<integral->width)&&(y+2*s<integral->height))
-     //  {
+        if ((x-2*s>0)&&(y-2*s>0)&&(x+2*s<integral->width)&&(y+2*s<integral->height))
+       {
        r=1*block(x-2*s,y+2*s,2*s,4*s,integral);
        r=r-1*block(x-2*s,y,2*s,4*s,integral);
-     //  }else r=0;
+       }else r=0;
        return r;
 }
 
 double CSurf::wl_horz(int x, int y,int s)
 {
-     //  cout<<"horz "<<x<<" "<<y<<" "<<s<<endl;
+      // cout<<"horz "<<x<<" "<<y<<" "<<s<<endl;
        double r;
-      // if ((x-2*s>0)&&(y-2*s>0)&&(x+2*s<integral->width)&&(y+2*s<integral->height))
-      // {
-       r=1*block(x-2*s,y+2*s,4*s,2*s,integral);
-       r=r-1*block(x,y+2*s,4*s,2*s,integral);
-      // }else r=0;
+       if ((x-2*s>0)&&(y-2*s>0)&&(x+2*s<integral->width)&&(y+2*s<integral->height))
+       {
+       r=1*block(x-2*s,y-2*s,4*s,2*s,integral);
+       r=r-1*block(x,y-2*s,4*s,2*s,integral);
+       }else r=0;
        return r;
 }
 /** @brief this function calculates the surf-64 descriptor for a given feature
@@ -521,6 +519,7 @@ int CSurf::nearest_neighbor_2(int *query, int *example_pairs,int n_examples,CvPo
 **/
 void CSurf::find_features(IplImage* _img,CvSeq*feat,int levels)
 {
+    cout<<"find feat"<<endl;
     img = _img;
     float *dyy,*dxx,*dxy;
     IplImage *max[4];
@@ -548,7 +547,7 @@ void CSurf::find_features(IplImage* _img,CvSeq*feat,int levels)
     for (int level=0; level<levels;level++)
     {
         s=level+1;
-    for (int i=0; i<img->width-(9*s+1); i++)
+/*    for (int i=0; i<img->width-(9*s+1); i++)
         for(int j=0; j<img->height-(9*s+1);j++)
         {
 	    dyy[j*(img->width+1)+i]=(-1*block(i,j,3*s,9*s,integral)
@@ -560,45 +559,51 @@ void CSurf::find_features(IplImage* _img,CvSeq*feat,int levels)
             dxy[j*(img->width+1)+i]=( 1*block(i+1,j+1,3*s,3*s,integral)
                                      -1*block(i+1,j+3*s+2,3*s,3*s,integral)
                                      -1*block(i+3*s+2,j+1,3*s,3*s,integral)
-                                     +1*block(i+3*s+2,j+3*s+2,3*s,3*s,integral))/(s*s);
-            /*
-            cvSet2D(dyy,j,i,cvScalar((-1*block(i,j,3*s,9*s,integral)
-                                     +2*block(i,j+3*s,3*s,9*s,integral)
-                                     -1*block(i,j+6*s,3*s,9*s,integral))/(s*s)));
-            cvSet2D(dxx,j,i,cvScalar((-1*block(i,j,9*s,3*s,integral)
-                                     +2*block(i+3*s,j,9*s,3*s,integral)
-                                     -1*block(i+6*s,j,9*s,3*s,integral))/(s*s)));
-            cvSet2D(dxy,j,i,cvScalar(( 1*block(i+1,j+1,3*s,3*s,integral)
-                                     -1*block(i+1,j+3*s+2,3*s,3*s,integral)
-                                     -1*block(i+3*s+2,j+1,3*s,3*s,integral)
-                                     +1*block(i+3*s+2,j+3*s+2,3*s,3*s,integral))/(s*s)));
-              */
+                                     +1*block(i+3*s+2,j+3*s+2,3*s,3*s,integral))/(s*s);*/
+    int size=0;
+    size=2*s+1;
+    for (int i=0; i<img->width-(3*size+1); i++)
+        for(int j=0; j<img->height-(3*size+1);j++)
+        {
+
+            dyy[j*(img->width+1)+i]=(-1*block(i,j,size,3*size,integral)
+                                     +2*block(i,j+size,size,3*size,integral)
+                                     -1*block(i,j+2*size,size,3*size,integral))/(s*s);
+            dxx[j*(img->width+1)+i]=(-1*block(i,j,3*size,size,integral)
+                                     +2*block(i+size,j,3*size,size,integral)
+                                     -1*block(i+2*size,j,3*size,size,integral))/(s*s);
+            dxy[j*(img->width+1)+i]=( 1*block(i+1,j+1,size,size,integral)
+                                     -1*block(i+1,j+size+2,size,size,integral)
+                                     -1*block(i+size+2,j+1,size,size,integral)
+                                     +1*block(i+size+2,j+size+2,size,size,integral))/(s*s);
+
             a=dxx[j*(img->width+1)+i];//cvGetReal2D(dxx,j,i);
             b=dyy[j*(img->width+1)+i];//cvGetReal2D(dyy,j,i);
             c=dxy[j*(img->width+1)+i];//cvGetReal2D(dyy,j,i);
 //            cvSet2D(det[level],j+(int)(4.5*s+0.5),i+(int)(4.5*s+0.5),cvScalar((a*b-0.9*cvGetReal2D(dxy,j,i))/65000.0));//*cvGet2D(dxx,j,i).val[0]
-            det[level*img->width*img->height+(j+(int)(4.5*s+0.5))*img->width+i+(int)(4.5*s+0.5)]=
+            det[level*img->width*img->height+(j+(int)(1.5*size+0.5))*img->width+i+(int)(1.5*size+0.5)]=
                               (a*b-(0.9*c*0.9*c))/(65000.0);
 
         }
-
-      /*   cvShowImage("win",dyy);
-         cvWaitKey(100);
+ /*      cvShowImage("win",dyy);
+         cvWaitKey(0);
          cvShowImage("win",dxx);
-         cvWaitKey(100);
+         cvWaitKey(0);
          cvShowImage("win",dxy);
-         cvWaitKey(100);*/
-//         cvShowImage("win",det[level]);
-//         cvWaitKey(100);
+         cvWaitKey(0);
+         cvShowImage("win",det[level]);
+         cvWaitKey(0);*/
+
    }//end levels
     non_max_sup(det,max,feat,levels);
-    delete(dxx);//cvReleaseImage(&dxx);
-    delete(dyy);//cvReleaseImage(&dyy);
-    delete(dxy);//cvReleaseImage(&dxy);
-    delete(det);
+    delete[] dxx;//cvReleaseImage(&dxx);
+    delete[] dyy;//cvReleaseImage(&dyy);
+    delete[] dxy;//cvReleaseImage(&dxy);
+    delete[] det;
    /* for(int level=0;level<levels;level++){
        cvReleaseImage(&(max[level]));
     }*/
+     cout<<"end find feat"<<endl;
 }
 void CSurf::gaussian(IplImage* img)
 {

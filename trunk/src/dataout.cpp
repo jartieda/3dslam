@@ -164,8 +164,8 @@ void CDataOut::Particle(IplImage *framecopy)
                 /*  cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
                                                 pParticleFilter->pred_measure[i+1][p]),
                             1,c[i/2],1 );*/
-                   cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
-                                                pParticleFilter->pred_measure[i+1][p]),
+                   cvCircle (framecopy,cvPoint((int)pParticleFilter->pred_measure[i][p],
+                                                (int)pParticleFilter->pred_measure[i+1][p]),
                             1,cvScalar(0,0,pParticleFilter->weights[p]*10001.0),1 );
           }
           i+=2;
@@ -261,7 +261,7 @@ void CDataOut::Disp_out(IplImage *framecopy)
 
              pModelCam->cvProject_1_pto(vect2,proj,NULL,NULL,NULL);
              if (framecopy != NULL){
-    		   cvCircle (framecopy,cvPoint(cvmGet(proj,0,0),cvmGet(proj,0,1)),1,cvScalar(0,0,255),1 );
+    		   cvCircle (framecopy,cvPoint((int)cvmGet(proj,0,0),(int)cvmGet(proj,0,1)),1,cvScalar(0,0,255),1 );
              }
    	      }
 

@@ -26,7 +26,7 @@
 		<Cursor position="325" topLine="7"/>
 	</File>
 	<File name="src\freecam.cpp" open="1" top="0">
-		<Cursor position="364" topLine="12"/>
+		<Cursor position="364" topLine="0"/>
 	</File>
 	<File name="src\freecam.h" open="1" top="0">
 		<Cursor position="246" topLine="0"/>
@@ -61,8 +61,14 @@
 	<File name="src\particlefilter.h" open="0" top="0">
 		<Cursor position="388" topLine="11"/>
 	</File>
-	<File name="src\surf.cpp" open="0" top="0">
-		<Cursor position="15152" topLine="471"/>
+	<File name="src\robotxyth.cpp" open="1" top="0">
+		<Cursor position="401" topLine="0"/>
+	</File>
+	<File name="src\robotxyth.h" open="1" top="0">
+		<Cursor position="298" topLine="0"/>
+	</File>
+	<File name="src\surf.cpp" open="1" top="1">
+		<Cursor position="1734" topLine="30"/>
 	</File>
 	<File name="src\surf.h" open="0" top="0">
 		<Cursor position="1923" topLine="20"/>
@@ -94,11 +100,11 @@
 	<File name="src\updater.h" open="0" top="0">
 		<Cursor position="378" topLine="22"/>
 	</File>
-	<File name="src\vehicle.cpp" open="1" top="1">
-		<Cursor position="2076" topLine="58"/>
+	<File name="src\vehicle.cpp" open="1" top="0">
+		<Cursor position="1995" topLine="53"/>
 	</File>
 	<File name="src\vehicle.h" open="1" top="0">
-		<Cursor position="534" topLine="7"/>
+		<Cursor position="350" topLine="0"/>
 	</File>
 	<File name="src\xmlParser.cpp" open="0" top="0">
 		<Cursor position="7743" topLine="167"/>
@@ -106,9 +112,7 @@
 	<File name="src\xmlParser.h" open="0" top="0">
 		<Cursor position="4668" topLine="149"/>
 	</File>
-	<File name="test1\test2.cpp" open="0" top="0">
-		<Cursor position="16473" topLine="561"/>
+	<File name="test1\test2.cpp" open="1" top="0">
+		<Cursor position="13608" topLine="439"/>
 	</File>
-	<Expand folder="/Sources/src"/>
-	<Expand folder="/Sources"/>
 </CodeBlocks_layout_file>

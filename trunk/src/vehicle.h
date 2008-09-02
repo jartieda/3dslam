@@ -13,8 +13,9 @@ namespace SLAM{
 class CVehicle:public CModel{
 public:
     CVehicle();
-    ~CVehicle();
+virtual    ~CVehicle();
 CvMat* getMeasurementVector();
+virtual void ReadData(CvMat* Rob, CvMat* CamRob,CvMat* T)=0;
 		/**
 		 * Rellena el nombre del fichero cierra el fichero anterior y abre el nuevo
 		 */

@@ -332,8 +332,12 @@ void init_video(int argc, char **argv)
     capture = cvCreateFileCapture( argv[1]);
     if (capture==0)
     {
-        cout<< "no se puede abrir el fichero de video "<<endl;
-        video = false ;
+        capture = cvCreateFileCapture( DATA);
+        if (capture ==0){
+        cout<< "no se puede abrir el fichero de video "<<DATA<<endl;
+        video = false ;}
+        else
+        {video = true;}
     }
     else
     {
