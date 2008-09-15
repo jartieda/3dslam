@@ -13,6 +13,7 @@
  * \section tutorial Turorial
  * <a href="../../slam.html">To be created...</a>
  ****************************************************************************/
+
 //#define JAVA_GUI
 
 #include <stdio.h>
@@ -110,25 +111,43 @@ JNIEnv* env;
 
 JNIEnv* create_vm()
 {
-    JavaVM* jvm;
-    JavaVMInitArgs args;
-    JavaVMOption options[3];
+///*    JavaVM* jvm;
+//    JavaVMInitArgs args;
+//    JavaVMOption options[3];
+//**/
+//    /* There is a new JNI_VERSION_1_4, but it doesn't add anything for the purposes of our example. */
+//  /*  args.version = JNI_VERSION_1_6;
+//    args.nOptions = 2;
+//     options[0].optionString = "-Djava.class.path=D:\\SLAM\\Programas\\JavaApplication4\\build\\classes;d:\\slam\\programas\\JavaApplication4\\build\\classes\\javaapplication4;\"c:\\Archivos de programa\\NetBeans 6.0.1\\platform7\\modules\\org-netbeans-api-visual.jar\";\"c:\\Archivos de programa\\NetBeans 6.0.1\\platform7\\lib\\org-openide-util.jar\"" ;
+//*/
+////    options[0].optionString = "-Djava.class.path=/media/WOXTER/SLAM/Programas/JavaApplication4/build/classes/:/media/WOXTER/SLAM/Programas/JavaApplication4/build/classes/javaapplication4/:/opt/netbeans-6.1/platform8/modules/org-netbeans-api-visual.jar:/opt/netbeans-6.1/platform8/lib/org-openide-util.jar:/media/WOXTER/SLAM/Programas/JavaApplication4/dist/JavaApplication4.jar" ;
+//
+//    //options[1].optionString = "-Djava.library.path=C:\\Sun\\SDK\\jdk\\jre\\bin\\client";  /* set native library path */
+//    options[1].optionString = "-verbose:lll";                   /* print JNI-related messages */
+//
+//    args.options = options;
+//    args.ignoreUnrecognized = JNI_TRUE;
 
-    /* There is a new JNI_VERSION_1_4, but it doesn't add anything for the purposes of our example. */
-    args.version = JNI_VERSION_1_6;
-    args.nOptions = 2;
-    // options[0].optionString = "-Djava.class.path=C:\\programas\\JavaApplication4\\dist\\JavaApplication4.jar;java.class.path=c:\\programas\\JavaApplication4\\build\\classes\\javaapplication4;\"c:\\Archivos de programa\\NetBeans 6.0.1\\platform7\\modules\\org-netbeans-api-visual.jar\";\"c:\\Archivos de programa\\NetBeans 6.0.1\\platform7\\lib\\org-openide-util.jar\"" ;
-    options[0].optionString = "-Djava.class.path=/media/WOXTER/SLAM/Programas/JavaApplication4/build/classes/:/media/WOXTER/SLAM/Programas/JavaApplication4/build/classes/javaapplication4/:/opt/netbeans-6.1/platform8/modules/org-netbeans-api-visual.jar:/opt/netbeans-6.1/platform8/lib/org-openide-util.jar:/media/WOXTER/SLAM/Programas/JavaApplication4/dist/JavaApplication4.jar" ;
 
-    //options[1].optionString = "-Djava.library.path=C:\\Sun\\SDK\\jdk\\jre\\bin\\client";  /* set native library path */
-    options[1].optionString = "-verbose:lll";                   /* print JNI-related messages */
+JavaVM *jvm;       /* denotes a Java VM */
+ //   JNIEnv *env;       /* pointer to native method interface */
+    JavaVMInitArgs vm_args; /* JDK/JRE 6 VM initialization arguments */
+    JavaVMOption* options = new JavaVMOption[2];
+    options[0].optionString = "-verboses:jni";
+    options[1].optionString = "-Djava.class.path=\"C:\\archivos de programa\\java\\jdk1.6.0_05\"";
+    vm_args.version = JNI_VERSION_1_4;
+    vm_args.nOptions = 2;
+    vm_args.options = options;
+    vm_args.ignoreUnrecognized = false;
+    /* load and initialize a Java VM, return a JNI interface
+     * pointer in env */
+    cout<<"jni_createvm="<<JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args)<<endl;
+cout<<"hola"<<endl;
 
-    args.options = options;
-    args.ignoreUnrecognized = JNI_FALSE;
-
-    cout<<"jni_createvm="<<JNI_CreateJavaVM(&jvm, (void **)&env, &args)<<endl;
+    //cout<<"jni_createvm="<<JNI_CreateJavaVM(&jvm, (void **)&env, &args)<<endl;
     return env;
 }
+
 
 void invoke_class()
 {

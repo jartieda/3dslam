@@ -3,7 +3,7 @@
 	tracker_surf
 </tracker>
 <data>
-	G:\\SLAM\\Datos\\univ-alberta-vision-sift\\ualberta-csc-flr3-vision\\image%04d.png
+    D:\\SLAM\\Datos\\airview\\Rozas4\\images\\image%0.4d.png
 </data>
 <gui>
 	false
@@ -12,7 +12,7 @@
     1
 </frame_increment>
 <waitkey>
-   0
+   100
 </waitkey>
 <tests>
     <ransac></ransac>
@@ -20,9 +20,9 @@
 <resdir>
     ..\\resdir\\
 </resdir>
-<vehicle id=RobotXYTh>
+<vehicle id=FreeCam>
     <data>
-        G:\\SLAM\\Datos\\univ-alberta-vision-sift\\ualberta-csc-flr3-vision\\image%04d.png
+        D:\\SLAM\\Datos\\univ-alberta-vision-sift\\ualberta-csc-flr3-vision\\image%04d.png
     </data>
 </vehicle>
 

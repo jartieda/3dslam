@@ -1,230 +1,91 @@
-<?xml version="1.0"?>
-<!DOCTYPE CodeBlocks_project_file>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="1"/>
+	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="slam"/>
-		<Option makefile="Makefile"/>
-		<Option makefile_is_custom="0"/>
-		<Option compiler="0"/>
+		<Option title="slam" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
 		<Build>
 			<Target title="default">
-				<Option output="slam.exe"/>
-				<Option working_dir="."/>
-				<Option object_output=".objs"/>
-				<Option deps_output=".deps"/>
-				<Option type="1"/>
-				<Option compiler="0"/>
-				<Option projectLinkerOptionsRelation="2"/>
-				<Option projectResourceIncludeDirsRelation="1"/>
+				<Option output="slam.exe" prefix_auto="0" extension_auto="0" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Option projectResourceIncludeDirsRelation="1" />
 				<Linker>
-					<Add directory="C:\Archivos de programa\OpenCV\lib"/>
+					<Add directory="C:\Archivos de programa\OpenCV\lib" />
 				</Linker>
 			</Target>
 		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="default;" />
+		</VirtualTargets>
 		<Compiler>
-			<Add directory="&quot;C:\Archivos de programa\OpenCV\cv\include&quot;"/>
-			<Add directory="&quot;C:\Archivos de programa\OpenCV\cvaux\include&quot;"/>
-			<Add directory="&quot;C:\Archivos de programa\OpenCV\cxcore\include&quot;"/>
-			<Add directory="&quot;C:\Archivos de programa\OpenCV\otherlibs\highgui&quot;"/>
-			<Add directory="G:\slam4sep\slam\src"/>
+			<Add option="-Wall" />
+			<Add option="-g" />
+			<Add directory='&quot;C:\Archivos de programa\OpenCV\cv\include&quot;' />
+			<Add directory='&quot;C:\Archivos de programa\OpenCV\cvaux\include&quot;' />
+			<Add directory='&quot;C:\Archivos de programa\OpenCV\cxcore\include&quot;' />
+			<Add directory='&quot;C:\Archivos de programa\OpenCV\otherlibs\highgui&quot;' />
+			<Add directory="G:\slam4sep\slam\src" />
+			<Add directory="C:\Archivos de programa\Java\jdk1.6.0_05\include" />
+			<Add directory="C:\Archivos de programa\Java\jdk1.6.0_05\include\win32" />
 		</Compiler>
 		<Linker>
-			<Add directory="&quot;C:\Archivos de programa\OpenCV\lib&quot;"/>
+			<Add library="C:\Archivos de programa\OpenCV\lib\cv.lib" />
+			<Add library="C:\Archivos de programa\OpenCV\lib\cvaux.lib" />
+			<Add library="C:\Archivos de programa\OpenCV\lib\cvcam.lib" />
+			<Add library="C:\Archivos de programa\OpenCV\lib\cxcore.lib" />
+			<Add library="C:\Archivos de programa\OpenCV\lib\cxts.lib" />
+			<Add library="C:\Archivos de programa\OpenCV\lib\highgui.lib" />
+			<Add library="jvm" />
+			<Add directory='&quot;C:\Archivos de programa\OpenCV\lib&quot;' />
+			<Add directory="C:\Archivos de programa\Java\jdk1.6.0_05\lib" />
 		</Linker>
-		<Unit filename="src\datacam.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\datacam.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\dataout.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\dataout.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\elempunto.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\elempunto.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\estimator.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\estimator.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\freecam.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\freecam.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\kalman.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\kalman.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\map.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\map.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\model.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\model.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\modelcam.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\modelcam.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\particlefilter.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\particlefilter.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\robotxyth.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\robotxyth.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\surf.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\surf.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\tracker.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\tracker.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\tracker_harris.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\tracker_harris.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\tracker_surf.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\tracker_surf.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\trackerfile.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\trackerfile.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\updater.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\updater.h">
-			<Option compilerVar="CPP"/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\vehicle.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\vehicle.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\xmlParser.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="src\xmlParser.h">
-			<Option compilerVar=""/>
-			<Option compile="0"/>
-			<Option link="0"/>
-			<Option target="default"/>
-		</Unit>
-		<Unit filename="test1\test2.cpp">
-			<Option compilerVar="CPP"/>
-			<Option target="default"/>
-		</Unit>
+		<Unit filename="src\datacam.cpp" />
+		<Unit filename="src\datacam.h" />
+		<Unit filename="src\dataout.cpp" />
+		<Unit filename="src\dataout.h" />
+		<Unit filename="src\elempunto.cpp" />
+		<Unit filename="src\elempunto.h" />
+		<Unit filename="src\estimator.cpp" />
+		<Unit filename="src\estimator.h" />
+		<Unit filename="src\freecam.cpp" />
+		<Unit filename="src\freecam.h" />
+		<Unit filename="src\kalman.cpp" />
+		<Unit filename="src\kalman.h" />
+		<Unit filename="src\map.cpp" />
+		<Unit filename="src\map.h" />
+		<Unit filename="src\model.cpp" />
+		<Unit filename="src\model.h" />
+		<Unit filename="src\modelcam.cpp" />
+		<Unit filename="src\modelcam.h" />
+		<Unit filename="src\particlefilter.cpp" />
+		<Unit filename="src\particlefilter.h" />
+		<Unit filename="src\robotxyth.cpp" />
+		<Unit filename="src\robotxyth.h" />
+		<Unit filename="src\surf.cpp" />
+		<Unit filename="src\surf.h" />
+		<Unit filename="src\tracker.cpp" />
+		<Unit filename="src\tracker.h" />
+		<Unit filename="src\tracker_harris.cpp" />
+		<Unit filename="src\tracker_harris.h" />
+		<Unit filename="src\tracker_surf.cpp" />
+		<Unit filename="src\tracker_surf.h" />
+		<Unit filename="src\trackerfile.cpp" />
+		<Unit filename="src\trackerfile.h" />
+		<Unit filename="src\updater.cpp" />
+		<Unit filename="src\updater.h" />
+		<Unit filename="src\vehicle.cpp" />
+		<Unit filename="src\vehicle.h" />
+		<Unit filename="src\xmlParser.cpp" />
+		<Unit filename="src\xmlParser.h" />
+		<Unit filename="test1\test2.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
