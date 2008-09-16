@@ -2,6 +2,8 @@
 #include "kalman.h"
 #include "tracker.h"
 #include "modelcam.h"
+#include "mapmnger.h"
+
 #include <vector>
 #include "highgui.h"
 
@@ -25,10 +27,11 @@ struct point
 };
 class CUpdater{
 public:
-CUpdater(CMap *pMap_,CDataCam* pDataCam_);
 CUpdater();
-void setMap(CMap *p);
-void setDataCam(CDataCam *p);
+//void setMap(CMap *p);
+//void setDataCam(CDataCam *p);
+void setMapMnger(CMapMnger *p);
+
 void setModelCam(CModelCam *p);
 void setTracker(CTracker *p);
 void TestRANSAC();
@@ -41,8 +44,10 @@ param bettermodel;
 param bestfit ;
 
 ~CUpdater();
-CMap *pMap;
-CDataCam *pDataCam;
+//CMap *pMap;
+//CDataCam *pDataCam;
+CMapMnger *pMapMnger;
+
 CModelCam *pModelCam;
 CTracker *pTracker;
 int update();

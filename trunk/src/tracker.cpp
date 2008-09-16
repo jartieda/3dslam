@@ -12,18 +12,23 @@ CTracker::~CTracker()
 
 }
 
-void CTracker::setDataCam(CDataCam *p)
+//void CTracker::setDataCam(CDataCam *p)
+//{
+//	pDataCam=p;
+//}
+void CTracker::setMapMnger(CMapMnger *p)
 {
-	pDataCam=p;
+    pMapMnger =p;
 }
+
 void CTracker::setModelCam(CModelCam *p)
 {
 	pModelCam=p;
 }
-
-void CTracker::setMap(CMap *p)
-{
-	pMap=p;
-}
+//
+//void CTracker::setMap(CMap *p)
+//{
+//	pMap=p;
+//}
 
 }

@@ -15,8 +15,8 @@ CDataOut::~CDataOut()
 void CDataOut::Draw(IplImage *framecopy)
 {
        //int rvis=0;
-  for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
-	It != pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
+	It != pMapMnger->pMap->bbdd.end(); It++ )
     {
       if ((*It)->state!=st_empty){
         sprintf(strID,"%d",(*It)->ID);
@@ -50,8 +50,8 @@ void CDataOut::R_Out()
   CvMat *temp,*jtemp;
   temp=cvCreateMatHeader(6,6,CV_32FC1);
   jtemp=cvCreateMat(3,6,CV_32FC1);
-  for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
-	It != pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
+	It != pMapMnger->pMap->bbdd.end(); It++ )
     {
       if((*It)->state>2)
 	{
@@ -123,9 +123,9 @@ void CDataOut::R_Out()
    RFile<<cvmGet(pKalman->pKalman->error_cov_post,4,2)<<",";
    RFile<<cvmGet(pKalman->pKalman->error_cov_post,4,4);
    RFile<<"),3,3)"<<endl;
-   RFile<<"pos <- c("<< cvmGet(pDataCam->translation,0,0)<<", ";
-   RFile<< cvmGet(pDataCam->translation,1,0)<<", ";
-   RFile<< cvmGet(pDataCam->translation,2,0)<<") "<<endl;
+   RFile<<"pos <- c("<< cvmGet(pMapMnger->pDataCam->translation,0,0)<<", ";
+   RFile<< cvmGet(pMapMnger->pDataCam->translation,1,0)<<", ";
+   RFile<< cvmGet(pMapMnger->pDataCam->translation,2,0)<<") "<<endl;
    RFile<<"plot3d( ellipse3d(p"<<ii<<",centre=";
    RFile<<"pos), col=\"red\", alpha=0.5, add = TRUE) "<<endl;
    RFile<<"rgl.viewpoint(45,30)"<<endl;
@@ -147,8 +147,8 @@ void CDataOut::Particle(IplImage *framecopy)
     sprintf(ndisp,(resdir+"disp%d.txt").c_str(),iter++);
     DispFile.open(ndisp);
     int s;
-    CvScalar c[pMap->bbdd.size()];
-    for (int j =0; j<pMap->bbdd.size();j++)
+    CvScalar c[pMapMnger->pMap->bbdd.size()];
+    for (int j =0; j<(int)pMapMnger->pMap->bbdd.size();j++)
     {
         c[j]=cvScalar(rand()*255.0/RAND_MAX,rand()*255.0/RAND_MAX,rand()*255.0/RAND_MAX);
     }
@@ -156,8 +156,8 @@ void CDataOut::Particle(IplImage *framecopy)
     {
         int i=0;
 	s=12;
-        for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
-            It != pMap->bbdd.end(); It++ )
+        for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
+            It != pMapMnger->pMap->bbdd.end(); It++ )
         {
 
           if (framecopy != NULL){
@@ -210,8 +210,8 @@ void CDataOut::Disp_out(IplImage *framecopy)
   CvMat* proj = cvCreateMat(4,2,CV_32FC1);    ///NOT RELEASED
   CvMat* m = cvCreateMat(3,1,CV_32FC1);
 
-  for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
-	    It != pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
+	    It != pMapMnger->pMap->bbdd.end(); It++ )
     {
       if((*It)->state>2)
 	  {
@@ -280,9 +280,9 @@ void CDataOut::Disp_out(IplImage *framecopy)
 }
 void CDataOut::Cam()
 {
-  CamFile<< cvmGet(pDataCam->translation,0,0)<<" ";
-  CamFile<< cvmGet(pDataCam->translation,1,0)<<" ";
-  CamFile<< cvmGet(pDataCam->translation,2,0)<<" ";
+  CamFile<< cvmGet(pMapMnger->pDataCam->translation,0,0)<<" ";
+  CamFile<< cvmGet(pMapMnger->pDataCam->translation,1,0)<<" ";
+  CamFile<< cvmGet(pMapMnger->pDataCam->translation,2,0)<<" ";
   CamFile<<"65000 ";
   CamFile<<"65000 ";
   CamFile<<endl;
@@ -293,7 +293,7 @@ void CDataOut::Feat()
   CvMat *m;
   m=cvCreateMat(3,1,CV_32FC1);
 
-  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
     {
 	///FIXME PONER en una funcion para que solo esté en un sitio
       cvmSet(m,0,0,cos((*It)->theta)*sin((*It)->phi));
@@ -315,21 +315,25 @@ void CDataOut::Frame()
   char nombre[100];
   sprintf(nombre,"frame%.2d.txt",iter);
   FrameFile.open(nombre);
-    for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
-	It != pMap->bbdd.end(); It++ )
+    for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
+	It != pMapMnger->pMap->bbdd.end(); It++ )
     {
       if ((*It)->state==st_inited){
       	FrameFile<<(*It)->ID<<" "<< (*It)->pto.x<<" "<<(*It)->pto.y<<" "<<(*It)->state<<endl;
       }
     }
 }
-void CDataOut::setMap(CMap *p)
+//void CDataOut::setMap(CMap *p)
+//{
+//  pMapMnger->pMap=p;
+//}
+//void CDataOut::setDataCam(CDataCam *p)
+//{
+//  pMapMnger->pDataCam=p;
+//}
+void CDataOut::setMapMnger(CMapMnger *p)
 {
-  pMap=p;
-}
-void CDataOut::setDataCam(CDataCam *p)
-{
-  pDataCam=p;
+    pMapMnger = p;
 }
 void CDataOut::setModelCam(CModelCam *p)
 {

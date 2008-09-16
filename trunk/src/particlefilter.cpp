@@ -4,8 +4,8 @@ namespace SLAM{
 * @fn constructor
 * initializates memory for particles as a double array particles[variable][particle]
 **/
-CParticleFilter::CParticleFilter():num_max_variables(400),num_max_particles(100),num_particles(100),num_variables(200),
-                                   fdims(6),num_max_measurements(300),threshold(20),var_modelo(0)
+CParticleFilter::CParticleFilter():num_max_variables(400),num_max_particles(100),num_max_measurements(300),num_particles(100),
+                                   num_variables(200),fdims(6),var_modelo(0),threshold(20)
 {
    particles = new double*[num_max_variables];
    for(int i=0; i<num_max_variables;i++){
@@ -88,10 +88,10 @@ void CParticleFilter::Correct()
 {
      cout<<"correct start"<<endl;
      int n_feat;
-     double measure_[pMap->bbdd.size()*2];
+     double measure_[pMapMnger->pMap->bbdd.size()*2];
      cout<<"get measurement"<<endl;
      int ii=0;//pModel->getMeasurementNum();
-     for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+     for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
      {
         if((*It)->state==st_inited){
         	measure_[ii]=(*It)->pto.x;
@@ -112,7 +112,7 @@ void CParticleFilter::Correct()
        double w=0;
        double err=0;
        weights[n_part]=0;
-       for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+       for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
        {
 	 w=0;
   	 if((*It)->state==st_inited){
@@ -187,15 +187,15 @@ void CParticleFilter::Correct()
     kstate++;
   }
 
-  pDataCam->SetRotation(rotation);
-  pDataCam->SetTranslation(trans);
+  pMapMnger->pDataCam->SetRotation(rotation);
+  pMapMnger->pDataCam->SetTranslation(trans);
   cout<<"_trans "<<cvmGet(trans,0,0)<<" "<<cvmGet(trans,1,0)<<" "<<cvmGet(trans,1,0)<<endl;
-  cout<<"translation "<<cvmGet(pDataCam->translation,0,0)<<" ";
-  cout<< cvmGet(pDataCam->translation,1,0)<<" ";
-  cout<< cvmGet(pDataCam->translation,2,0)<<" "<<endl;
+  cout<<"translation "<<cvmGet(pMapMnger->pDataCam->translation,0,0)<<" ";
+  cout<< cvmGet(pMapMnger->pDataCam->translation,1,0)<<" ";
+  cout<< cvmGet(pMapMnger->pDataCam->translation,2,0)<<" "<<endl;
 
   ii=pModel->getStateNum();
-  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited||(*It)->state==st_no_view)
 	{
@@ -233,8 +233,8 @@ void CParticleFilter::Correct()
     kstate++;
   }
 
-  pDataCam->SetRotation(rotation);
-  pDataCam->SetTranslation(trans);
+  pMapMnger->pDataCam->SetRotation(rotation);
+  pMapMnger->pDataCam->SetTranslation(trans);
 
   pModelCam->ProjectPoints();
 /** Añado partículas nuevas en los sitios de las rechazadas **/
@@ -258,17 +258,17 @@ void CParticleFilter::initParticle(int part)
 {
       int kstate=0;
       for( int i=0; i<3; i++){
-           particles[kstate++][part]=cvmGet(pDataCam->translation,i,0);
-           particles[kstate++][part]=cvmGet(pDataCam->translation,i,0);
+           particles[kstate++][part]=cvmGet(pMapMnger->pDataCam->translation,i,0);
+           particles[kstate++][part]=cvmGet(pMapMnger->pDataCam->translation,i,0);
       }
 
      for(int i =0; i<3;i++){
-          particles[kstate++][part]=cvmGet(pDataCam->rotation,i,0);
-          particles[kstate++][part]=cvmGet(pDataCam->rotation,i,0);
+          particles[kstate++][part]=cvmGet(pMapMnger->pDataCam->rotation,i,0);
+          particles[kstate++][part]=cvmGet(pMapMnger->pDataCam->rotation,i,0);
      }
 
   // inicializaciÃ³n primeros puntos vistos
-    for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+    for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
     {
       //if((*It)->state==st_inited){
     	particles[kstate++][part]=(*It)->wx+Random(-0.01,0.01);
@@ -348,8 +348,8 @@ void CParticleFilter::UpdateMatrixSize()
   inited_vis=0;
   inited_no_vis=0;
 
-  for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
-	It != pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
+	It != pMapMnger->pMap->bbdd.end(); It++ )
     {
       if ((*It)->state==st_inited){
         inited_vis++;
@@ -387,10 +387,10 @@ void CParticleFilter::UpdateMatrixSize()
 //            cout<<"rotation "<<particles[n_var-2][n_part]<<endl;
          }
 
-         pDataCam->SetRotation(rotation);
-         pDataCam->SetTranslation(trans);
+         pMapMnger->pDataCam->SetRotation(rotation);
+         pMapMnger->pDataCam->SetTranslation(trans);
 
-     	for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+     	for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
      	{
               for (int i=0; i<6; i++){
                   cvmSet(obj,0,i,particles[n_var++][n_part]);

@@ -18,7 +18,7 @@ class CKalman: public CEstimator {
 
 public:
 CKalman();
-~CKalman();
+virtual ~CKalman();
 
 void Predict();
 void Correct();

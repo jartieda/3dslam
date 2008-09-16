@@ -38,7 +38,6 @@
 			<Add library="C:\Archivos de programa\OpenCV\lib\cxcore.lib" />
 			<Add library="C:\Archivos de programa\OpenCV\lib\cxts.lib" />
 			<Add library="C:\Archivos de programa\OpenCV\lib\highgui.lib" />
-			<Add library="jvm" />
 			<Add directory='&quot;C:\Archivos de programa\OpenCV\lib&quot;' />
 			<Add directory="C:\Archivos de programa\Java\jdk1.6.0_05\lib" />
 		</Linker>
@@ -56,6 +55,8 @@
 		<Unit filename="src\kalman.h" />
 		<Unit filename="src\map.cpp" />
 		<Unit filename="src\map.h" />
+		<Unit filename="src\mapmnger.cpp" />
+		<Unit filename="src\mapmnger.h" />
 		<Unit filename="src\model.cpp" />
 		<Unit filename="src\model.h" />
 		<Unit filename="src\modelcam.cpp" />

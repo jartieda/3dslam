@@ -5,6 +5,8 @@
 #include <iostream>
 #include "datacam.h"
 #include "map.h"
+#include "mapmnger.h"
+
 namespace SLAM{
 /**
 @author Jorge Artieda
@@ -34,12 +36,17 @@ void cvProjectPoints3( const CvMat* obj_points,
 void cvProject_1_pto(CvMat* obj, CvMat* img,
                         CvMat* dpdr, CvMat* dpdt, CvMat* dpdw);
 void cvInverseParam(CvMat** h,CvPoint pto);
-void setDataCam(CDataCam* p);
-void setMap(CMap* p);
+//void setDataCam(CDataCam* p);
+//void setMap(CMap* p);
+void setMapMnger(CMapMnger* p);
+
 void getJInit(CvMat *Jpos, CvMat *Jpix, CvPoint pto);
 private:
-CDataCam *pDataCam;
-CMap * pMap;
+
+CMapMnger *pMapMnger;
+
+//CDataCam *pDataCam;
+//CMap * pMap;
 };
 }
 #endif

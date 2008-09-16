@@ -13,6 +13,8 @@
 #include "modelcam.h"
 #include "kalman.h"
 #include "particlefilter.h"
+#include "mapmnger.h"
+
 namespace SLAM{
 /**
 @brief Almacena salidas del algoritmo
@@ -31,8 +33,9 @@ void Cam();
 void Feat();
 void Frame();
 int iter;
-void setMap(CMap *p);
-void setDataCam(CDataCam *p);
+//void setMap(CMap *p);
+//void setDataCam(CDataCam *p);
+void setMapMnger(CMapMnger *p);
 void setModelCam(CModelCam *p);
 void setTracker(CTracker *p);
 void setKalman(CKalman *p);
@@ -49,8 +52,9 @@ ofstream DispFile;
 ofstream RFile;
 ofstream FrameFile;
 
-CMap *pMap;
-CDataCam *pDataCam;
+//CMap *pMap;
+//CDataCam *pDataCam;
+CMapMnger *pMapMnger;
 CModelCam *pModelCam;
 CTracker *pTracker;
 CKalman *pKalman;

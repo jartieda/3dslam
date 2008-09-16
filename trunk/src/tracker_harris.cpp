@@ -36,8 +36,8 @@ void CTracker_harris::Match(IplImage *f)
    patron = cvCreateImageHeader( cvSize(10,10),8,1);
    patron_border = cvCreateImage( cvSize(10,10),8,1);
 
-   for ( std::list<CElempunto*>::iterator It=pMap->bbdd.begin();
-         It != pMap->bbdd.end(); It++ )
+   for ( std::list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
+         It != pMapMnger->pMap->bbdd.end(); It++ )
    {
         if((*It)->state!=st_empty){
 	patron->imageData=(char*)(*It)->key;
@@ -70,13 +70,13 @@ void CTracker_harris::Match(IplImage *f)
          	{
          		std::cout << "borropuntos: "<<(*It)->pto.x<<" "<<(*It)->pto.y<<std::endl;
          		(*It)->state = st_no_view;
-         		pMap->visible--;
+         		pMapMnger->pMap->visible--;
          	}else if((*It)->state!=st_no_view)
          	{
          		cout<< "borro punto por no iniciado y fuera devista " << endl;
-//         		pMap->bbdd.erase(It);
+//         		pMapMnger->pMap->bbdd.erase(It);
 //	      		(*It)->state = st_empty;
-//         		pMap->visible--;
+//         		pMapMnger->pMap->visible--;
 		}
 	///FIXME En el casod de que el punto se deje de ver antes de inicializar quiero borrarlo.
 	}

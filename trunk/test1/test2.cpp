@@ -27,6 +27,8 @@
 
 #include <time.h>
 
+#include "highgui.h"
+
 #include "../src/datacam.h"
 #include "../src/modelcam.h"
 #include "../src/map.h"
@@ -36,11 +38,12 @@
 #include "../src/tracker_harris.h"
 #include "../src/freecam.h"
 #include "../src/dataout.h"
-#include "highgui.h"
 #include "../src/particlefilter.h"
 #include "../src/trackerfile.h"
 #include "../src/xmlParser.h"
 #include "../src/robotxyth.h"
+#include "../src/mapmnger.h"
+
 #define RHO_INIT_DIST 1
 
 //#define DATA "F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif"
@@ -62,9 +65,10 @@
 using namespace std;
 using namespace SLAM;
 
-CDataCam mDataCam;
+//CDataCam *pDataCam;
+//CMap *pMap;
+
 CModelCam mModelCam;
-CMap mMap;
 CUpdater mUpdater;
 //CTrackerFile mTracker;
 //CTracker_surf mTracker;
@@ -77,10 +81,13 @@ CKalman mEstimator;
 #endif
 CDataOut *pDataOut;
 
+CMapMnger *pMapMnger;
+
+
 XMLNode xMainNode;
 
-int ptox[1000][120];
-int ptoy[1000][120];
+/*int ptox[1000][120];
+int ptoy[1000][120];*/
 
 ///video variables
 CvCapture* capture = 0;
@@ -237,22 +244,23 @@ void invoke_class()
 void conect()
 {
 
-    mModelCam.setDataCam(&mDataCam);
-    mModelCam.setMap(&mMap);
+    mModelCam.setMapMnger(pMapMnger);
 
     mEstimator.setModelCam(&mModelCam);
-    mEstimator.setDataCam(&mDataCam);
-    mEstimator.setMap(&mMap);
+    //mEstimator.setDataCam(pMapMnger->pDataCam);
+    //mEstimator.setMap(pMap);
+    mEstimator.setMapMnger(pMapMnger);
     mEstimator.setModel((CModel*)(pVehicle));
 
-    mUpdater.setDataCam(&mDataCam);
-    mUpdater.setMap(&mMap);
-
+    //mUpdater.setDataCam(pMapMnger->pDataCam);
+    //mUpdater.setMap(pMap);
+    mUpdater.setMapMnger(pMapMnger);
     mUpdater.setTracker((CTracker*)pTracker);
     mUpdater.setModelCam(&mModelCam);
 
-    pDataOut->setDataCam(&mDataCam);
-    pDataOut->setMap(&mMap);
+//    pDataOut->setDataCam(pMapMnger->pDataCam);
+//    pDataOut->setMap(pMap);
+    pDataOut->setMapMnger(pMapMnger);
     pDataOut->setTracker((CTracker*)pTracker);
     pDataOut->setModelCam(&mModelCam);
 #ifndef KALMAN
@@ -263,32 +271,33 @@ void conect()
     pDataOut->setKalman(&mEstimator);//FIXME!!!!
 #endif
 
-    pTracker->setDataCam(&mDataCam);
+//    pTracker->setDataCam(pMapMnger->pDataCam);
+    pTracker->setMapMnger(pMapMnger);
 
 }
 void param_init()
 {
     ///Cámaras sony?
-    /*mDataCam.SetFx(629.49);
-      mDataCam.SetFy(630.74);
-      mDataCam.SetCx(337.8743788);
-      mDataCam.SetCy(241.0742116);
-      mDataCam.frame_width=640;
-      mDataCam.frame_height=480;*/
+    /*pMapMnger->pDataCam->SetFx(629.49);
+      pMapMnger->pDataCam->SetFy(630.74);
+      pMapMnger->pDataCam->SetCx(337.8743788);
+      pMapMnger->pDataCam->SetCy(241.0742116);
+      pMapMnger->pDataCam->frame_width=640;
+      pMapMnger->pDataCam->frame_height=480;*/
     ///Camara firewire escuela
-    mDataCam.SetFx(837.9529);
-    mDataCam.SetFy(838.6889);
-    mDataCam.SetCx(315.5322);
-    mDataCam.SetCy(277.6592);
-    mDataCam.frame_width=640;
-    mDataCam.frame_height=480;
+    pMapMnger->pDataCam->SetFx(837.9529);
+    pMapMnger->pDataCam->SetFy(838.6889);
+    pMapMnger->pDataCam->SetCx(315.5322);
+    pMapMnger->pDataCam->SetCy(277.6592);
+    pMapMnger->pDataCam->frame_width=640;
+    pMapMnger->pDataCam->frame_height=480;
     ///Camara Genérica
-    /*mDataCam.SetFx(1000);
-      mDataCam.SetFy(1000);
-      mDataCam.SetCx(320);
-      mDataCam.SetCy(240);
-      mDataCam.frame_width=640;
-      mDataCam.frame_height=480;*/
+    /*pMapMnger->pDataCam->SetFx(1000);
+      pMapMnger->pDataCam->SetFy(1000);
+      pMapMnger->pDataCam->SetCx(320);
+      pMapMnger->pDataCam->SetCy(240);
+      pMapMnger->pDataCam->frame_width=640;
+      pMapMnger->pDataCam->frame_height=480;*/
 
     double dist[4];
     dist[0]=0;
@@ -302,7 +311,7 @@ void param_init()
     for ( int i=0;i<4;i++)
         cvmSet(distMat,i,0,dist[i]);
 
-    cvCopy(distMat,mDataCam.distortion);
+    cvCopy(distMat,pMapMnger->pDataCam->distortion);
 
     CvMat *rotation;
     CvMat *trans ,*trans2;
@@ -329,12 +338,12 @@ void param_init()
         cvmSet(trans,1,0,cvmGet(temp,1,0));
         cvmSet(trans,2,0,cvmGet(temp,2,0));
     }
-    mDataCam.SetRotation(rotation);
-    mDataCam.SetTranslation(trans);
+    pMapMnger->pDataCam->SetRotation(rotation);
+    pMapMnger->pDataCam->SetTranslation(trans);
 
-    pTracker->setDataCam(&mDataCam);
-    pTracker->setMap(&mMap);
-
+//    pTracker->setDataCam(pMapMnger->pDataCam);
+//    pTracker->setMap(pMap);
+    pTracker->setMapMnger(pMapMnger);
 }
 
 void init_video(int argc, char **argv)
@@ -404,22 +413,22 @@ void init_ptos()
     mUpdater.Add(frame,frameold);
 
     //inicializacion de la posición de la camara con funciones de opencv
-    cout <<"marcas visibles en init "<<mMap.visible<<endl;
+    cout <<"marcas visibles en init "<<pMapMnger->pMap->visible<<endl;
 
     CvMat *h;
     h=cvCreateMat(3,1,CV_32FC1);
 
-    for   (list<CElempunto*>::iterator It=mMap.bbdd.begin();It != mMap.bbdd.end();It++)
+    for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
     {
         mModelCam.cvInverseParam(&h,(*It)->pto);
-        (*It)->wx=cvmGet(mDataCam.translation,0,0);
-        (*It)->wy=cvmGet(mDataCam.translation,1,0);
-        (*It)->wz=cvmGet(mDataCam.translation,2,0);
+        (*It)->wx=cvmGet(pMapMnger->pDataCam->translation,0,0);
+        (*It)->wy=cvmGet(pMapMnger->pDataCam->translation,1,0);
+        (*It)->wz=cvmGet(pMapMnger->pDataCam->translation,2,0);
         (*It)->theta=atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0)));
         (*It)->phi=atan2(cvmGet(h,0,0),cvmGet(h,2,0));
         (*It)->rho=1./RHO_INIT_DIST;
         (*It)->state=st_inited;
-        mMap.inited++;
+        pMapMnger->pMap->inited++;
     }
 
     cout<<"kalman ini"<<endl;
@@ -542,6 +551,14 @@ int main (int argc, char **argv)
     }
     cout<<"VEHICLE: "<<t<<endl;
 
+
+    //Map Manager initialization
+    pMapMnger = new CMapMnger();
+    pMapMnger->newMap();
+//    pDataCam=pMapMnger->pDataCam;
+//    pMap=pMapMnger->pMap;
+
+
     conect();
     cout<<"param_init"<<endl;
     param_init();
@@ -554,7 +571,6 @@ int main (int argc, char **argv)
 
     int n=0;
     int i;
-    char filein[400];
 
     while(1)
     {

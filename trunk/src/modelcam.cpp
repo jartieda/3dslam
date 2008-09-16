@@ -26,7 +26,7 @@ obj=cvCreateMat(1,6,CV_32FC1);
 proj=cvCreateMat(4,2,CV_32FC1);
 CvMat * m;
 m=cvCreateMat(3,1,CV_32FC1);
-for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
+for (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
 {
     cvmSet(obj,0,0,(*It)->wx);
     cvmSet(obj,0,1,(*It)->wy);
@@ -120,8 +120,8 @@ void CModelCam::cvProject_1_pto(CvMat* nobj, CvMat* nimg,
    cvmSet(obj,0,1,cvmGet(nobj,0,1) +cvmGet(m,1,0)/cvmGet(nobj,0,5));
    cvmSet(obj,0,2,cvmGet(nobj,0,2) +cvmGet(m,2,0)/cvmGet(nobj,0,5));
 
-   cvProjectPoints3(obj,pDataCam->rotation,pDataCam->translation,pDataCam->calibration,
-			pDataCam->distortion, nimg,dpdr_, dpdt_, dpdf, dpdc, dpdk , dpdw_);
+   cvProjectPoints3(obj,pMapMnger->pDataCam->rotation,pMapMnger->pDataCam->translation,pMapMnger->pDataCam->calibration,
+			pMapMnger->pDataCam->distortion, nimg,dpdr_, dpdt_, dpdf, dpdc, dpdk , dpdw_);
 if (dpdr!=NULL){
    cvmSet(dpdr,0,0,cvmGet(dpdr_,0,0));
    cvmSet(dpdr,0,1,cvmGet(dpdr_,0,1));
@@ -164,14 +164,17 @@ cvReleaseMat (&obj);
 cvReleaseMat (&m);
 }
 
-void CModelCam::setDataCam(CDataCam *p)
+/*void CModelCam::setDataCam(CDataCam *p)
 {
-	pDataCam=p;
+	pMapMnger->pDataCam=p;
 }
-
 void CModelCam::setMap(CMap *p)
 {
 	pMap=p;
+}*/
+void CModelCam::setMapMnger(CMapMnger *p)
+{
+    pMapMnger=p;
 }
 
 void CModelCam::cvInverseParam(CvMat** h,CvPoint pto)
@@ -183,13 +186,13 @@ void CModelCam::cvInverseParam(CvMat** h,CvPoint pto)
      cvmSet(pixel,2,0,1);
      CvMat *inv;
      inv=cvCreateMat(3,3,CV_32FC1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
 
      CvMat *temp1;
      temp1=cvCreateMat(3,1,CV_32FC1);
      cvGEMM(inv,pixel,1,NULL,0,temp1);//CUIDADO ESTA A 0 TRANSLATION
 
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,*h);
 
 	cvReleaseMat(&pixel);
@@ -622,20 +625,20 @@ void CModelCam::getJInit(CvMat *Jpos, CvMat *Jpix, CvPoint pto)
      cvmSet(pixel,2,0,1);
      CvMat *inv;
      inv=cvCreateMat(3,3,CV_32FC1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
 
      CvMat *temp1;
      temp1=cvCreateMat(3,1,CV_32FC1);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
 
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
 
      cvGEMM(inv,temp1,1,NULL,0,h);
 
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 wx=cvmGet(pDataCam->translation,0,0);
-	 wy=cvmGet(pDataCam->translation,1,0);
-	 wz=cvmGet(pDataCam->translation,2,0);
+	 wx=cvmGet(pMapMnger->pDataCam->translation,0,0);
+	 wy=cvmGet(pMapMnger->pDataCam->translation,1,0);
+	 wz=cvmGet(pMapMnger->pDataCam->translation,2,0);
 	 theta=atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0)));
      phi=atan2(cvmGet(h,0,0),cvmGet(h,2,0));
      //(*It)->rho=1./200000.;
@@ -644,14 +647,14 @@ void CModelCam::getJInit(CvMat *Jpos, CvMat *Jpix, CvPoint pto)
      cvmSet(pixel,0,0,fpto.x);
      cvmSet(pixel,1,0,fpto.y);
      cvmSet(pixel,2,0,1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,h);
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 cvmSet(Jpix,0,0,(wx-cvmGet(pDataCam->translation,0,0))/diff);
-	 cvmSet(Jpix,1,0,(wy-cvmGet(pDataCam->translation,1,0))/diff);
-	 cvmSet(Jpix,2,0,(wz-cvmGet(pDataCam->translation,2,0))/diff);
+	 cvmSet(Jpix,0,0,(wx-cvmGet(pMapMnger->pDataCam->translation,0,0))/diff);
+	 cvmSet(Jpix,1,0,(wy-cvmGet(pMapMnger->pDataCam->translation,1,0))/diff);
+	 cvmSet(Jpix,2,0,(wz-cvmGet(pMapMnger->pDataCam->translation,2,0))/diff);
 	 cvmSet(Jpix,3,0,(theta-atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0))))/diff);
      cvmSet(Jpix,4,0,(phi-atan2(cvmGet(h,0,0),cvmGet(h,2,0)))/diff);
      cvmSet(Jpix,5,0,0);//(*It)->rho=1./200000.;
@@ -661,120 +664,120 @@ void CModelCam::getJInit(CvMat *Jpos, CvMat *Jpix, CvPoint pto)
      cvmSet(pixel,0,0,fpto.x);
      cvmSet(pixel,1,0,fpto.y);
      cvmSet(pixel,2,0,1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,h);
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 cvmSet(Jpix,0,1,(wx-cvmGet(pDataCam->translation,0,0))/diff);
-	 cvmSet(Jpix,1,1,(wy-cvmGet(pDataCam->translation,1,0))/diff);
-	 cvmSet(Jpix,2,1,(wz-cvmGet(pDataCam->translation,2,0))/diff);
+	 cvmSet(Jpix,0,1,(wx-cvmGet(pMapMnger->pDataCam->translation,0,0))/diff);
+	 cvmSet(Jpix,1,1,(wy-cvmGet(pMapMnger->pDataCam->translation,1,0))/diff);
+	 cvmSet(Jpix,2,1,(wz-cvmGet(pMapMnger->pDataCam->translation,2,0))/diff);
 	 cvmSet(Jpix,3,1,(theta-atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0))))/diff);
      cvmSet(Jpix,4,1,(phi-atan2(cvmGet(h,0,0),cvmGet(h,2,0)))/diff);
      cvmSet(Jpix,5,1,0);//(*It)->rho=1./200000.;
      fpto.y-=diff;
 
-     cvmSet(pDataCam->translation,0,0,cvmGet(pDataCam->translation,0,0)+diff);
+     cvmSet(pMapMnger->pDataCam->translation,0,0,cvmGet(pMapMnger->pDataCam->translation,0,0)+diff);
      cvmSet(pixel,0,0,fpto.x);
      cvmSet(pixel,1,0,fpto.y);
      cvmSet(pixel,2,0,1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,h);
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 cvmSet(Jpos,0,0,(wx-cvmGet(pDataCam->translation,0,0))/diff);
-	 cvmSet(Jpos,1,0,(wy-cvmGet(pDataCam->translation,1,0))/diff);
-	 cvmSet(Jpos,2,0,(wz-cvmGet(pDataCam->translation,2,0))/diff);
+	 cvmSet(Jpos,0,0,(wx-cvmGet(pMapMnger->pDataCam->translation,0,0))/diff);
+	 cvmSet(Jpos,1,0,(wy-cvmGet(pMapMnger->pDataCam->translation,1,0))/diff);
+	 cvmSet(Jpos,2,0,(wz-cvmGet(pMapMnger->pDataCam->translation,2,0))/diff);
 	 cvmSet(Jpos,3,0,(theta-atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0))))/diff);
      cvmSet(Jpos,4,0,(phi-atan2(cvmGet(h,0,0),cvmGet(h,2,0)))/diff);
      cvmSet(Jpos,5,0,0);//(*It)->rho=1./200000.;
-     cvmSet(pDataCam->translation,0,0,cvmGet(pDataCam->translation,0,0)-diff);
+     cvmSet(pMapMnger->pDataCam->translation,0,0,cvmGet(pMapMnger->pDataCam->translation,0,0)-diff);
 
-     cvmSet(pDataCam->translation,1,0,cvmGet(pDataCam->translation,1,0)+diff);
+     cvmSet(pMapMnger->pDataCam->translation,1,0,cvmGet(pMapMnger->pDataCam->translation,1,0)+diff);
      cvmSet(pixel,0,0,fpto.x);
      cvmSet(pixel,1,0,fpto.y);
      cvmSet(pixel,2,0,1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,h);
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 cvmSet(Jpos,0,1,(wx-cvmGet(pDataCam->translation,0,0))/diff);
-	 cvmSet(Jpos,1,1,(wy-cvmGet(pDataCam->translation,1,0))/diff);
-	 cvmSet(Jpos,2,1,(wz-cvmGet(pDataCam->translation,2,0))/diff);
+	 cvmSet(Jpos,0,1,(wx-cvmGet(pMapMnger->pDataCam->translation,0,0))/diff);
+	 cvmSet(Jpos,1,1,(wy-cvmGet(pMapMnger->pDataCam->translation,1,0))/diff);
+	 cvmSet(Jpos,2,1,(wz-cvmGet(pMapMnger->pDataCam->translation,2,0))/diff);
 	 cvmSet(Jpos,3,1,(theta-atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0))))/diff);
      cvmSet(Jpos,4,1,(phi-atan2(cvmGet(h,0,0),cvmGet(h,2,0)))/diff);
      cvmSet(Jpos,5,1,0);//(*It)->rho=1./200000.;
-     cvmSet(pDataCam->translation,1,0,cvmGet(pDataCam->translation,1,0)-diff);
+     cvmSet(pMapMnger->pDataCam->translation,1,0,cvmGet(pMapMnger->pDataCam->translation,1,0)-diff);
 
-     cvmSet(pDataCam->translation,2,0,cvmGet(pDataCam->translation,2,0)+diff);
+     cvmSet(pMapMnger->pDataCam->translation,2,0,cvmGet(pMapMnger->pDataCam->translation,2,0)+diff);
      cvmSet(pixel,0,0,fpto.x);
      cvmSet(pixel,1,0,fpto.y);
      cvmSet(pixel,2,0,1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,h);
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 cvmSet(Jpos,0,2,(wx-cvmGet(pDataCam->translation,0,0))/diff);
-	 cvmSet(Jpos,1,2,(wy-cvmGet(pDataCam->translation,1,0))/diff);
-	 cvmSet(Jpos,2,2,(wz-cvmGet(pDataCam->translation,2,0))/diff);
+	 cvmSet(Jpos,0,2,(wx-cvmGet(pMapMnger->pDataCam->translation,0,0))/diff);
+	 cvmSet(Jpos,1,2,(wy-cvmGet(pMapMnger->pDataCam->translation,1,0))/diff);
+	 cvmSet(Jpos,2,2,(wz-cvmGet(pMapMnger->pDataCam->translation,2,0))/diff);
 	 cvmSet(Jpos,3,2,(theta-atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0))))/diff);
      cvmSet(Jpos,4,2,(phi-atan2(cvmGet(h,0,0),cvmGet(h,2,0)))/diff);
      cvmSet(Jpos,5,2,0);//(*It)->rho=1./200000.;
-     cvmSet(pDataCam->translation,2,0,cvmGet(pDataCam->translation,2,0)-diff);
+     cvmSet(pMapMnger->pDataCam->translation,2,0,cvmGet(pMapMnger->pDataCam->translation,2,0)-diff);
 
-     cvmSet(pDataCam->rotation,0,0,cvmGet(pDataCam->rotation,0,0)+diff);
+     cvmSet(pMapMnger->pDataCam->rotation,0,0,cvmGet(pMapMnger->pDataCam->rotation,0,0)+diff);
      cvmSet(pixel,0,0,fpto.x);
      cvmSet(pixel,1,0,fpto.y);
      cvmSet(pixel,2,0,1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,h);
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 cvmSet(Jpos,0,3,(wx-cvmGet(pDataCam->translation,0,0))/diff);
-	 cvmSet(Jpos,1,3,(wy-cvmGet(pDataCam->translation,1,0))/diff);
-	 cvmSet(Jpos,2,3,(wz-cvmGet(pDataCam->translation,2,0))/diff);
+	 cvmSet(Jpos,0,3,(wx-cvmGet(pMapMnger->pDataCam->translation,0,0))/diff);
+	 cvmSet(Jpos,1,3,(wy-cvmGet(pMapMnger->pDataCam->translation,1,0))/diff);
+	 cvmSet(Jpos,2,3,(wz-cvmGet(pMapMnger->pDataCam->translation,2,0))/diff);
 	 cvmSet(Jpos,3,3,(theta-atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0))))/diff);
      cvmSet(Jpos,4,3,(phi-atan2(cvmGet(h,0,0),cvmGet(h,2,0)))/diff);
      cvmSet(Jpos,5,3,0);//(*It)->rho=1./200000.;
-     cvmSet(pDataCam->rotation,0,0,cvmGet(pDataCam->rotation,0,0)-diff);
+     cvmSet(pMapMnger->pDataCam->rotation,0,0,cvmGet(pMapMnger->pDataCam->rotation,0,0)-diff);
 
-     cvmSet(pDataCam->rotation,1,0,cvmGet(pDataCam->rotation,1,0)+diff);
+     cvmSet(pMapMnger->pDataCam->rotation,1,0,cvmGet(pMapMnger->pDataCam->rotation,1,0)+diff);
      cvmSet(pixel,0,0,fpto.x);
      cvmSet(pixel,1,0,fpto.y);
      cvmSet(pixel,2,0,1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,h);
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 cvmSet(Jpos,0,4,(wx-cvmGet(pDataCam->translation,0,0))/diff);
-	 cvmSet(Jpos,1,4,(wy-cvmGet(pDataCam->translation,1,0))/diff);
-	 cvmSet(Jpos,2,4,(wz-cvmGet(pDataCam->translation,2,0))/diff);
+	 cvmSet(Jpos,0,4,(wx-cvmGet(pMapMnger->pDataCam->translation,0,0))/diff);
+	 cvmSet(Jpos,1,4,(wy-cvmGet(pMapMnger->pDataCam->translation,1,0))/diff);
+	 cvmSet(Jpos,2,4,(wz-cvmGet(pMapMnger->pDataCam->translation,2,0))/diff);
 	 cvmSet(Jpos,3,4,(theta-atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0))))/diff);
      cvmSet(Jpos,4,4,(phi-atan2(cvmGet(h,0,0),cvmGet(h,2,0)))/diff);
      cvmSet(Jpos,5,4,0);//(*It)->rho=1./200000.;
-     cvmSet(pDataCam->rotation,1,0,cvmGet(pDataCam->rotation,1,0)-diff);
+     cvmSet(pMapMnger->pDataCam->rotation,1,0,cvmGet(pMapMnger->pDataCam->rotation,1,0)-diff);
 
-     cvmSet(pDataCam->rotation,2,0,cvmGet(pDataCam->rotation,2,0)+diff);
+     cvmSet(pMapMnger->pDataCam->rotation,2,0,cvmGet(pMapMnger->pDataCam->rotation,2,0)+diff);
      cvmSet(pixel,0,0,fpto.x);
      cvmSet(pixel,1,0,fpto.y);
      cvmSet(pixel,2,0,1);
-     cvInvert(pDataCam->calibration,inv,CV_SVD);
-     cvGEMM(inv,pixel,1,pDataCam->translation,-1,temp1);
-     cvInvert(pDataCam->rotMat,inv);
+     cvInvert(pMapMnger->pDataCam->calibration,inv,CV_SVD);
+     cvGEMM(inv,pixel,1,pMapMnger->pDataCam->translation,-1,temp1);
+     cvInvert(pMapMnger->pDataCam->rotMat,inv);
      cvGEMM(inv,temp1,1,NULL,0,h);
 	 // pModelCam->cvInverseParam(&h,(*It)->pto);
-	 cvmSet(Jpos,0,5,(wx-cvmGet(pDataCam->translation,0,0))/diff);
-	 cvmSet(Jpos,1,5,(wy-cvmGet(pDataCam->translation,1,0))/diff);
-	 cvmSet(Jpos,2,5,(wz-cvmGet(pDataCam->translation,2,0))/diff);
+	 cvmSet(Jpos,0,5,(wx-cvmGet(pMapMnger->pDataCam->translation,0,0))/diff);
+	 cvmSet(Jpos,1,5,(wy-cvmGet(pMapMnger->pDataCam->translation,1,0))/diff);
+	 cvmSet(Jpos,2,5,(wz-cvmGet(pMapMnger->pDataCam->translation,2,0))/diff);
 	 cvmSet(Jpos,3,5,(theta-atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0))))/diff);
      cvmSet(Jpos,4,5,(phi-atan2(cvmGet(h,0,0),cvmGet(h,2,0)))/diff);
      cvmSet(Jpos,5,5,0);//(*It)->rho=1./200000.;
-     cvmSet(pDataCam->rotation,2,0,cvmGet(pDataCam->rotation,2,0)-diff);
+     cvmSet(pMapMnger->pDataCam->rotation,2,0,cvmGet(pMapMnger->pDataCam->rotation,2,0)-diff);
 
      cvReleaseMat(&pixel);
      cvReleaseMat(&inv);

@@ -4,13 +4,19 @@ void CEstimator::setModelCam(CModelCam *p)
 {
   pModelCam=p;
 }
+//
+//void CEstimator::setDataCam(CDataCam *p)
+//{
+//  pDataCam=p;
+//}
+void CEstimator::setMapMnger(CMapMnger *p)
+{
+    pMapMnger = p;
+}
 
-void CEstimator::setDataCam(CDataCam *p)
-{
-  pDataCam=p;
-}
-void CEstimator::setMap(CMap *p)
-{
-  pMap=p;
-}
+//void CEstimator::setMap(CMap *p)
+//{
+//  pMap=p;
+//}
+
 }

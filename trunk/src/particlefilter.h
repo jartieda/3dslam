@@ -6,6 +6,8 @@
 #include "model.h"
 #include "cv.h"
 #include "estimator.h"
+#include "mapmnger.h"
+
 namespace SLAM{
 /**
 @author Jorge Artieda
@@ -15,7 +17,7 @@ namespace SLAM{
 class CParticleFilter: public CEstimator {
 public:
 CParticleFilter();
-~CParticleFilter();
+virtual ~CParticleFilter();
 
 void Predict();
 void Correct();
@@ -25,9 +27,6 @@ void setModel(CModel *p);///< enlaza la clase calman con el modelo de vehículo
 void UpdateMatrixSize();
 
 double **pred_measure;///< predicted measurements. Projection of particles
-int num_particles; ///number of particles per variable
-int num_variables; ///number of variables
-int num_measurements; ///number of measurements
 double *weights;
 double **particles; ///pointer to a dynamically allocated array of particles
 
@@ -38,6 +37,13 @@ void initParticle(int part);
 int num_max_variables;
 int num_max_particles;
 int num_max_measurements;
+public:
+int num_particles; ///number of particles per variable
+int num_variables; ///number of variables
+int fdims; ///dimension of one point
+int num_measurements; ///number of measurements
+protected:
+
 double **A;
 /*int n_var;
 int n_meas;
@@ -55,7 +61,6 @@ double Random(double min, double max);
      double ERF[200];
 int inited_vis; ///<number of visible points inited
 int inited_no_vis; ///<viewed once not visible now
-int fdims; ///dimension of one point
   CvMat *rotation;///<rotacion para devolver los valores de la camara
 CvMat *trans;///<translacion  para devolver los valores de la camara
 

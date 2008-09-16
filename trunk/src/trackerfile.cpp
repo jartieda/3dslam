@@ -25,14 +25,14 @@ CTrackerFile::~CTrackerFile()
      f=fopen(fichero, "r");
      int num;
      int x,y;
-     for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
-         	It != pMap->bbdd.end(); It++ )
+     for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
+         	It != pMapMnger->pMap->bbdd.end(); It++ )
 	{
         if((*It)->state==st_inited)
         {
             std::cout << "borropuntos: "<<(*It)->pto.x<<" "<<(*It)->pto.y<<std::endl;
             (*It)->state = st_no_view;
-            pMap->visible--;
+            pMapMnger->pMap->visible--;
          }
 	}
 	cout<<"aqui casco"<<endl;
@@ -40,18 +40,18 @@ CTrackerFile::~CTrackerFile()
     while (fscanf(f,"%d %d %d %d\n", &num, &y, &x,&dumb)!=EOF)
      {
          cout<<"in while"<<endl;
-         list<CElempunto*>::iterator It=pMap->bbdd.begin();
+         list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
          int count=0;
-        while  (((*It)->ID!=num)&&( count < pMap->bbdd.size()))
+        while  (((*It)->ID!=num)&&( count < pMapMnger->pMap->bbdd.size()))
         {
             cout<<"."<<count;
             It++ ;
             count++;
-            if (count>= pMap->bbdd.size()) break;
+            if (count>= pMapMnger->pMap->bbdd.size()) break;
         }
         cout<<"fuera while"<<endl;
 
-        if( count<pMap->bbdd.size()){
+        if( count<pMapMnger->pMap->bbdd.size()){
            (*It)->old_pto.x=(*It)->pto.x;
            (*It)->old_pto.y=(*It)->pto.y;
            (*It)->pto.x=(int)x;
@@ -59,13 +59,13 @@ CTrackerFile::~CTrackerFile()
 		   if((*It)->state==st_no_view)
 		   {
                 (*It)->state=st_inited;
-                pMap->visible++;
+                pMapMnger->pMap->visible++;
 		   }
         }else{
             ///add point
             unsigned char *key;
             key= new unsigned char [getFeatDim()];
-            pMap->add_key(cvPoint(x,y),key,getFeatDim());
+            pMapMnger->pMap->add_key(cvPoint(x,y),key,getFeatDim());
 	    cout <<"ANADIDO PUNTO NUEVO!!!!!!!"<<endl;
 
         }
