@@ -1,6 +1,8 @@
 #include "dataout.h"
+
 namespace SLAM{
-CDataOut::CDataOut(string r):iter(0),hScale(0.5),vScale(0.5),lineWidth(2)
+
+CDataOut::CDataOut(std::string r):iter(0),hScale(0.5),vScale(0.5),lineWidth(2)
 {
     resdir = r;
   FeatFile.open((resdir+"feat.txt").c_str());
@@ -15,8 +17,8 @@ CDataOut::~CDataOut()
 void CDataOut::Draw(IplImage *framecopy)
 {
        //int rvis=0;
-  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-	It != pMapMnger->pMap->bbdd.end(); It++ )
+  for ( std::list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+	It != pEstimator->pMap->bbdd.end(); It++ )
     {
       if ((*It)->state!=st_empty){
         sprintf(strID,"%d",(*It)->ID);
@@ -50,8 +52,8 @@ void CDataOut::R_Out()
   CvMat *temp,*jtemp;
   temp=cvCreateMatHeader(6,6,CV_32FC1);
   jtemp=cvCreateMat(3,6,CV_32FC1);
-  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-	It != pMapMnger->pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+	It != pEstimator->pMap->bbdd.end(); It++ )
     {
       if((*It)->state>2)
 	{
@@ -87,10 +89,10 @@ void CDataOut::R_Out()
 	  cvmSet(jtemp,1,5,(s_th     )/((*It)->rho*(*It)->rho));
 	  cvmSet(jtemp,2,5,(-c_th*c_ph)/((*It)->rho*(*It)->rho));
 
-	  if (12+ii*6< pKalman->pKalman->error_cov_post->width && 12+ii*6< pKalman->pKalman->error_cov_post->height)
+	  if (12+ii*6< pEstimator->pCovMat->width && 12+ii*6< pEstimator->pCovMat->height)
 	    {
 
-	      cvGetSubRect( pKalman->pKalman->error_cov_post,temp,cvRect(12+ii*6,12+ii*6,6,6) );
+	      cvGetSubRect( pEstimator->pCovMat,temp,cvRect(12+ii*6,12+ii*6,6,6) );
 	      cvMatMul(jtemp,temp,temp2);
 	      cvGEMM( temp2,jtemp,1,NULL,0,temp3,CV_GEMM_B_T );
 
@@ -117,15 +119,15 @@ void CDataOut::R_Out()
   for (int i=0; i<2 ; i++)
     for (int j=0; j<3;j++)
       {
-	RFile<<cvmGet(pKalman->pKalman->error_cov_post,2*i,2*j)<<",";
+	RFile<<cvmGet(pEstimator->pCovMat,2*i,2*j)<<",";
       }
-   RFile<<cvmGet(pKalman->pKalman->error_cov_post,4,0)<<",";
-   RFile<<cvmGet(pKalman->pKalman->error_cov_post,4,2)<<",";
-   RFile<<cvmGet(pKalman->pKalman->error_cov_post,4,4);
+   RFile<<cvmGet(pEstimator->pCovMat,4,0)<<",";
+   RFile<<cvmGet(pEstimator->pCovMat,4,2)<<",";
+   RFile<<cvmGet(pEstimator->pCovMat,4,4);
    RFile<<"),3,3)"<<endl;
-   RFile<<"pos <- c("<< cvmGet(pMapMnger->pDataCam->translation,0,0)<<", ";
-   RFile<< cvmGet(pMapMnger->pDataCam->translation,1,0)<<", ";
-   RFile<< cvmGet(pMapMnger->pDataCam->translation,2,0)<<") "<<endl;
+   RFile<<"pos <- c("<< cvmGet(pEstimator->pDataCam->translation,0,0)<<", ";
+   RFile<< cvmGet(pEstimator->pDataCam->translation,1,0)<<", ";
+   RFile<< cvmGet(pEstimator->pDataCam->translation,2,0)<<") "<<endl;
    RFile<<"plot3d( ellipse3d(p"<<ii<<",centre=";
    RFile<<"pos), col=\"red\", alpha=0.5, add = TRUE) "<<endl;
    RFile<<"rgl.viewpoint(45,30)"<<endl;
@@ -140,58 +142,57 @@ void CDataOut::R_Out()
 }
 void CDataOut::Particle(IplImage *framecopy)
 {
-    char ndisp[100];
-  CvMat* vect2=cvCreateMat(1,6,CV_32FC1);
-  CvMat* m = cvCreateMat(3,1,CV_32FC1);
-
-    sprintf(ndisp,(resdir+"disp%d.txt").c_str(),iter++);
-    DispFile.open(ndisp);
-    int s;
-    CvScalar c[pMapMnger->pMap->bbdd.size()];
-    for (int j =0; j<(int)pMapMnger->pMap->bbdd.size();j++)
-    {
-        c[j]=cvScalar(rand()*255.0/RAND_MAX,rand()*255.0/RAND_MAX,rand()*255.0/RAND_MAX);
-    }
-    for (int p=0; p<pParticleFilter->num_particles;p++)
-    {
-        int i=0;
-	s=12;
-        for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-            It != pMapMnger->pMap->bbdd.end(); It++ )
-        {
-
-          if (framecopy != NULL){
-                /*  cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
-                                                pParticleFilter->pred_measure[i+1][p]),
-                            1,c[i/2],1 );*/
-                   cvCircle (framecopy,cvPoint((int)pParticleFilter->pred_measure[i][p],
-                                                (int)pParticleFilter->pred_measure[i+1][p]),
-                            1,cvScalar(0,0,pParticleFilter->weights[p]*10001.0),1 );
-          }
-          i+=2;
-	  cvmSet(m,0,0,cos(pParticleFilter->particles[s+3][p])*sin(pParticleFilter->particles[s+4][p]));
-  	  cvmSet(m,1,0,-sin(pParticleFilter->particles[s+3][p]));
-	  cvmSet(m,2,0,cos(pParticleFilter->particles[s+3][p])*cos(pParticleFilter->particles[s+4][p]));
-    	  cvNormalize( m, m);
-    	  cvmSet(vect2,0,0,((pParticleFilter->particles[s][p])+cvmGet(m,0,0)/(pParticleFilter->particles[s+5][p])));
-    	  cvmSet(vect2,0,1,((pParticleFilter->particles[s+1][p])+cvmGet(m,1,0)/(pParticleFilter->particles[s+5][p])));
-   	  cvmSet(vect2,0,2,((pParticleFilter->particles[s+2][p])+cvmGet(m,2,0)/(pParticleFilter->particles[s+5][p])));
-	  s+=6;
-	  DispFile<<cvmGet(vect2,0,0)<<" ";
-          DispFile<<cvmGet(vect2,0,1)<<" ";
-          DispFile<<cvmGet(vect2,0,2)<<" ";
-	  DispFile<< s/6<<endl;
-
-        }
-	  DispFile<<pParticleFilter->particles[0][p]<<" ";
-	  DispFile<<pParticleFilter->particles[2][p]<<" ";
-	  DispFile<<pParticleFilter->particles[4][p]<<" ";
-	  DispFile<<"0";
-	  DispFile<<endl;
-    }
-    cvReleaseMat(&m);
-    cvReleaseMat(&vect2);
-    DispFile.close();
+//    char ndisp[100];
+//  CvMat* vect2=cvCreateMat(1,6,CV_32FC1);
+//  CvMat* m = cvCreateMat(3,1,CV_32FC1);
+//
+//    sprintf(ndisp,(resdir+"disp%d.txt").c_str(),iter++);
+//    DispFile.open(ndisp);
+//    int s;
+//    CvScalar c[pEstimator->pMap->bbdd.size()];
+//    for (int j =0; j<(int)pEstimator->pMap->bbdd.size();j++)
+//    {
+//        c[j]=cvScalar(rand()*255.0/RAND_MAX,rand()*255.0/RAND_MAX,rand()*255.0/RAND_MAX);
+//    }
+//    for (int p=0; p<pParticleFilter->num_particles;p++)
+//    {
+//        int i=0;
+//        s=12;
+//        for ( list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+//            It != pEstimator->pMap->bbdd.end(); It++ )
+//        {
+//          if (framecopy != NULL){
+//                /*  cvCircle (framecopy,cvPoint(pParticleFilter->pred_measure[i][p],
+//                                                pParticleFilter->pred_measure[i+1][p]),
+//                            1,c[i/2],1 );*/
+//                   cvCircle (framecopy,cvPoint((int)pParticleFilter->pred_measure[i][p],
+//                                                (int)pParticleFilter->pred_measure[i+1][p]),
+//                            1,cvScalar(0,0,pParticleFilter->weights[p]*10001.0),1 );
+//          }
+//          i+=2;
+//          cvmSet(m,0,0,cos(pParticleFilter->particles[s+3][p])*sin(pParticleFilter->particles[s+4][p]));
+//          cvmSet(m,1,0,-sin(pParticleFilter->particles[s+3][p]));
+//          cvmSet(m,2,0,cos(pParticleFilter->particles[s+3][p])*cos(pParticleFilter->particles[s+4][p]));
+//    	  cvNormalize( m, m);
+//    	  cvmSet(vect2,0,0,((pParticleFilter->particles[s][p])+cvmGet(m,0,0)/(pParticleFilter->particles[s+5][p])));
+//    	  cvmSet(vect2,0,1,((pParticleFilter->particles[s+1][p])+cvmGet(m,1,0)/(pParticleFilter->particles[s+5][p])));
+//          cvmSet(vect2,0,2,((pParticleFilter->particles[s+2][p])+cvmGet(m,2,0)/(pParticleFilter->particles[s+5][p])));
+//          s+=6;
+//          DispFile<<cvmGet(vect2,0,0)<<" ";
+//          DispFile<<cvmGet(vect2,0,1)<<" ";
+//          DispFile<<cvmGet(vect2,0,2)<<" ";
+//          DispFile<< s/6<<endl;
+//
+//        }
+//	  DispFile<<pParticleFilter->particles[0][p]<<" ";
+//	  DispFile<<pParticleFilter->particles[2][p]<<" ";
+//	  DispFile<<pParticleFilter->particles[4][p]<<" ";
+//	  DispFile<<"0";
+//	  DispFile<<endl;
+//    }
+//    cvReleaseMat(&m);
+//    cvReleaseMat(&vect2);
+//    DispFile.close();
 
 }
 void CDataOut::Disp_out(IplImage *framecopy)
@@ -210,8 +211,8 @@ void CDataOut::Disp_out(IplImage *framecopy)
   CvMat* proj = cvCreateMat(4,2,CV_32FC1);    ///NOT RELEASED
   CvMat* m = cvCreateMat(3,1,CV_32FC1);
 
-  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-	    It != pMapMnger->pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+	    It != pEstimator->pMap->bbdd.end(); It++ )
     {
       if((*It)->state>2)
 	  {
@@ -225,10 +226,12 @@ void CDataOut::Disp_out(IplImage *framecopy)
 	  float yreal=(*It)->wy +cvmGet(m,1,0)/(*It)->rho;
 	  float zreal=(*It)->wz +cvmGet(m,2,0)/(*It)->rho;
 */
-	  if (12+ii*6< pKalman->pKalman->error_cov_post->width && 12+ii*6< pKalman->pKalman->error_cov_post->height)
+    CvMat *pCovMat = pEstimator->getCovMat();
+
+	  if (12+ii*6< pCovMat->width && 12+ii*6< pCovMat->height)
 	    {
 
-	      cvGetSubRect( pKalman->pKalman->error_cov_post,temp,cvRect(12+ii*6,12+ii*6,6,6) );
+	      cvGetSubRect( pCovMat,temp,cvRect(12+ii*6,12+ii*6,6,6) );
 
         for (int part=0; part<40; part++){
 		  cvmSet(vect,0,0,randomVector(-.005,.005));
@@ -280,9 +283,9 @@ void CDataOut::Disp_out(IplImage *framecopy)
 }
 void CDataOut::Cam()
 {
-  CamFile<< cvmGet(pMapMnger->pDataCam->translation,0,0)<<" ";
-  CamFile<< cvmGet(pMapMnger->pDataCam->translation,1,0)<<" ";
-  CamFile<< cvmGet(pMapMnger->pDataCam->translation,2,0)<<" ";
+  CamFile<< cvmGet(pEstimator->pDataCam->translation,0,0)<<" ";
+  CamFile<< cvmGet(pEstimator->pDataCam->translation,1,0)<<" ";
+  CamFile<< cvmGet(pEstimator->pDataCam->translation,2,0)<<" ";
   CamFile<<"65000 ";
   CamFile<<"65000 ";
   CamFile<<endl;
@@ -293,7 +296,7 @@ void CDataOut::Feat()
   CvMat *m;
   m=cvCreateMat(3,1,CV_32FC1);
 
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();It != pEstimator->pMap->bbdd.end();It++)
     {
 	///FIXME PONER en una funcion para que solo esté en un sitio
       cvmSet(m,0,0,cos((*It)->theta)*sin((*It)->phi));
@@ -315,8 +318,8 @@ void CDataOut::Frame()
   char nombre[100];
   sprintf(nombre,"frame%.2d.txt",iter);
   FrameFile.open(nombre);
-    for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-	It != pMapMnger->pMap->bbdd.end(); It++ )
+    for ( list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+	It != pEstimator->pMap->bbdd.end(); It++ )
     {
       if ((*It)->state==st_inited){
       	FrameFile<<(*It)->ID<<" "<< (*It)->pto.x<<" "<<(*It)->pto.y<<" "<<(*It)->state<<endl;
@@ -325,16 +328,12 @@ void CDataOut::Frame()
 }
 //void CDataOut::setMap(CMap *p)
 //{
-//  pMapMnger->pMap=p;
+//  pEstimator->pMap=p;
 //}
 //void CDataOut::setDataCam(CDataCam *p)
 //{
-//  pMapMnger->pDataCam=p;
+//  pEstimator->pDataCam=p;
 //}
-void CDataOut::setMapMnger(CMapMnger *p)
-{
-    pMapMnger = p;
-}
 void CDataOut::setModelCam(CModelCam *p)
 {
   pModelCam=p;
@@ -344,12 +343,9 @@ void CDataOut::setTracker(CTracker *p)
 {
   pTracker=p;
 }
-void CDataOut::setKalman(CKalman *p)
+void CDataOut::setEstimator(CEstimator *p)
 {
-  pKalman=p;
-}
-void CDataOut::setParticle(CParticleFilter *p){
-  pParticleFilter = p;
+  pEstimator=p;
 }
 
 float CDataOut::randomVector(float max,float min)

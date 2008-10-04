@@ -55,8 +55,6 @@
 		<Unit filename="src\kalman.h" />
 		<Unit filename="src\map.cpp" />
 		<Unit filename="src\map.h" />
-		<Unit filename="src\mapmnger.cpp" />
-		<Unit filename="src\mapmnger.h" />
 		<Unit filename="src\model.cpp" />
 		<Unit filename="src\model.h" />
 		<Unit filename="src\modelcam.cpp" />

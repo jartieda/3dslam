@@ -128,7 +128,7 @@ void CUpdater::ranasac(vector<point> orig_data,int k, int n,double t,int d)
  //     cout<<"bestfit y: "<< bestfit.py[0]<<" "<< bestfit.py[1]<<" "<< bestfit.py[2]<<" "<<endl;
  if (besterr<10){
  int ok=0;
- for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+ for   (list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();It != pEstimator->pMap->bbdd.end();It++)
    {
      if((*It)->state==st_inited){
        ok=0;
@@ -141,7 +141,7 @@ void CUpdater::ranasac(vector<point> orig_data,int k, int n,double t,int d)
        if (ok==0){
             (*It)->state=st_no_view;
             cout<<"eleminado ransac "<<(*It)->ID<<endl;
-            pMapMnger->pMap->visible--;
+            pEstimator->pMap->visible--;
        }
      }
    }
@@ -262,7 +262,7 @@ void CUpdater::TestRANSAC()
   cout<<"in ransac"<<endl;
   point p;
   vector<point> orig_data;
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();It != pEstimator->pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
 	p.ground[0]=(*It)->pto.x;
@@ -292,10 +292,6 @@ void CUpdater::TestRANSAC()
 //  pDataCam=p;
 //}
 
-void CUpdater::setMapMnger(CMapMnger *p)
-{
-    pMapMnger= p;
-}
 
 void CUpdater::setModelCam(CModelCam *p)
 {
@@ -320,7 +316,7 @@ int CUpdater::update()
 {
   CvMat *h;
   h=cvCreateMat(3,1,CV_32FC1);
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();It != pEstimator->pMap->bbdd.end();It++)
     {
       switch((*It)->state)
 	{
@@ -329,15 +325,15 @@ int CUpdater::update()
 	    {
 	      (*It)->state=st_inited;
 	      pModelCam->cvInverseParam(&h,(*It)->pto);
-	      (*It)->wx=cvmGet(pMapMnger->pDataCam->translation,0,0);
-	      (*It)->wy=cvmGet(pMapMnger->pDataCam->translation,1,0);
-	      (*It)->wz=cvmGet(pMapMnger->pDataCam->translation,2,0);
+	      (*It)->wx=cvmGet(pEstimator->pDataCam->translation,0,0);
+	      (*It)->wy=cvmGet(pEstimator->pDataCam->translation,1,0);
+	      (*It)->wz=cvmGet(pEstimator->pDataCam->translation,2,0);
 	      (*It)->theta=atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0)));
 	      (*It)->phi=atan2(cvmGet(h,0,0),cvmGet(h,2,0));
 	      (*It)->rho=1./depth;
 	      cout<<"update_idpth "<<" "<<(*It)->wx<<" "<<(*It)->wy<<" "<<(*It)->wz<<" "<<(*It)->theta<<" "<<(*It)->phi<<" "<<(*It)->rho<<" "<<cvmGet(h,0,0)<<" "<<cvmGet(h,1,0)<<" "<<cvmGet(h,2,0)<<" "<<endl;
-	      //cvmCopy(pMapMnger->pDataCam->rotation,(*It)->rot_unInit_1);
-	      //cvmCopy(pMapMnger->pDataCam->translation,(*It)->trans_unInit_1);
+	      //cvmCopy(pEstimator->pDataCam->rotation,(*It)->rot_unInit_1);
+	      //cvmCopy(pEstimator->pDataCam->translation,(*It)->trans_unInit_1);
 	      //(*It)->xpix_1=(*It)->pto.x;
 	      //(*It)->ypix_1=(*It)->pto.y;
 	    }
@@ -442,8 +438,8 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
         /////////////////////////////////////////////////
 
 	       //no cerca de un punto existente
-	       for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-		     It != pMapMnger->pMap->bbdd.end(); It++ )
+	       for ( list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+		     It != pEstimator->pMap->bbdd.end(); It++ )
 		 {
 		   if((*It)->pto.x<(cvmGet(points,j,0)+point_sep) &&
 		      (*It)->pto.y<(cvmGet(points,j,1)+point_sep) &&
@@ -466,8 +462,8 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 
 	       if( (cvmGet(points,j,0)<border) ||
 		      (cvmGet(points,j,1)<border) ||
-		      (cvmGet(points,j,0)>(pMapMnger->pDataCam->frame_width-border)) ||
-		      (cvmGet(points,j,1)>(pMapMnger->pDataCam->frame_height-border)))
+		      (cvmGet(points,j,0)>(pEstimator->pDataCam->frame_width-border)) ||
+		      (cvmGet(points,j,1)>(pEstimator->pDataCam->frame_height-border)))
                   {
                       encontrado = false;
                   }
@@ -487,7 +483,7 @@ int CUpdater::busca_posibles_para_anadir(IplImage *f,IplImage *f2,int faltan)
 		       key[d]=(unsigned char) keys[j*dim+d];//cvmGet(keys,j,d);
 		       //cout<<"asignando key_char: "<<(int)key[d]<<" key_mat "<<cvmGet(keys,j,d)<<endl;
 		     }
-		   pMapMnger->pMap->add_key(cvPoint((int)cvmGet(points,j,0),
+		   pEstimator->pMap->add_key(cvPoint((int)cvmGet(points,j,0),
 					 (int)cvmGet(points,j,1)),key,dim);
 		   insert++;
 		 }
@@ -515,8 +511,8 @@ int CUpdater::Add(IplImage *f,IplImage *f2)
   int inited_vis=0;
   int inited_no_vis=0;
 
-  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-	It != pMapMnger->pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+	It != pEstimator->pMap->bbdd.end(); It++ )
     {
       if ((*It)->state==st_inited){
         inited_vis++;
@@ -527,11 +523,11 @@ int CUpdater::Add(IplImage *f,IplImage *f2)
     }
 
   cornercount=num_feat_min-inited_vis;//bbdd.size();
-  cout<< "faltan "<<cornercount<<"esquinas"<<num_feat_min<<" "<<pMapMnger->pMap->visible<<endl;
+  cout<< "faltan "<<cornercount<<"esquinas"<<num_feat_min<<" "<<pEstimator->pMap->visible<<endl;
   int insert=0;
   if (cornercount>0)
     {
-      insert = busca_posibles_para_anadir(f,f2,num_feat_max-pMapMnger->pMap->visible);
+      insert = busca_posibles_para_anadir(f,f2,num_feat_max-pEstimator->pMap->visible);
     }
   return 0;
 }
@@ -543,7 +539,7 @@ int CUpdater::AddByHand(IplImage *f)
 {
 
   int cornercount;
-  cornercount=num_feat_min-pMapMnger->pMap->visible;//bbdd.size();
+  cornercount=num_feat_min-pEstimator->pMap->visible;//bbdd.size();
   cout<< "faltan "<<cornercount<<"esquinas"<<endl;
   int insert=0;
   //if (cornercount>0)
@@ -583,12 +579,12 @@ int CUpdater::AddByHand(IplImage *f)
             for (int kk =0 ; kk<pTracker->getFeatDim();kk++)
                 ckey[kk]=key[kk];
 
- 		    pMapMnger->pMap->add_key(p,ckey,pTracker->getFeatDim());
+ 		    pEstimator->pMap->add_key(p,ckey,pTracker->getFeatDim());
 		    insert++;
 		    oldpoint.x = point.x;
 		    oldpoint.y =point.y;
       }
-      //insert = busca_posibles_para_anadir(f,f2,num_feat_max-pMapMnger->pMap->visible);
+      //insert = busca_posibles_para_anadir(f,f2,num_feat_max-pEstimator->pMap->visible);
       }
 }
   return 0;
@@ -627,33 +623,33 @@ int CUpdater::remove()
 {
   int i=0;
   std::cout << "remove ";
-  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-	It != pMapMnger->pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+	It != pEstimator->pMap->bbdd.end(); It++ )
     {
       if ((*It)->pto.x<0 ||(*It)->pto.y<0 ||
 	  isnan((*It)->wx)||isnan((*It)->wy)||isnan((*It)->wz))
 	{
 	  cout<< "ERROR borro punto por not a number. estado:"<<(*It)->state <<"x y:"<<(*It)->pto.x<<" "<<(*It)->pto.y<< endl;
-	  //pMapMnger->pMap->bbdd.erase(It);
+	  //pEstimator->pMap->bbdd.erase(It);
 	  i++;
-	  pMapMnger->pMap->visible--;
+	  pEstimator->pMap->visible--;
 	  exit(-1);
 
 	}else if((*It)->pto.x<border ||(*It)->pto.y<border ||
-		(*It)->pto.x>pMapMnger->pDataCam->frame_width-border ||(*It)->pto.y>pMapMnger->pDataCam->frame_height-border )
+		(*It)->pto.x>pEstimator->pDataCam->frame_width-border ||(*It)->pto.y>pEstimator->pDataCam->frame_height-border )
 	      {
 		if((*It)->state==st_inited)
 		  {
 		    i++;
 		    std::cout << "pongo punto como st_no_view: "<<(*It)->ID<<" "<<(*It)->pto.x<<" "<<(*It)->pto.y<<std::endl;
 		    (*It)->state = st_no_view;
-		    pMapMnger->pMap->visible--;
+		    pEstimator->pMap->visible--;
 		  }else if((*It)->state!=st_no_view)
 		  {
 		    cout<< "borro punto por no iniciado y fuera devista state: "<<(*It)->state << endl;
 		    exit(-1);	///FIXME En el casod de que el punto se deje de ver antes de inicializar quiero borrarlo.
-		    //pMapMnger->pMap->bbdd.erase(It);
-		    //pMapMnger->pMap->visible--;
+		    //pEstimator->pMap->bbdd.erase(It);
+		    //pEstimator->pMap->visible--;
 		  }
                }
 

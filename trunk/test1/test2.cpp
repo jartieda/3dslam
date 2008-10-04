@@ -42,7 +42,6 @@
 #include "../src/trackerfile.h"
 #include "../src/xmlParser.h"
 #include "../src/robotxyth.h"
-#include "../src/mapmnger.h"
 
 #define RHO_INIT_DIST 1
 
@@ -74,14 +73,15 @@ CUpdater mUpdater;
 //CTracker_surf mTracker;
 CTracker *pTracker;
 CModel *pVehicle;
+
 #ifndef KALMAN
 CParticleFilter mEstimator;
 #else
 CKalman mEstimator;
 #endif
+
 CDataOut *pDataOut;
 
-CMapMnger *pMapMnger;
 
 
 XMLNode xMainNode;
@@ -101,7 +101,7 @@ IplImage* framecopy=0;
 FILE *gplot=0;
 
 /// variable para contar la iteracion;
-int iter=1;
+int iter=120;
 
 float randomVector(float max, float min);
 
@@ -243,61 +243,55 @@ void invoke_class()
 
 void conect()
 {
-
-    mModelCam.setMapMnger(pMapMnger);
-
     mEstimator.setModelCam(&mModelCam);
-    //mEstimator.setDataCam(pMapMnger->pDataCam);
+    //mEstimator.setDataCam(mEstimator.pDataCam);
     //mEstimator.setMap(pMap);
-    mEstimator.setMapMnger(pMapMnger);
     mEstimator.setModel((CModel*)(pVehicle));
 
-    //mUpdater.setDataCam(pMapMnger->pDataCam);
+    //mUpdater.setDataCam(mEstimator.pDataCam);
     //mUpdater.setMap(pMap);
-    mUpdater.setMapMnger(pMapMnger);
     mUpdater.setTracker((CTracker*)pTracker);
     mUpdater.setModelCam(&mModelCam);
+    mUpdater.pEstimator=&mEstimator;
 
-//    pDataOut->setDataCam(pMapMnger->pDataCam);
+//    pDataOut->setDataCam(mEstimator.pDataCam);
 //    pDataOut->setMap(pMap);
-    pDataOut->setMapMnger(pMapMnger);
     pDataOut->setTracker((CTracker*)pTracker);
     pDataOut->setModelCam(&mModelCam);
+    pDataOut->pEstimator=&mEstimator;
 #ifndef KALMAN
-
     pDataOut->setParticle(&mEstimator);
 #else
-
-    pDataOut->setKalman(&mEstimator);//FIXME!!!!
+//    pDataOut->setKalman(&mEstimator);//FIXME!!!!
 #endif
-
-//    pTracker->setDataCam(pMapMnger->pDataCam);
-    pTracker->setMapMnger(pMapMnger);
+      mModelCam.pEstimator=&mEstimator;
+      pTracker->pEstimator=&mEstimator;
+//    pTracker->setDataCam(mEstimator.pDataCam);
 
 }
 void param_init()
 {
     ///Cámaras sony?
-    /*pMapMnger->pDataCam->SetFx(629.49);
-      pMapMnger->pDataCam->SetFy(630.74);
-      pMapMnger->pDataCam->SetCx(337.8743788);
-      pMapMnger->pDataCam->SetCy(241.0742116);
-      pMapMnger->pDataCam->frame_width=640;
-      pMapMnger->pDataCam->frame_height=480;*/
+    /*mEstimator.pDataCam->SetFx(629.49);
+      mEstimator.pDataCam->SetFy(630.74);
+      mEstimator.pDataCam->SetCx(337.8743788);
+      mEstimator.pDataCam->SetCy(241.0742116);
+      mEstimator.pDataCam->frame_width=640;
+      mEstimator.pDataCam->frame_height=480;*/
     ///Camara firewire escuela
-    pMapMnger->pDataCam->SetFx(837.9529);
-    pMapMnger->pDataCam->SetFy(838.6889);
-    pMapMnger->pDataCam->SetCx(315.5322);
-    pMapMnger->pDataCam->SetCy(277.6592);
-    pMapMnger->pDataCam->frame_width=640;
-    pMapMnger->pDataCam->frame_height=480;
+    mEstimator.pDataCam->SetFx(837.9529);
+    mEstimator.pDataCam->SetFy(838.6889);
+    mEstimator.pDataCam->SetCx(315.5322);
+    mEstimator.pDataCam->SetCy(277.6592);
+    mEstimator.pDataCam->frame_width=640;
+    mEstimator.pDataCam->frame_height=480;
     ///Camara Genérica
-    /*pMapMnger->pDataCam->SetFx(1000);
-      pMapMnger->pDataCam->SetFy(1000);
-      pMapMnger->pDataCam->SetCx(320);
-      pMapMnger->pDataCam->SetCy(240);
-      pMapMnger->pDataCam->frame_width=640;
-      pMapMnger->pDataCam->frame_height=480;*/
+    /*mEstimator.pDataCam->SetFx(1000);
+      mEstimator.pDataCam->SetFy(1000);
+      mEstimator.pDataCam->SetCx(320);
+      mEstimator.pDataCam->SetCy(240);
+      mEstimator.pDataCam->frame_width=640;
+      mEstimator.pDataCam->frame_height=480;*/
 
     double dist[4];
     dist[0]=0;
@@ -311,7 +305,7 @@ void param_init()
     for ( int i=0;i<4;i++)
         cvmSet(distMat,i,0,dist[i]);
 
-    cvCopy(distMat,pMapMnger->pDataCam->distortion);
+    cvCopy(distMat,mEstimator.pDataCam->distortion);
 
     CvMat *rotation;
     CvMat *trans ,*trans2;
@@ -338,14 +332,13 @@ void param_init()
         cvmSet(trans,1,0,cvmGet(temp,1,0));
         cvmSet(trans,2,0,cvmGet(temp,2,0));
     }
-    pMapMnger->pDataCam->SetRotation(rotation);
-    pMapMnger->pDataCam->SetTranslation(trans);
+    mEstimator.pDataCam->SetRotation(rotation);
+    mEstimator.pDataCam->SetTranslation(trans);
 
-//    pTracker->setDataCam(pMapMnger->pDataCam);
+//    pTracker->setDataCam(mEstimator.pDataCam);
 //    pTracker->setMap(pMap);
-    pTracker->setMapMnger(pMapMnger);
+//    pTracker->setMapMnger(pMapMnger);
 }
-
 void init_video(int argc, char **argv)
 {
     //Arbrir video para captura
@@ -391,8 +384,6 @@ void init_video(int argc, char **argv)
     cvCopy( frame,framecopy);
 
 }
-
-
 void init_ptos()
 {
     if (video == true )
@@ -413,22 +404,22 @@ void init_ptos()
     mUpdater.Add(frame,frameold);
 
     //inicializacion de la posición de la camara con funciones de opencv
-    cout <<"marcas visibles en init "<<pMapMnger->pMap->visible<<endl;
+    cout <<"marcas visibles en init "<<mEstimator.pMap->visible<<endl;
 
     CvMat *h;
     h=cvCreateMat(3,1,CV_32FC1);
 
-    for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+    for   (list<CElempunto*>::iterator It=mEstimator.pMap->bbdd.begin();It != mEstimator.pMap->bbdd.end();It++)
     {
         mModelCam.cvInverseParam(&h,(*It)->pto);
-        (*It)->wx=cvmGet(pMapMnger->pDataCam->translation,0,0);
-        (*It)->wy=cvmGet(pMapMnger->pDataCam->translation,1,0);
-        (*It)->wz=cvmGet(pMapMnger->pDataCam->translation,2,0);
+        (*It)->wx=cvmGet(mEstimator.pDataCam->translation,0,0);
+        (*It)->wy=cvmGet(mEstimator.pDataCam->translation,1,0);
+        (*It)->wz=cvmGet(mEstimator.pDataCam->translation,2,0);
         (*It)->theta=atan2(-cvmGet(h,1,0),sqrt(cvmGet(h,0,0)*cvmGet(h,0,0)+cvmGet(h,2,0)*cvmGet(h,2,0)));
         (*It)->phi=atan2(cvmGet(h,0,0),cvmGet(h,2,0));
         (*It)->rho=1./RHO_INIT_DIST;
         (*It)->state=st_inited;
-        pMapMnger->pMap->inited++;
+        mEstimator.pMap->inited++;
     }
 
     cout<<"kalman ini"<<endl;
@@ -501,13 +492,14 @@ int main (int argc, char **argv)
     cout <<"DATA IS : " <<DATA<<endl;
 
 #ifdef JAVA_GUI
-
+{
     t=xMainNode.getChildNode("gui").getText();
     if (!strcmp(t,"true"))
     {
         env = create_vm();
         invoke_class( );
     }
+}
 #endif
 
     t=xMainNode.getChildNode("frame_increment").getText();
@@ -553,10 +545,8 @@ int main (int argc, char **argv)
 
 
     //Map Manager initialization
-    pMapMnger = new CMapMnger();
-    pMapMnger->newMap();
-//    pDataCam=pMapMnger->pDataCam;
-//    pMap=pMapMnger->pMap;
+
+    mEstimator.newMap();
 
 
     conect();
@@ -640,7 +630,11 @@ int main (int argc, char **argv)
         mUpdater.update();
         cout<<"dataout"<<endl;
 
+        mEstimator.ManageMap();
+
         data_out();
+
+
         cout<<"waitkey correct"<<endl;
         c = cvWaitKey(waitkey);//esto probablemente se pueda quitar
         if( c == 27 )//si presiono escape salgo del programa limpiamente

@@ -3,7 +3,7 @@
 	tracker_surf
 </tracker>
 <data>
-    g:\\SLAM\\Datos\\airview\\Rozas4\\images\\image%0.4d.png
+    H:\\vueloarganda290908\\imagenesVuelo4\\imageLeft%0.4d.tif
 </data>
 <gui>
 	false
@@ -22,7 +22,7 @@
 </resdir>
 <vehicle id=FreeCam>
     <data>
-        D:\\SLAM\\Datos\\univ-alberta-vision-sift\\ualberta-csc-flr3-vision\\image%04d.png
+        H:\\SLAM\\Datos\\univ-alberta-vision-sift\\ualberta-csc-flr3-vision\\image%04d.png
     </data>
 </vehicle>
 

@@ -59,8 +59,8 @@ for( int i = 0; i < feat->total; i++ )
          delete desc;
     }
   int key[64];
-	for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-         	It != pMapMnger->pMap->bbdd.end(); It++ )
+	for ( list<CElempunto*>::iterator It=pEstimator->pMap->bbdd.begin();
+         	It != pEstimator->pMap->bbdd.end(); It++ )
 	{///FIXME Esto tiene que estar relacionado con un valor mas claro del surf
 	     if((*It)->projx>(9*levels+1) && (*It)->projx<img->width-(9*levels+1) &&
                 (*It)->projy>(9*levels+1) && (*It)->projy<img->height-(9*levels+1))
@@ -81,12 +81,12 @@ for( int i = 0; i < feat->total; i++ )
          	     {
              		std::cout << "borropuntos: "<<(*It)->pto.x<<" "<<(*It)->pto.y<<std::endl;
              		(*It)->state = st_no_view;
-             		pMapMnger->pMap->visible--;
+             		pEstimator->pMap->visible--;
          	     }else if((*It)->state!=st_no_view)
          	     {
          		cout<< "borro punto por no iniciado y fuera devista " << endl;
-         	//	pMapMnger->pMap->bbdd.erase(It);
-         	//	pMapMnger->pMap->visible--;
+         	//	pEstimator->pMap->bbdd.erase(It);
+         	//	pEstimator->pMap->visible--;
 	 	     }
 	 	     (*It)->pto.x=0;
   		     (*It)->pto.y=0;
@@ -100,13 +100,13 @@ for( int i = 0; i < feat->total; i++ )
 		   if((*It)->state==st_no_view)
 		   {
 			(*It)->state=st_inited;
-			pMapMnger->pMap->visible++;
+			pEstimator->pMap->visible++;
 		   }
 	         }
             }else
             {
               (*It)->state=st_no_view;
-              pMapMnger->pMap->visible--;
+              pEstimator->pMap->visible--;
             } //end if proj dentro borde
 	}//end for cada elemento del mapa
 	cvShowImage("win",grey2);

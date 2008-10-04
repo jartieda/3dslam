@@ -190,7 +190,7 @@ void CKalman::Predict_FAST()
 
 /**
  * inicializa el estado del filtro de kalman <br>
- * usa las 12 primeras variables para almacenar los parámetros de translación y rotación de pMapMnger->pDataCam <br>
+ * usa las 12 primeras variables para almacenar los parámetros de translación y rotación de pDataCam <br>
  * despues llama a UdateMatrixSize para ajustar los tamanos de las matrices.<br>
  * despues rellena el resto del vector de estado con las coordenadas xyz de los puntos de la base de datos
  **/
@@ -199,22 +199,22 @@ void CKalman::initState()
   int kstate=0;
   //fixme esto puede tener otro orden
   for(int i =0; i<3;i++){
-    cvmSet(pKalman->state_post,kstate++,0,cvmGet(pMapMnger->pDataCam->translation,i,0));
-    cvmSet(pKalman->state_post,kstate++,0,cvmGet(pMapMnger->pDataCam->translation,i,0));
+    cvmSet(pKalman->state_post,kstate++,0,cvmGet(pDataCam->translation,i,0));
+    cvmSet(pKalman->state_post,kstate++,0,cvmGet(pDataCam->translation,i,0));
   }
   for(int i =0; i<3;i++){
-    cvmSet(pKalman->state_post,kstate++,0,cvmGet(pMapMnger->pDataCam->rotation,i,0));
-    cvmSet(pKalman->state_post,kstate++,0,cvmGet(pMapMnger->pDataCam->rotation,i,0));
+    cvmSet(pKalman->state_post,kstate++,0,cvmGet(pDataCam->rotation,i,0));
+    cvmSet(pKalman->state_post,kstate++,0,cvmGet(pDataCam->rotation,i,0));
   }
   cout<<"Before updateMatrizSize init_state"<<endl;
 
   UpdateMatrixSize();
 
-  //grow(pMapMnger->pMap->bbdd.size()-10);
+  //grow(pMap->bbdd.size()-10);
   cout<<"after updateMatrizSize " <<endl;
 
   // inicializaciÃ³n primeros puntos vistos
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
         cvmSet(pKalman->state_post,kstate++,0,(*It)->wx);
@@ -300,7 +300,7 @@ void CKalman::Test()
 
   int m_i=pModel->getMeasurementNum();
   int s_i=12;//
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
 
@@ -363,7 +363,7 @@ void CKalman::Test()
 	  {
 	    cout<<"test ko: "<<cvmGet(T4,0,0)<<" xi: "<<xi[30]<<" id "<<(*It)->ID<<endl;
 	    (*It)->state=st_no_view;
-	    pMapMnger->pMap->visible--;
+	    pMap->visible--;
 	  }else{
 	  cout<<"test OK: "<<cvmGet(T4,0,0)<<" xi: "<<xi[30]<<" id "<<(*It)->ID<<endl;
     	}
@@ -376,7 +376,7 @@ void CKalman::Test()
 
     }//end for iterator
 
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
         if(sqrt(((*It)->pto.x-(*It)->projx)*((*It)->pto.x-(*It)->projx)+
@@ -385,7 +385,7 @@ void CKalman::Test()
             cout<<"fuera por distancia a proj: "<<(*It)->ID<<" Dist: "<<sqrt(((*It)->pto.x-(*It)->projx)*((*It)->pto.x-(*It)->projx)+
                 ((*It)->pto.y-(*It)->projy)*((*It)->pto.y-(*It)->projy))<<endl;
             (*It)->state=st_no_view;
-            pMapMnger->pMap->visible--;
+            pMap->visible--;
         }//end if for
       }//end if state
     }//end iterator
@@ -422,8 +422,8 @@ void CKalman::UpdateJacob()
 
   int i =0;
 
-  pMapMnger->pDataCam->SetRotation(rotation);
-  pMapMnger->pDataCam->SetTranslation(trans);
+  pDataCam->SetRotation(rotation);
+  pDataCam->SetTranslation(trans);
   i=0;
   pModelCam->ProjectPoints();
 
@@ -435,7 +435,7 @@ void CKalman::UpdateJacob()
     transMat(pModel->getMeasurementMatrix(),pKalman->measurement_matrix);
   }
 
-  for (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
 	//cout<<j<<" "<<(*It)->wx<<" "<<(*It)->wy<<" "<<(*It)->wz<<" "<<(*It)->projx<<" "<<(*It)->projy<<" "<<cvmGet((*It)->dpdw,0,0)<<endl;
@@ -521,7 +521,7 @@ void CKalman::Correct()
           //		cvReleaseMat(&tempmeas);
     }
   int ii=pModel->getMeasurementNum();
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
         cvmSet(measurement,ii,0,(*It)->pto.x);
@@ -538,7 +538,7 @@ void CKalman::Correct()
     }
 
   ii=pModel->getMeasurementNum();
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
         cout<<"linearidad--> "<<" Jacob x:"<< cvmGet(pKalman->temp5,ii,0)<<" y: ";
@@ -568,15 +568,15 @@ void CKalman::Correct()
     kstate++;
   }
 
-  pMapMnger->pDataCam->SetRotation(rotation);
-  pMapMnger->pDataCam->SetTranslation(trans);
+  pDataCam->SetRotation(rotation);
+  pDataCam->SetTranslation(trans);
   cout<<"_trans "<<cvmGet(trans,0,0)<<" "<<cvmGet(trans,1,0)<<" "<<cvmGet(trans,1,0)<<endl;
-  cout<<"translation "<<cvmGet(pMapMnger->pDataCam->translation,0,0)<<" ";
-  cout<< cvmGet(pMapMnger->pDataCam->translation,1,0)<<" ";
-  cout<< cvmGet(pMapMnger->pDataCam->translation,2,0)<<" "<<endl;
+  cout<<"translation "<<cvmGet(pDataCam->translation,0,0)<<" ";
+  cout<< cvmGet(pDataCam->translation,1,0)<<" ";
+  cout<< cvmGet(pDataCam->translation,2,0)<<" "<<endl;
 
   ii=pModel->getStateNum();
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited||(*It)->state==st_no_view)
         {
@@ -621,7 +621,7 @@ void CKalman::Correct_FAST()
       i_c++;
     }
 //  cout<<"2"<<endl;
-  for (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
 	for (int j=0;j<fdims; j++)
@@ -709,7 +709,7 @@ void CKalman::Correct_FAST()
       //		cvReleaseMat(&tempmeas);
     }
   int ii=pModel->getMeasurementNum();
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
 	cvmSet(measurement,ii,0,(*It)->pto.x);
@@ -726,7 +726,7 @@ void CKalman::Correct_FAST()
     }
 
   ii=pModel->getMeasurementNum();
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited){
 	cvmSet(pKalman->temp5,ii,0,(*It)->pto.x-(*It)->projx);
@@ -770,15 +770,15 @@ void CKalman::Correct_FAST()
     kstate++;
   }
 
-  pMapMnger->pDataCam->SetRotation(rotation);
-  pMapMnger->pDataCam->SetTranslation(trans);
+  pDataCam->SetRotation(rotation);
+  pDataCam->SetTranslation(trans);
   cout<<"_trans "<<cvmGet(trans,0,0)<<" "<<cvmGet(trans,1,0)<<" "<<cvmGet(trans,1,0)<<endl;
-  cout<<"translation "<<cvmGet(pMapMnger->pDataCam->translation,0,0)<<" ";
-  cout<< cvmGet(pMapMnger->pDataCam->translation,1,0)<<" ";
-  cout<< cvmGet(pMapMnger->pDataCam->translation,2,0)<<" "<<endl;
+  cout<<"translation "<<cvmGet(pDataCam->translation,0,0)<<" ";
+  cout<< cvmGet(pDataCam->translation,1,0)<<" ";
+  cout<< cvmGet(pDataCam->translation,2,0)<<" "<<endl;
 
   ii=pModel->getStateNum();
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited||(*It)->state==st_no_view)
 	{
@@ -818,8 +818,8 @@ void CKalman::UpdateMatrixSize()
   int inited_vis=0;
   int inited_no_vis=0;
 
-  for ( list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();
-	It != pMapMnger->pMap->bbdd.end(); It++ )
+  for ( list<CElempunto*>::iterator It=pMap->bbdd.begin();
+	It != pMap->bbdd.end(); It++ )
     {
       if ((*It)->state==st_inited){
         inited_vis++;
@@ -951,7 +951,7 @@ void CKalman::UpdateMatrixSize()
 
     int id=0;
     int start=0;
-    for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+    for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
       {
         if ((*It)->state>=st_inited){
           if (start<startpoint) start++;
@@ -997,7 +997,7 @@ void CKalman::UpdateMatrixSize()
     int estado_recorrido=oldDP;
     int start=0;
     CvMat *h=cvCreateMat(3,1,CV_32FC1);
-    for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+    for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
         if ((*It)->state>=st_inited){
           if (start<startpoint) start++;
@@ -1027,7 +1027,7 @@ void CKalman::UpdateMatrixSize()
 
   //	state_post=wx wy wz
   int kstate=pModel->getStateNum();
-  for   (list<CElempunto*>::iterator It=pMapMnger->pMap->bbdd.begin();It != pMapMnger->pMap->bbdd.end();It++)
+  for   (list<CElempunto*>::iterator It=pMap->bbdd.begin();It != pMap->bbdd.end();It++)
     {
       if((*It)->state==st_inited||(*It)->state==st_no_view){
         cvmSet(pKalman->state_post,kstate,0,(*It)->wx);
@@ -1186,7 +1186,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     CvMat *dh_dr=cvCreateMat(3,3,CV_32FC1);
     CvMat *RotMat = cvCreateMat(3,3,CV_32FC1);
     CvMat *RotJ=cvCreateMat(9,3,CV_32FC1);
-    cvRodrigues2(pMapMnger->pDataCam->rotation, RotMat,RotJ);
+    cvRodrigues2(pDataCam->rotation, RotMat,RotJ);
     CvMat *RotJ_dr0=cvCreateMatHeader(3,3,CV_32FC1);
     CvMat *RotJ_dr1=cvCreateMatHeader(3,3,CV_32FC1);
     CvMat *RotJ_dr2=cvCreateMatHeader(3,3,CV_32FC1);
@@ -1196,7 +1196,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
 
 
     CvMat *InvF =cvCreateMat(3,3,CV_32FC1);
-    cvInv(pMapMnger->pDataCam->calibration, InvF);
+    cvInv(pDataCam->calibration, InvF);
     CvMat *Pix=cvCreateMat(3,1,CV_32FC1);
     cvmSet(Pix,0,0,xpix);
     cvmSet(Pix,1,0,ypix);
@@ -1226,7 +1226,7 @@ void CKalman::NewPointCov(int old_state,CvMat *h,int xpix,int ypix)
     CvMat *dh_dpix =cvCreateMatHeader(3,2,CV_32FC1);
     cvGetSubRect(dh_dpix_,dh_dpix,cvRect(0, 0, 2,3));//Aunque es de 3x3 solo se usa las 2 1º cols.
 
-    cvGEMM(pMapMnger->pDataCam->rotMat,InvF,1,NULL,0,dh_dpix_,CV_GEMM_A_T);
+    cvGEMM(pDataCam->rotMat,InvF,1,NULL,0,dh_dpix_,CV_GEMM_A_T);
 
     CvMat *dTh_dpix=cvCreateMat(1,2,CV_32FC1);
     cvGEMM(dTh_dh,dh_dpix,1,NULL,0,dTh_dpix,0);
@@ -1340,4 +1340,20 @@ void CKalman::Print(int iter)
   cvShowImage("kalman_cov_pre",im);
 */
 }
+
+CvMat *CKalman::getCovMat()
+{
+    return pKalman->error_cov_post;
+}
+void CKalman::ResetEstimator(){
+
+}
+// void CKalman::ManageMap(){
+//      iterInThisMap++;
+//      if (iterInThisMap>20)
+//      {
+//          SaveMap();
+//          ResetEstimator();
+//      }
+//     }
 }

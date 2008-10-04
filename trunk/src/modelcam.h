@@ -1,13 +1,16 @@
 #ifndef MODELCAM_H
 #define MODELCAM_H
 
+
 #include <cv.h>
 #include <iostream>
 #include "datacam.h"
 #include "map.h"
-#include "mapmnger.h"
+#include "estimator.h"
 
 namespace SLAM{
+    class CEstimator;
+
 /**
 @author Jorge Artieda
 @brief Ecuaciones del modelo de c&aacute;mara pin-hole
@@ -38,15 +41,11 @@ void cvProject_1_pto(CvMat* obj, CvMat* img,
 void cvInverseParam(CvMat** h,CvPoint pto);
 //void setDataCam(CDataCam* p);
 //void setMap(CMap* p);
-void setMapMnger(CMapMnger* p);
 
 void getJInit(CvMat *Jpos, CvMat *Jpix, CvPoint pto);
-private:
 
-CMapMnger *pMapMnger;
+CEstimator *pEstimator;
 
-//CDataCam *pDataCam;
-//CMap * pMap;
 };
 }
 #endif

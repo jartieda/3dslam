@@ -1,12 +1,8 @@
 #ifndef KALMAN_H
 #define KALMAN_H
 
-#include "modelcam.h"
-#include "map.h"
-#include "model.h"
-#include "cv.h"
-#include "estimator.h"
 #include "highgui.h"
+#include "estimator.h"
 
 namespace SLAM{
 
@@ -24,6 +20,9 @@ void Predict();
 void Correct();
 void Test();///<test de mahalanobis
 void initState();
+CvMat *getCovMat();
+
+
 CvKalman *pKalman;///<estructura que contiene las variables internas del kalman
 CvKalman *pKalmanMem;///<estructura que contiene un kalman gigante para reservar memoria
 
@@ -44,7 +43,7 @@ void setModel(CModel *p);///< enlaza la clase calman con el modelo de vehículo
 void Predict_FAST();
 void Correct_FAST();
 void NewPointCov(int old_state,CvMat *h,int xpix,int ypix);
-
+void ResetEstimator();
 };
 }
 #endif

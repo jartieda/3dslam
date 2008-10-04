@@ -6,7 +6,6 @@
 #include "model.h"
 #include "cv.h"
 #include "estimator.h"
-#include "mapmnger.h"
 
 namespace SLAM{
 /**
@@ -63,6 +62,7 @@ int inited_vis; ///<number of visible points inited
 int inited_no_vis; ///<viewed once not visible now
   CvMat *rotation;///<rotacion para devolver los valores de la camara
 CvMat *trans;///<translacion  para devolver los valores de la camara
+CvMat *getCovMat();
 
 };
 }

@@ -16,10 +16,6 @@ CTracker::~CTracker()
 //{
 //	pDataCam=p;
 //}
-void CTracker::setMapMnger(CMapMnger *p)
-{
-    pMapMnger =p;
-}
 
 void CTracker::setModelCam(CModelCam *p)
 {

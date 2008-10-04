@@ -1,8 +1,10 @@
+#ifndef M_UPDATER
+#define M_UPDATER
+
 #include "map.h"
 #include "kalman.h"
 #include "tracker.h"
 #include "modelcam.h"
-#include "mapmnger.h"
 
 #include <vector>
 #include "highgui.h"
@@ -30,7 +32,6 @@ public:
 CUpdater();
 //void setMap(CMap *p);
 //void setDataCam(CDataCam *p);
-void setMapMnger(CMapMnger *p);
 
 void setModelCam(CModelCam *p);
 void setTracker(CTracker *p);
@@ -46,8 +47,7 @@ param bestfit ;
 ~CUpdater();
 //CMap *pMap;
 //CDataCam *pDataCam;
-CMapMnger *pMapMnger;
-
+CEstimator *pEstimator;
 CModelCam *pModelCam;
 CTracker *pTracker;
 int update();
@@ -66,4 +66,8 @@ double point_sep;
 double calidad_min_punto;
 double depth;
 };
+
+
 }
+
+#endif

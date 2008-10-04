@@ -43,16 +43,5 @@ int CModel::getInputNum()
 {
 	return InputNum;
 }
-void CModel::setModelCam(CModelCam *p)
-{
-	pModelCam=p;
-}
-void CModel::setDataCam(CDataCam *p)
-{
-	pDataCam=p;
-}
-void CModel::setMap(CMap *p)
-{
-	pMap=p;
-}
+
 }

@@ -1,5 +1,6 @@
 #ifndef CMAP_H
 #define CMAP_H
+
 #include "elempunto.h"
 #include <list>
 
