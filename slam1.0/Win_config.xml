@@ -1,0 +1,13 @@
+<slam>
+<tracker>
+	tracker_surf
+</tracker>
+<data>
+	g:\\SLAM\\Datos\\December62007-ArgandaDelRey\\imagenes1\\image%0.4d.jpg
+</data>
+<gui>
+	true
+</gui>
+
+</slam>
+

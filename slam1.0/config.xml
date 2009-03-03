@@ -1,0 +1,30 @@
+<slam>
+<tracker>
+	tracker_surf
+</tracker>
+<data>
+    H:\\vueloarganda290908\\imagenesVuelo4\\imageLeft%0.4d.tif
+</data>
+<gui>
+	false
+</gui>
+<frame_increment>
+    1
+</frame_increment>
+<waitkey>
+   100
+</waitkey>
+<tests>
+    <ransac></ransac>
+</tests>
+<resdir>
+    ..\\resdir\\
+</resdir>
+<vehicle id=FreeCam>
+    <data>
+        H:\\SLAM\\Datos\\univ-alberta-vision-sift\\ualberta-csc-flr3-vision\\image%04d.png
+    </data>
+</vehicle>
+
+</slam>
+

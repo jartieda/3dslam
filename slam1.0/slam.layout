@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="All" />
+	<File name="src\datacam.cpp" open="0" top="0" tabpos="8">
+		<Cursor position="82" topLine="41" />
+	</File>
+	<File name="src\datacam.h" open="0" top="0" tabpos="11">
+		<Cursor position="259" topLine="0" />
+	</File>
+	<File name="src\dataout.cpp" open="0" top="0" tabpos="8">
+		<Cursor position="466" topLine="10" />
+	</File>
+	<File name="src\dataout.h" open="0" top="0" tabpos="9">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="src\elempunto.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="362" topLine="0" />
+	</File>
+	<File name="src\elempunto.h" open="0" top="0" tabpos="33">
+		<Cursor position="419" topLine="0" />
+	</File>
+	<File name="src\estimator.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="427" topLine="2" />
+	</File>
+	<File name="src\estimator.h" open="0" top="0" tabpos="2">
+		<Cursor position="995" topLine="25" />
+	</File>
+	<File name="src\freecam.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="330" topLine="29" />
+	</File>
+	<File name="src\freecam.h" open="0" top="0" tabpos="5">
+		<Cursor position="74" topLine="8" />
+	</File>
+	<File name="src\kalman.cpp" open="0" top="0" tabpos="7">
+		<Cursor position="43836" topLine="1230" />
+	</File>
+	<File name="src\kalman.h" open="0" top="0" tabpos="6">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="src\map.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1104" topLine="41" />
+	</File>
+	<File name="src\map.h" open="0" top="0" tabpos="9">
+		<Cursor position="77" topLine="0" />
+	</File>
+	<File name="src\model.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="664" topLine="28" />
+	</File>
+	<File name="src\model.h" open="0" top="0" tabpos="3">
+		<Cursor position="154" topLine="0" />
+	</File>
+	<File name="src\modelcam.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="28603" topLine="722" />
+	</File>
+	<File name="src\modelcam.h" open="0" top="0" tabpos="5">
+		<Cursor position="1158" topLine="24" />
+	</File>
+	<File name="src\particlefilter.cpp" open="0" top="0" tabpos="10">
+		<Cursor position="1568" topLine="35" />
+	</File>
+	<File name="src\particlefilter.h" open="0" top="0" tabpos="21">
+		<Cursor position="1632" topLine="51" />
+	</File>
+	<File name="src\robotxyth.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="554" topLine="16" />
+	</File>
+	<File name="src\robotxyth.h" open="0" top="0" tabpos="12">
+		<Cursor position="68" topLine="0" />
+	</File>
+	<File name="src\surf.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="1734" topLine="30" />
+	</File>
+	<File name="src\surf.h" open="0" top="0" tabpos="0">
+		<Cursor position="1167" topLine="0" />
+	</File>
+	<File name="src\tracker.cpp" open="0" top="0" tabpos="22">
+		<Cursor position="196" topLine="9" />
+	</File>
+	<File name="src\tracker.h" open="0" top="0" tabpos="2">
+		<Cursor position="607" topLine="0" />
+	</File>
+	<File name="src\tracker_harris.cpp" open="0" top="0" tabpos="14">
+		<Cursor position="1294" topLine="29" />
+	</File>
+	<File name="src\tracker_harris.h" open="0" top="0" tabpos="24">
+		<Cursor position="89" topLine="5" />
+	</File>
+	<File name="src\tracker_surf.cpp" open="0" top="0" tabpos="8">
+		<Cursor position="103" topLine="0" />
+	</File>
+	<File name="src\tracker_surf.h" open="0" top="0" tabpos="7">
+		<Cursor position="171" topLine="22" />
+	</File>
+	<File name="src\trackerfile.cpp" open="0" top="0" tabpos="16">
+		<Cursor position="1771" topLine="3" />
+	</File>
+	<File name="src\trackerfile.h" open="0" top="0" tabpos="23">
+		<Cursor position="499" topLine="3" />
+	</File>
+	<File name="src\updater.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="635" topLine="37" />
+	</File>
+	<File name="src\updater.h" open="0" top="0" tabpos="25">
+		<Cursor position="953" topLine="44" />
+	</File>
+	<File name="src\vehicle.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="2634" topLine="66" />
+	</File>
+	<File name="src\vehicle.h" open="0" top="0" tabpos="6">
+		<Cursor position="144" topLine="0" />
+	</File>
+	<File name="src\xmlParser.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="7743" topLine="167" />
+	</File>
+	<File name="src\xmlParser.h" open="0" top="0" tabpos="34">
+		<Cursor position="4668" topLine="149" />
+	</File>
+	<File name="test1\test2.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="18955" topLine="625" />
+	</File>
+</CodeBlocks_layout_file>
