@@ -1,0 +1,2260 @@
+# depslib dependency file v1.0
+1224770762 source:h:\slam\programas\minislam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+
+1225305702 h:\slam\programas\minislam\cslam.h
+	<cv.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+
+1159380162 c:\program files\opencv\cv\include\cv.h
+	<chdl.h>
+	"cxcore.h"
+	"cvtypes.h"
+	"cv.hpp"
+	"cvcompat.h"
+
+1158764962 c:\program files\opencv\cxcore\include\cxcore.h
+	"ipl.h"
+	"ipl/ipl.h"
+	"cxtypes.h"
+	"cxerror.h"
+	"cvver.h"
+	"cxcore.hpp"
+
+1157736794 c:\program files\opencv\cxcore\include\cxtypes.h
+	<assert.h>
+	<stdlib.h>
+	<string.h>
+	<float.h>
+	<emmintrin.h>
+	<fastmath.h>
+	<mathimf.h>
+	<math.h>
+	<ipl.h>
+	<ipl/ipl.h>
+
+1157556268 c:\program files\opencv\cxcore\include\cxerror.h
+
+1160685726 c:\program files\opencv\cxcore\include\cvver.h
+
+1160157594 c:\program files\opencv\cxcore\include\cxcore.hpp
+
+1132692136 c:\program files\opencv\cv\include\cvtypes.h
+	<assert.h>
+	<stdlib.h>
+
+1157550020 c:\program files\opencv\cv\include\cv.hpp
+
+1152726440 c:\program files\opencv\cv\include\cvcompat.h
+	<string.h>
+
+1160579992 c:\program files\opencv\otherlibs\highgui\highgui.h
+	"cxcore.h"
+	<windows.h>
+	<chdl.h>
+
+1219868286 h:\slam\programas\minislam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224573478 source:h:\slam\programas\minislam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1225308736 source:h:\slam\programas\minislam\cslam.cpp
+	"cslam.h"
+
+1224770762 source:f:\slam\programas\minislam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+
+1224763734 f:\slam\programas\minislam\cslam.h
+	<cv.h>
+	<iostream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+
+1219868286 f:\slam\programas\minislam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224573478 source:f:\slam\programas\minislam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1224777804 source:f:\slam\programas\minislam\cslam.cpp
+	"cslam.h"
+
+1223227550 c:\archivos de programa\opencv\cv\include\cv.h
+	<chdl.h>
+	"cxcore.h"
+	"cvtypes.h"
+	"cv.hpp"
+	"cvcompat.h"
+
+1223402942 c:\archivos de programa\opencv\cxcore\include\cxcore.h
+	"ipl.h"
+	"ipl/ipl.h"
+	"cxtypes.h"
+	"cxerror.h"
+	"cvver.h"
+	"cxcore.hpp"
+
+1224276540 c:\archivos de programa\opencv\cxcore\include\cxtypes.h
+	<assert.h>
+	<stdlib.h>
+	<string.h>
+	<float.h>
+	<emmintrin.h>
+	<fastmath.h>
+	<mathimf.h>
+	<math.h>
+	<ipl.h>
+	<ipl/ipl.h>
+
+1211325702 c:\archivos de programa\opencv\cxcore\include\cxerror.h
+
+1223230342 c:\archivos de programa\opencv\cxcore\include\cvver.h
+
+1223049866 c:\archivos de programa\opencv\cxcore\include\cxcore.hpp
+
+1220440080 c:\archivos de programa\opencv\cv\include\cvtypes.h
+	<assert.h>
+	<stdlib.h>
+
+1222814646 c:\archivos de programa\opencv\cv\include\cv.hpp
+
+1217983240 c:\archivos de programa\opencv\cv\include\cvcompat.h
+	<string.h>
+
+1223233630 c:\archivos de programa\opencv\otherlibs\highgui\highgui.h
+	"cxcore.h"
+	<windows.h>
+	<chdl.h>
+
+1223391456 f:\slam\programas\minislam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+
+1224573478 source:f:\slam\programas\minislam\surf.cpp
+	"surf.h"
+
+1224838474 h:\slam\programas\minislam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1225138182 source:h:\slam\programas\minislam\surf.cpp
+	"surf.h"
+
+1225989642 source:g:\slam\programas\minislam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+
+1225899588 g:\slam\programas\minislam\cslam.h
+	<cv.h>
+	<highgui.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+	<cstdio>
+
+1219868286 g:\slam\programas\minislam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224838474 g:\slam\programas\minislam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1225138182 source:g:\slam\programas\minislam\surf.cpp
+	"surf.h"
+
+1224573478 source:g:\slam\programas\minislam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1225989558 source:g:\slam\programas\minislam\cslam.cpp
+	"cslam.h"
+	"Openvis3d.h"
+	"OpenCVImageAdapter.h"
+
+1225885758 g:\slam\programas\minislam\openvis3d.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+	"OvStereoT.h"
+	"OvFlowT.h"
+	"BTLocalMatcherT.h"
+	"OvStereoDiffuseMatcherT.h"
+	"OvFlowDiffuseMatcherT.h"
+
+1225885758 g:\slam\programas\minislam\ovimageadapter.h
+
+1225885758 g:\slam\programas\minislam\ovimaget.h
+	<cmath>
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	"OvImageAdapter.h"
+
+1225885758 g:\slam\programas\minislam\ovimagepairpreprocessort.h
+	"OvImageT.h"
+
+1225885758 g:\slam\programas\minislam\ovlocalmatchert.h
+	"OvImageT.h"
+
+1225885758 g:\slam\programas\minislam\ovstereoglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 g:\slam\programas\minislam\ovdisparitypostprocessor.h
+	"OvImageT.h"
+
+1225885758 g:\slam\programas\minislam\ovstereot.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+
+1225885758 g:\slam\programas\minislam\btlocalmatchert.h
+	"OvLocalMatcherT.h"
+
+1225885758 g:\slam\programas\minislam\ovstereodiffusematchert.h
+	"OvImageT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 g:\slam\programas\minislam\opencvimageadapter.h
+	<cv.h>
+	"OvImageAdapter.h"
+
+1225885758 g:\slam\programas\minislam\ovflowglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 g:\slam\programas\minislam\ovflowpostprocessor.h
+	"OvImageT.h"
+
+1225885758 g:\slam\programas\minislam\ovflowt.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+
+1225885758 g:\slam\programas\minislam\ovflowdiffusematchert.h
+	"OvImageT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 source:g:\slam\programas\minislam\opencvimageadapter.cpp
+	"OpenCVImageAdapter.h"
+
+1225885764 source:g:\slam\programas\minislam\ovimageadapter.cpp
+	"OvImageAdapter.h"
+
+1225885764 source:d:\slam\programas\minislam\ovimageadapter.cpp
+	"OvImageAdapter.h"
+
+1225885758 d:\slam\programas\minislam\ovimageadapter.h
+
+1229118758 source:d:\slam\programas\minislam\cslam.cpp
+	"cslam.h"
+	"Openvis3d.h"
+	"OpenCVImageAdapter.h"
+
+1229249902 d:\slam\programas\minislam\cslam.h
+	<cv.h>
+	<highgui.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+	<cstdio>
+
+1219868286 d:\slam\programas\minislam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224838474 d:\slam\programas\minislam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1225885758 d:\slam\programas\minislam\openvis3d.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+	"OvStereoT.h"
+	"OvFlowT.h"
+	"BTLocalMatcherT.h"
+	"OvStereoDiffuseMatcherT.h"
+	"OvFlowDiffuseMatcherT.h"
+
+1225885758 d:\slam\programas\minislam\ovimaget.h
+	<cmath>
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	"OvImageAdapter.h"
+
+1225885758 d:\slam\programas\minislam\ovimagepairpreprocessort.h
+	"OvImageT.h"
+
+1225885758 d:\slam\programas\minislam\ovlocalmatchert.h
+	"OvImageT.h"
+
+1225885758 d:\slam\programas\minislam\ovstereoglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 d:\slam\programas\minislam\ovdisparitypostprocessor.h
+	"OvImageT.h"
+
+1225885758 d:\slam\programas\minislam\ovflowglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 d:\slam\programas\minislam\ovflowpostprocessor.h
+	"OvImageT.h"
+
+1225885758 d:\slam\programas\minislam\ovstereot.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+
+1225885758 d:\slam\programas\minislam\ovflowt.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+
+1225885758 d:\slam\programas\minislam\btlocalmatchert.h
+	"OvLocalMatcherT.h"
+
+1225885758 d:\slam\programas\minislam\ovstereodiffusematchert.h
+	"OvImageT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 d:\slam\programas\minislam\ovflowdiffusematchert.h
+	"OvImageT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 d:\slam\programas\minislam\opencvimageadapter.h
+	<cv.h>
+	"OvImageAdapter.h"
+
+1229126622 source:d:\slam\programas\minislam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+	"cvisor.h"
+
+1225989780 source:d:\slam\programas\minislam\surf.cpp
+	"surf.h"
+
+1224573478 source:d:\slam\programas\minislam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1225884396 source:d:\slam\programas\minislam\opencvimageadapter.cpp
+	"OpenCVImageAdapter.h"
+
+1229250136 source:d:\slam\programas\minislam\cvisor.cpp
+	"cvisor.h"
+
+1229167402 d:\slam\programas\minislam\cvisor.h
+	<osgViewer/Viewer>
+	<osg/ShapeDrawable>
+	<osg/Geometry>
+	<osg/PositionAttitudeTransform>
+	<osgDB/ReadFile>
+	<osg/Texture2D>
+	<iostream>
+	"cslam.h"
+
+1235630417 c:\program files\openscenegraph\include\osgviewer\viewer
+	<osg/ArgumentParser>
+	<osgGA/EventVisitor>
+	<osgUtil/UpdateVisitor>
+	<osgViewer/GraphicsWindow>
+	<osgViewer/View>
+
+1235630414 c:\program files\openscenegraph\include\osg\argumentparser
+	<osg/Export>
+	<osg/ref_ptr>
+	<osg/ApplicationUsage>
+	<map>
+	<string>
+	<ostream>
+
+1235630414 c:\program files\openscenegraph\include\osg\export
+	<osg/Config>
+
+1235630499 c:\program files\openscenegraph\include\osg\config
+
+1235630414 c:\program files\openscenegraph\include\osg\ref_ptr
+	<osg/Config>
+
+1235630416 c:\program files\openscenegraph\include\osg\applicationusage
+	<osg/Referenced>
+	<map>
+	<string>
+	<ostream>
+
+1235630415 c:\program files\openscenegraph\include\osg\referenced
+	<osg/Export>
+	<OpenThreads/ScopedLock>
+	<OpenThreads/Mutex>
+	<OpenThreads/Atomic>
+
+1235630416 c:\program files\openscenegraph\include\openthreads\scopedlock
+
+1235630416 c:\program files\openscenegraph\include\openthreads\mutex
+	<OpenThreads/Exports>
+
+1235630416 c:\program files\openscenegraph\include\openthreads\exports
+	<OpenThreads/Config>
+
+1235630501 c:\program files\openscenegraph\include\openthreads\config
+
+1235630416 c:\program files\openscenegraph\include\openthreads\atomic
+	<OpenThreads/Config>
+	<OpenThreads/Exports>
+	<atomic.h>
+	"Mutex"
+	"ScopedLock"
+	<libkern/OSAtomic.h>
+	"Mutex"
+	"ScopedLock"
+
+1235630411 c:\program files\openscenegraph\include\osgga\eventvisitor
+	<osg/NodeVisitor>
+	<osg/Node>
+	<osg/Geode>
+	<osg/Billboard>
+	<osg/LOD>
+	<osg/Switch>
+	<osg/LightSource>
+	<osg/Transform>
+	<osg/Projection>
+	<osg/OccluderNode>
+	<osgGA/GUIEventAdapter>
+	<osgGA/GUIActionAdapter>
+	<osgGA/EventQueue>
+
+1235630414 c:\program files\openscenegraph\include\osg\nodevisitor
+	<osg/Node>
+	<osg/Matrix>
+	<osg/FrameStamp>
+
+1235630413 c:\program files\openscenegraph\include\osg\node
+	<osg/Object>
+	<osg/StateSet>
+	<osg/BoundingSphere>
+	<osg/NodeCallback>
+	<string>
+	<vector>
+
+1235630414 c:\program files\openscenegraph\include\osg\object
+	<osg/Referenced>
+	<osg/CopyOp>
+	<osg/ref_ptr>
+	<string>
+
+1235630414 c:\program files\openscenegraph\include\osg\copyop
+	<osg/Export>
+
+1235630415 c:\program files\openscenegraph\include\osg\stateset
+	<osg/Object>
+	<osg/StateAttribute>
+	<osg/ref_ptr>
+	<osg/Uniform>
+	<osg/Program>
+	<map>
+	<vector>
+	<string>
+
+1235630415 c:\program files\openscenegraph\include\osg\stateattribute
+	<osg/Export>
+	<osg/Object>
+	<osg/GL>
+	<typeinfo>
+	<utility>
+	<vector>
+
+1235630416 c:\program files\openscenegraph\include\osg\gl
+	<OpenGL/gl.h>
+	<GL/gl.h>
+	<GL/gl.h>
+
+1235630415 c:\program files\openscenegraph\include\osg\uniform
+	<osg/ref_ptr>
+	<osg/Array>
+	<osg/Vec2>
+	<osg/Vec3>
+	<osg/Vec4>
+	<osg/Matrix>
+	<osg/GL2Extensions>
+	<string>
+	<vector>
+
+1235630415 c:\program files\openscenegraph\include\osg\array
+	<osg/MixinVector>
+	<osg/Vec2>
+	<osg/Vec3>
+	<osg/Vec4>
+	<osg/Vec2d>
+	<osg/Vec3d>
+	<osg/Vec4d>
+	<osg/Vec4ub>
+	<osg/Vec2s>
+	<osg/Vec3s>
+	<osg/Vec4s>
+	<osg/Vec2b>
+	<osg/Vec3b>
+	<osg/Vec4b>
+	<osg/BufferObject>
+	<osg/Object>
+	<osg/GL>
+
+1235630414 c:\program files\openscenegraph\include\osg\mixinvector
+	<vector>
+
+1235630413 c:\program files\openscenegraph\include\osg\vec2
+	<osg/Vec2f>
+
+1235630414 c:\program files\openscenegraph\include\osg\vec2f
+	<osg/Math>
+
+1235630415 c:\program files\openscenegraph\include\osg\math
+	<math.h>
+	<osg/Export>
+	<cmath>
+	<AvailabilityMacros.h>
+	<float.h>
+	<float.h>
+
+1235630414 c:\program files\openscenegraph\include\osg\vec3
+	<osg/Vec3f>
+
+1235630415 c:\program files\openscenegraph\include\osg\vec3f
+	<osg/Vec2f>
+	<osg/Math>
+
+1235630415 c:\program files\openscenegraph\include\osg\vec4
+	<osg/Vec4f>
+
+1235630415 c:\program files\openscenegraph\include\osg\vec4f
+	<osg/Vec3f>
+
+1235630414 c:\program files\openscenegraph\include\osg\vec2d
+	<osg/Vec2f>
+
+1235630414 c:\program files\openscenegraph\include\osg\vec3d
+	<osg/Vec2d>
+	<osg/Vec3f>
+
+1235630414 c:\program files\openscenegraph\include\osg\vec4d
+	<osg/Vec3d>
+	<osg/Vec4f>
+
+1235630414 c:\program files\openscenegraph\include\osg\vec4ub
+	<osg/Vec3>
+
+1235630414 c:\program files\openscenegraph\include\osg\vec2s
+
+1235630415 c:\program files\openscenegraph\include\osg\vec3s
+
+1235630413 c:\program files\openscenegraph\include\osg\vec4s
+
+1235630414 c:\program files\openscenegraph\include\osg\vec2b
+
+1235630415 c:\program files\openscenegraph\include\osg\vec3b
+
+1235630414 c:\program files\openscenegraph\include\osg\vec4b
+
+1235630414 c:\program files\openscenegraph\include\osg\bufferobject
+	<osg/GL>
+	<osg/Object>
+	<osg/buffered_value>
+
+1235630414 c:\program files\openscenegraph\include\osg\buffered_value
+	<osg/DisplaySettings>
+	<vector>
+
+1235630416 c:\program files\openscenegraph\include\osg\displaysettings
+	<osg/Referenced>
+	<string>
+	<vector>
+
+1235630416 c:\program files\openscenegraph\include\osg\matrix
+	<osg/Config>
+	<osg/Matrixd>
+	<osg/Matrixf>
+
+1235630414 c:\program files\openscenegraph\include\osg\matrixd
+	<osg/Object>
+	<osg/Vec3d>
+	<osg/Vec4d>
+	<osg/Quat>
+
+1235630414 c:\program files\openscenegraph\include\osg\quat
+	<osg/Export>
+	<osg/Vec3f>
+	<osg/Vec4f>
+	<osg/Vec3d>
+	<osg/Vec4d>
+
+1235630415 c:\program files\openscenegraph\include\osg\matrixf
+	<osg/Object>
+	<osg/Vec3d>
+	<osg/Vec4d>
+	<osg/Quat>
+
+1235630415 c:\program files\openscenegraph\include\osg\gl2extensions
+	<osg/Referenced>
+	<osg/GL>
+	<string>
+
+1235630415 c:\program files\openscenegraph\include\osg\program
+	<string>
+	<vector>
+	<map>
+	<osg/buffered_value>
+	<osg/ref_ptr>
+	<osg/Uniform>
+	<osg/Shader>
+	<osg/StateAttribute>
+
+1235630415 c:\program files\openscenegraph\include\osg\shader
+	<osg/GL2Extensions>
+	<osg/Object>
+	<osg/buffered_value>
+	<set>
+
+1235630415 c:\program files\openscenegraph\include\osg\boundingsphere
+	<osg/Config>
+	<osg/Export>
+	<osg/Vec3f>
+	<osg/Vec3d>
+
+1235630414 c:\program files\openscenegraph\include\osg\nodecallback
+	<osg/Object>
+	<osg/ref_ptr>
+
+1235630415 c:\program files\openscenegraph\include\osg\framestamp
+	<osg/Referenced>
+	<time.h>
+	<ctime>
+
+1235630415 c:\program files\openscenegraph\include\osg\geode
+	<osg/Node>
+	<osg/NodeVisitor>
+	<osg/Drawable>
+
+1235630416 c:\program files\openscenegraph\include\osg\drawable
+	<osg/BoundingBox>
+	<osg/Shape>
+	<osg/BufferObject>
+	<osg/PrimitiveSet>
+	<osg/RenderInfo>
+
+1235630415 c:\program files\openscenegraph\include\osg\boundingbox
+	<osg/Config>
+	<osg/Export>
+	<osg/Vec3>
+	<osg/Vec3d>
+	<float.h>
+
+1235630415 c:\program files\openscenegraph\include\osg\shape
+	<osg/Object>
+	<osg/Vec3>
+	<osg/Quat>
+	<osg/Plane>
+	<osg/Array>
+
+1235630416 c:\program files\openscenegraph\include\osg\plane
+	<osg/Config>
+	<osg/Export>
+	<osg/Vec3>
+	<osg/Vec4>
+	<osg/Matrix>
+	<osg/BoundingSphere>
+	<osg/BoundingBox>
+	<vector>
+
+1235630414 c:\program files\openscenegraph\include\osg\primitiveset
+	<osg/GL>
+	<osg/Object>
+	<osg/buffered_value>
+	<osg/Vec2>
+	<osg/Vec3>
+	<osg/Vec4>
+	<osg/Vec2d>
+	<osg/Vec3d>
+	<osg/Vec4d>
+	<osg/MixinVector>
+	<osg/BufferObject>
+	<vector>
+
+1235630415 c:\program files\openscenegraph\include\osg\renderinfo
+	<osg/State>
+	<osg/View>
+	<osg/observer_ptr>
+
+1235630415 c:\program files\openscenegraph\include\osg\state
+	<osg/Export>
+	<osg/StateSet>
+	<osg/Matrix>
+	<osg/Uniform>
+	<osg/BufferObject>
+	<osg/observer_ptr>
+	<osg/FrameStamp>
+	<osg/DisplaySettings>
+	<osg/Polytope>
+	<osg/Viewport>
+	<vector>
+	<map>
+	<set>
+	<string>
+
+1235630416 c:\program files\openscenegraph\include\osg\polytope
+	<osg/Plane>
+	<osg/fast_back_stack>
+
+1235630415 c:\program files\openscenegraph\include\osg\fast_back_stack
+	<vector>
+
+1235630413 c:\program files\openscenegraph\include\osg\viewport
+	<osg/StateAttribute>
+	<osg/Matrix>
+
+1235630414 c:\program files\openscenegraph\include\osg\view
+	<osg/Camera>
+	<osg/Light>
+	<osg/Stats>
+	<OpenThreads/Mutex>
+
+1235630415 c:\program files\openscenegraph\include\osg\camera
+	<osg/Transform>
+	<osg/Viewport>
+	<osg/ColorMask>
+	<osg/CullSettings>
+	<osg/Texture>
+	<osg/Image>
+	<osg/GraphicsContext>
+	<osg/Stats>
+	<OpenThreads/Mutex>
+
+1235630414 c:\program files\openscenegraph\include\osg\transform
+	<osg/Group>
+	<osg/Matrix>
+
+1235630414 c:\program files\openscenegraph\include\osg\group
+	<osg/Node>
+	<osg/NodeVisitor>
+
+1235630415 c:\program files\openscenegraph\include\osg\colormask
+	<osg/Export>
+	<osg/StateAttribute>
+
+1235630415 c:\program files\openscenegraph\include\osg\cullsettings
+	<iosfwd>
+	<osg/Matrix>
+	<osg/ClearNode>
+
+1235630415 c:\program files\openscenegraph\include\osg\clearnode
+	<osg/Group>
+	<osg/Vec4>
+
+1235630416 c:\program files\openscenegraph\include\osg\texture
+	<osg/GL>
+	<osg/Image>
+	<osg/StateAttribute>
+	<osg/GraphicsContext>
+	<osg/ref_ptr>
+	<osg/Vec4>
+	<osg/Vec4d>
+	<osg/buffered_value>
+	<list>
+	<map>
+
+1235630413 c:\program files\openscenegraph\include\osg\image
+	<osg/BufferObject>
+	<osg/Vec2>
+	<osg/Vec3>
+	<osg/Vec4>
+	<osg/FrameStamp>
+	<string>
+	<vector>
+
+1235630413 c:\program files\openscenegraph\include\osg\graphicscontext
+	<osg/State>
+	<osg/GraphicsThread>
+	<vector>
+
+1235630414 c:\program files\openscenegraph\include\osg\graphicsthread
+	<osg/OperationThread>
+	<osg/State>
+
+1235630415 c:\program files\openscenegraph\include\osg\operationthread
+	<osg/observer_ptr>
+	<osg/Object>
+	<OpenThreads/Thread>
+	<OpenThreads/Barrier>
+	<OpenThreads/Condition>
+	<OpenThreads/Block>
+	<list>
+	<set>
+
+1235630414 c:\program files\openscenegraph\include\osg\observer_ptr
+	<osg/Notify>
+
+1235630414 c:\program files\openscenegraph\include\osg\notify
+	<osg/Export>
+	<ostream>
+
+1235630416 c:\program files\openscenegraph\include\openthreads\thread
+	<sys/types.h>
+	<OpenThreads/Mutex>
+
+1235630416 c:\program files\openscenegraph\include\openthreads\barrier
+	<OpenThreads/Exports>
+
+1235630416 c:\program files\openscenegraph\include\openthreads\condition
+	<OpenThreads/Exports>
+	<OpenThreads/Mutex>
+
+1235630416 c:\program files\openscenegraph\include\openthreads\block
+	<OpenThreads/Thread>
+	<OpenThreads/Barrier>
+	<OpenThreads/Condition>
+	<OpenThreads/ScopedLock>
+
+1235630415 c:\program files\openscenegraph\include\osg\stats
+	<osg/Referenced>
+	<OpenThreads/Mutex>
+	<OpenThreads/ScopedLock>
+	<string>
+	<map>
+	<vector>
+	<ostream>
+
+1235630415 c:\program files\openscenegraph\include\osg\light
+	<osg/StateAttribute>
+	<osg/Vec3>
+	<osg/Vec4>
+
+1235630415 c:\program files\openscenegraph\include\osg\billboard
+	<osg/Matrix>
+	<osg/Geode>
+
+1235630415 c:\program files\openscenegraph\include\osg\lod
+	<osg/Group>
+
+1235630414 c:\program files\openscenegraph\include\osg\switch
+	<osg/Group>
+
+1235630414 c:\program files\openscenegraph\include\osg\lightsource
+	<osg/NodeVisitor>
+	<osg/Light>
+	<osg/Group>
+
+1235630414 c:\program files\openscenegraph\include\osg\projection
+	<osg/Group>
+	<osg/Matrix>
+
+1235630415 c:\program files\openscenegraph\include\osg\occludernode
+	<osg/Group>
+	<osg/ConvexPlanarOccluder>
+
+1235630413 c:\program files\openscenegraph\include\osg\convexplanaroccluder
+	<osg/ConvexPlanarPolygon>
+	<osg/Object>
+
+1235630415 c:\program files\openscenegraph\include\osg\convexplanarpolygon
+	<osg/Plane>
+	<vector>
+
+1235630411 c:\program files\openscenegraph\include\osgga\guieventadapter
+	<osg/Object>
+	<osg/Matrix>
+	<osg/GraphicsContext>
+	<osgGA/Export>
+
+1235630411 c:\program files\openscenegraph\include\osgga\export
+
+1235630411 c:\program files\openscenegraph\include\osgga\guiactionadapter
+	<osgGA/Export>
+	<osg/View>
+
+1235630411 c:\program files\openscenegraph\include\osgga\eventqueue
+	<osgGA/GUIEventAdapter>
+	<osg/ref_ptr>
+	<osg/Timer>
+	<OpenThreads/Mutex>
+	<list>
+
+1235630414 c:\program files\openscenegraph\include\osg\timer
+	<osg/Export>
+
+1235630410 c:\program files\openscenegraph\include\osgutil\updatevisitor
+	<osg/NodeVisitor>
+	<osg/Node>
+	<osg/Geode>
+	<osg/Billboard>
+	<osg/LOD>
+	<osg/Switch>
+	<osg/LightSource>
+	<osg/Transform>
+	<osg/Projection>
+	<osg/OccluderNode>
+	<osgUtil/Export>
+
+1235630409 c:\program files\openscenegraph\include\osgutil\export
+
+1235630417 c:\program files\openscenegraph\include\osgviewer\graphicswindow
+	<osg/GraphicsContext>
+	<osg/Notify>
+	<osgGA/EventQueue>
+	<osgGA/GUIActionAdapter>
+	<osgViewer/Export>
+
+1235630417 c:\program files\openscenegraph\include\osgviewer\export
+
+1235630417 c:\program files\openscenegraph\include\osgviewer\view
+	<osg/View>
+	<osgUtil/PolytopeIntersector>
+	<osgUtil/LineSegmentIntersector>
+	<osgUtil/UpdateVisitor>
+	<osgUtil/SceneView>
+	<osgGA/MatrixManipulator>
+	<osgGA/EventVisitor>
+	<osgGA/EventQueue>
+	<osgViewer/Scene>
+	<osgViewer/ViewerBase>
+
+1235630410 c:\program files\openscenegraph\include\osgutil\polytopeintersector
+	<osgUtil/IntersectionVisitor>
+
+1235630409 c:\program files\openscenegraph\include\osgutil\intersectionvisitor
+	<osg/NodeVisitor>
+	<osg/Drawable>
+	<osgUtil/Export>
+	<list>
+
+1235630409 c:\program files\openscenegraph\include\osgutil\linesegmentintersector
+	<osgUtil/IntersectionVisitor>
+
+1235630410 c:\program files\openscenegraph\include\osgutil\sceneview
+	<osg/Node>
+	<osg/StateSet>
+	<osg/Light>
+	<osg/FrameStamp>
+	<osg/DisplaySettings>
+	<osg/CollectOccludersVisitor>
+	<osg/CullSettings>
+	<osg/Camera>
+	<osgUtil/CullVisitor>
+
+1235630414 c:\program files\openscenegraph\include\osg\collectoccludersvisitor
+	<osg/NodeVisitor>
+	<osg/CullStack>
+	<set>
+
+1235630415 c:\program files\openscenegraph\include\osg\cullstack
+	<osg/CullingSet>
+	<osg/CullSettings>
+	<osg/Viewport>
+	<osg/fast_back_stack>
+	<osg/Transform>
+
+1235630414 c:\program files\openscenegraph\include\osg\cullingset
+	<osg/Polytope>
+	<osg/ShadowVolumeOccluder>
+	<osg/Viewport>
+	<math.h>
+
+1235630413 c:\program files\openscenegraph\include\osg\shadowvolumeoccluder
+	<osg/Polytope>
+	<osg/ConvexPlanarOccluder>
+	<osg/Node>
+
+1235630410 c:\program files\openscenegraph\include\osgutil\cullvisitor
+	<map>
+	<vector>
+	<osg/NodeVisitor>
+	<osg/BoundingSphere>
+	<osg/BoundingBox>
+	<osg/Matrix>
+	<osg/Drawable>
+	<osg/StateSet>
+	<osg/State>
+	<osg/ClearNode>
+	<osg/Camera>
+	<osg/Notify>
+	<osg/CullStack>
+	<osgUtil/StateGraph>
+	<osgUtil/RenderStage>
+	<osg/Vec3>
+
+1235630410 c:\program files\openscenegraph\include\osgutil\stategraph
+	<osg/Matrix>
+	<osg/Drawable>
+	<osg/StateSet>
+	<osg/State>
+	<osg/Light>
+	<osgUtil/RenderLeaf>
+	<set>
+	<vector>
+	<algorithm>
+
+1235630409 c:\program files\openscenegraph\include\osgutil\renderleaf
+	<osg/ref_ptr>
+	<osg/Matrix>
+	<osg/Drawable>
+	<osg/State>
+	<osgUtil/Export>
+
+1235630409 c:\program files\openscenegraph\include\osgutil\renderstage
+	<osg/ColorMask>
+	<osg/Viewport>
+	<osg/Texture>
+	<osg/FrameBufferObject>
+	<osg/Camera>
+	<osgUtil/RenderBin>
+	<osgUtil/PositionalStateContainer>
+
+1235630415 c:\program files\openscenegraph\include\osg\framebufferobject
+	<osg/GL>
+	<osg/Texture>
+	<osg/buffered_value>
+	<osg/Camera>
+
+1235630410 c:\program files\openscenegraph\include\osgutil\renderbin
+	<osgUtil/StateGraph>
+	<map>
+	<vector>
+	<string>
+
+1235630409 c:\program files\openscenegraph\include\osgutil\positionalstatecontainer
+	<osg/Object>
+	<osg/Light>
+	<osg/State>
+	<osgUtil/RenderLeaf>
+	<osgUtil/StateGraph>
+
+1235630412 c:\program files\openscenegraph\include\osgga\matrixmanipulator
+	<osg/Node>
+	<osg/Matrixd>
+	<osg/CoordinateSystemNode>
+	<osgUtil/SceneView>
+	<osgGA/Export>
+	<osgGA/GUIEventHandler>
+	<osgGA/GUIEventAdapter>
+	<osgGA/GUIActionAdapter>
+
+1235630414 c:\program files\openscenegraph\include\osg\coordinatesystemnode
+	<osg/Group>
+	<osg/Matrixd>
+
+1235630411 c:\program files\openscenegraph\include\osgga\guieventhandler
+	<vector>
+	<osg/NodeCallback>
+	<osg/Drawable>
+	<osg/ApplicationUsage>
+	<osgGA/Export>
+	<osgGA/GUIEventAdapter>
+	<osgGA/GUIActionAdapter>
+
+1235630417 c:\program files\openscenegraph\include\osgviewer\scene
+	<osgGA/GUIEventHandler>
+	<osgGA/EventVisitor>
+	<osgDB/DatabasePager>
+	<osgDB/ImagePager>
+	<osgViewer/Export>
+	<list>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\databasepager
+	<osg/NodeVisitor>
+	<osg/Group>
+	<osg/PagedLOD>
+	<osg/Drawable>
+	<osg/GraphicsThread>
+	<osg/FrameStamp>
+	<OpenThreads/Thread>
+	<OpenThreads/Mutex>
+	<OpenThreads/ScopedLock>
+	<OpenThreads/Condition>
+	<osgDB/SharedStateManager>
+	<osgDB/ReaderWriter>
+	<osgDB/Export>
+	<map>
+	<list>
+	<algorithm>
+	<functional>
+
+1235630416 c:\program files\openscenegraph\include\osg\pagedlod
+	<osg/LOD>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\sharedstatemanager
+	<osg/NodeVisitor>
+	<osg/Geode>
+	<osgDB/Export>
+	<OpenThreads/Mutex>
+	<set>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\export
+
+1235630408 c:\program files\openscenegraph\include\osgdb\readerwriter
+	<osg/Image>
+	<osg/Shape>
+	<osg/Node>
+	<osgDB/AuthenticationMap>
+	<deque>
+	<list>
+	<iosfwd>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\authenticationmap
+	<osg/Referenced>
+	<osg/ref_ptr>
+	<osgDB/Export>
+	<string>
+	<map>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\imagepager
+	<osg/Image>
+	<osg/NodeVisitor>
+	<osg/observer_ptr>
+	<osg/OperationThread>
+	<osg/FrameStamp>
+	<OpenThreads/Mutex>
+	<osgDB/ReaderWriter>
+
+1235630417 c:\program files\openscenegraph\include\osgviewer\viewerbase
+	<osg/Stats>
+	<osgUtil/UpdateVisitor>
+	<osgGA/MatrixManipulator>
+	<osgGA/EventVisitor>
+	<osgGA/EventQueue>
+	<osgViewer/Scene>
+	<osgViewer/GraphicsWindow>
+
+1235630416 c:\program files\openscenegraph\include\osg\shapedrawable
+	<osg/Drawable>
+	<osg/Vec2>
+	<osg/Vec3>
+	<osg/Vec4>
+	<osg/Array>
+	<osg/PrimitiveSet>
+
+1235630414 c:\program files\openscenegraph\include\osg\geometry
+	<osg/Drawable>
+	<osg/Vec2>
+	<osg/Vec3>
+	<osg/Vec4>
+	<osg/Array>
+	<osg/PrimitiveSet>
+
+1235630416 c:\program files\openscenegraph\include\osg\positionattitudetransform
+	<osg/Group>
+	<osg/Transform>
+	<osg/AnimationPath>
+	<osg/Vec3d>
+	<osg/Quat>
+
+1235630414 c:\program files\openscenegraph\include\osg\animationpath
+	<map>
+	<istream>
+	<float.h>
+	<osg/Matrixf>
+	<osg/Matrixd>
+	<osg/Quat>
+	<osg/NodeCallback>
+
+1235630409 c:\program files\openscenegraph\include\osgdb\readfile
+	<string>
+	<osg/Node>
+	<osg/Image>
+	<osg/ArgumentParser>
+	<osgDB/Export>
+	<osgDB/Registry>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\registry
+	<OpenThreads/ReentrantMutex>
+	<osg/ref_ptr>
+	<osg/ArgumentParser>
+	<osg/KdTree>
+	<osgDB/DynamicLibrary>
+	<osgDB/ReaderWriter>
+	<osgDB/DotOsgWrapper>
+	<osgDB/DatabasePager>
+	<osgDB/FileCache>
+	<vector>
+	<map>
+	<string>
+
+1235630416 c:\program files\openscenegraph\include\openthreads\reentrantmutex
+	<OpenThreads/Thread>
+	<OpenThreads/Mutex>
+	<OpenThreads/ScopedLock>
+
+1235630414 c:\program files\openscenegraph\include\osg\kdtree
+	<osg/Shape>
+	<osg/Geometry>
+	<map>
+
+1235630409 c:\program files\openscenegraph\include\osgdb\dynamiclibrary
+	<osg/Referenced>
+	<osgDB/Export>
+	<string>
+
+1235630409 c:\program files\openscenegraph\include\osgdb\dotosgwrapper
+	<osg/ref_ptr>
+	<osg/Object>
+	<osgDB/Input>
+	<osgDB/Output>
+	<string>
+	<vector>
+
+1235630409 c:\program files\openscenegraph\include\osgdb\input
+	<osg/Image>
+	<osg/Shader>
+	<osg/Node>
+	<osg/Drawable>
+	<osg/StateAttribute>
+	<osg/ArgumentParser>
+	<osgDB/FieldReaderIterator>
+	<osgDB/ReaderWriter>
+	<map>
+	<string>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\fieldreaderiterator
+	<osg/Vec2f>
+	<osg/Vec2f>
+	<osg/Vec4f>
+	<osg/Vec2d>
+	<osg/Vec2d>
+	<osg/Vec4d>
+	<osgDB/Field>
+	<osgDB/FieldReader>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\field
+	<osgDB/Export>
+	<string>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\fieldreader
+	<osgDB/Export>
+	<istream>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\output
+	<osg/Object>
+	<osgDB/ReaderWriter>
+	<osgDB/fstream>
+	<string>
+	<map>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\fstream
+	<osgDB/Export>
+	<osg/Export>
+	<fstream>
+
+1235630408 c:\program files\openscenegraph\include\osgdb\filecache
+	<osg/Node>
+	<osgDB/ReaderWriter>
+
+1235630414 c:\program files\openscenegraph\include\osg\texture2d
+	<osg/Texture>
+
+1225885764 source:e:\slam\programas\minislam\ovimageadapter.cpp
+	"OvImageAdapter.h"
+
+1225885758 e:\slam\programas\minislam\ovimageadapter.h
+
+1231525930 source:e:\slam\programas\minislam\cslam.cpp
+	"cslam.h"
+	"Openvis3d.h"
+	"OpenCVImageAdapter.h"
+
+1231521014 e:\slam\programas\minislam\cslam.h
+	<cv.h>
+	<highgui.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+	<cstdio>
+
+1219868286 e:\slam\programas\minislam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224838474 e:\slam\programas\minislam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1225885758 e:\slam\programas\minislam\openvis3d.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+	"OvStereoT.h"
+	"OvFlowT.h"
+	"BTLocalMatcherT.h"
+	"OvStereoDiffuseMatcherT.h"
+	"OvFlowDiffuseMatcherT.h"
+
+1225885758 e:\slam\programas\minislam\ovimaget.h
+	<cmath>
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	"OvImageAdapter.h"
+
+1225885758 e:\slam\programas\minislam\ovimagepairpreprocessort.h
+	"OvImageT.h"
+
+1225885758 e:\slam\programas\minislam\ovlocalmatchert.h
+	"OvImageT.h"
+
+1225885758 e:\slam\programas\minislam\ovstereoglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 e:\slam\programas\minislam\ovdisparitypostprocessor.h
+	"OvImageT.h"
+
+1225885758 e:\slam\programas\minislam\ovflowglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 e:\slam\programas\minislam\ovflowpostprocessor.h
+	"OvImageT.h"
+
+1225885758 e:\slam\programas\minislam\ovstereot.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+
+1225885758 e:\slam\programas\minislam\ovflowt.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+
+1225885758 e:\slam\programas\minislam\btlocalmatchert.h
+	"OvLocalMatcherT.h"
+
+1225885758 e:\slam\programas\minislam\ovstereodiffusematchert.h
+	"OvImageT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 e:\slam\programas\minislam\ovflowdiffusematchert.h
+	"OvImageT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 e:\slam\programas\minislam\opencvimageadapter.h
+	<cv.h>
+	"OvImageAdapter.h"
+
+1229126622 source:e:\slam\programas\minislam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+	"cvisor.h"
+
+1231500024 e:\slam\programas\minislam\cvisor.h
+	<osgViewer/Viewer>
+	<osg/ShapeDrawable>
+	<osg/Geometry>
+	<osg/PositionAttitudeTransform>
+	<osg/Point>
+	<osg/MatrixTransform>
+	<osg/ref_ptr>
+	<osgDB/ReadFile>
+	<osg/Texture2D>
+	<iostream>
+	"cslam.h"
+	<string>
+
+1225989780 source:e:\slam\programas\minislam\surf.cpp
+	"surf.h"
+
+1224573478 source:e:\slam\programas\minislam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1225884396 source:e:\slam\programas\minislam\opencvimageadapter.cpp
+	"OpenCVImageAdapter.h"
+
+1231504630 source:e:\slam\programas\minislam\cvisor.cpp
+	"cvisor.h"
+
+1235630416 c:\program files\openscenegraph\include\osg\point
+	<osg/Vec3>
+	<osg/StateAttribute>
+
+1235630415 c:\program files\openscenegraph\include\osg\matrixtransform
+	<osg/Transform>
+
+1225885764 source:d:\slam\programas\quatslam\ovimageadapter.cpp
+	"OvImageAdapter.h"
+
+1225885758 d:\slam\programas\quatslam\ovimageadapter.h
+
+1235937274 source:d:\slam\programas\quatslam\cslam.cpp
+	"cslam.h"
+	"Openvis3d.h"
+	"OpenCVImageAdapter.h"
+
+1235932090 d:\slam\programas\quatslam\cslam.h
+	<cv.h>
+	<highgui.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+	<cstdio>
+
+1219868286 d:\slam\programas\quatslam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224838474 d:\slam\programas\quatslam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1225885758 d:\slam\programas\quatslam\openvis3d.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+	"OvStereoT.h"
+	"OvFlowT.h"
+	"BTLocalMatcherT.h"
+	"OvStereoDiffuseMatcherT.h"
+	"OvFlowDiffuseMatcherT.h"
+
+1225885758 d:\slam\programas\quatslam\ovimaget.h
+	<cmath>
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	"OvImageAdapter.h"
+
+1225885758 d:\slam\programas\quatslam\ovimagepairpreprocessort.h
+	"OvImageT.h"
+
+1225885758 d:\slam\programas\quatslam\ovlocalmatchert.h
+	"OvImageT.h"
+
+1225885758 d:\slam\programas\quatslam\ovstereoglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 d:\slam\programas\quatslam\ovdisparitypostprocessor.h
+	"OvImageT.h"
+
+1225885758 d:\slam\programas\quatslam\ovflowglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 d:\slam\programas\quatslam\ovflowpostprocessor.h
+	"OvImageT.h"
+
+1225885758 d:\slam\programas\quatslam\ovstereot.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+
+1225885758 d:\slam\programas\quatslam\ovflowt.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+
+1225885758 d:\slam\programas\quatslam\btlocalmatchert.h
+	"OvLocalMatcherT.h"
+
+1225885758 d:\slam\programas\quatslam\ovstereodiffusematchert.h
+	"OvImageT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 d:\slam\programas\quatslam\ovflowdiffusematchert.h
+	"OvImageT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 d:\slam\programas\quatslam\opencvimageadapter.h
+	<cv.h>
+	"OvImageAdapter.h"
+
+1236011318 source:d:\slam\programas\quatslam\cvisor.cpp
+	"cvisor.h"
+
+1236011948 d:\slam\programas\quatslam\cvisor.h
+	<osgViewer/Viewer>
+	<osg/ShapeDrawable>
+	<osg/Geometry>
+	<osg/Group>
+	<osg/PositionAttitudeTransform>
+	<osg/Point>
+	<osg/MatrixTransform>
+	<osg/ref_ptr>
+	<osgDB/ReadFile>
+	<osg/Texture2D>
+	<osg/PolygonMode>
+	<osg/LineWidth>
+	<iostream>
+	"cslam.h"
+	<string>
+
+1233577392 source:d:\slam\programas\quatslam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+	"cvisor.h"
+
+1225989780 source:d:\slam\programas\quatslam\surf.cpp
+	"surf.h"
+
+1224573478 source:d:\slam\programas\quatslam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1225884396 source:d:\slam\programas\quatslam\opencvimageadapter.cpp
+	"OpenCVImageAdapter.h"
+
+1235630415 c:\program files\openscenegraph\include\osg\polygonmode
+	<osg/StateAttribute>
+	<osg/GL>
+
+1235630415 c:\program files\openscenegraph\include\osg\linewidth
+	<osg/StateAttribute>
+
+1233769246 source:e:\slam\programas\quatslam\cvisor.cpp
+	"cvisor.h"
+
+1233676542 e:\slam\programas\quatslam\cvisor.h
+	<osgViewer/Viewer>
+	<osg/ShapeDrawable>
+	<osg/Geometry>
+	<osg/Group>
+	<osg/PositionAttitudeTransform>
+	<osg/Point>
+	<osg/MatrixTransform>
+	<osg/ref_ptr>
+	<osgDB/ReadFile>
+	<osg/Texture2D>
+	<osg/PolygonMode>
+	<osg/LineWidth>
+	<iostream>
+	"cslam.h"
+	<string>
+
+1233768742 e:\slam\programas\quatslam\cslam.h
+	<cv.h>
+	<highgui.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+	<cstdio>
+
+1219868286 e:\slam\programas\quatslam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224838474 e:\slam\programas\quatslam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1233577392 source:e:\slam\programas\quatslam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+	"cvisor.h"
+
+1225989780 source:e:\slam\programas\quatslam\surf.cpp
+	"surf.h"
+
+1224573478 source:e:\slam\programas\quatslam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1234094428 source:e:\slam\programas\quatslam\cslam.cpp
+	"cslam.h"
+	"Openvis3d.h"
+	"OpenCVImageAdapter.h"
+
+1225885758 e:\slam\programas\quatslam\openvis3d.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+	"OvStereoT.h"
+	"OvFlowT.h"
+	"BTLocalMatcherT.h"
+	"OvStereoDiffuseMatcherT.h"
+	"OvFlowDiffuseMatcherT.h"
+
+1225885758 e:\slam\programas\quatslam\ovimageadapter.h
+
+1225885758 e:\slam\programas\quatslam\ovimaget.h
+	<cmath>
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	"OvImageAdapter.h"
+
+1225885758 e:\slam\programas\quatslam\ovimagepairpreprocessort.h
+	"OvImageT.h"
+
+1225885758 e:\slam\programas\quatslam\ovlocalmatchert.h
+	"OvImageT.h"
+
+1225885758 e:\slam\programas\quatslam\ovstereoglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 e:\slam\programas\quatslam\ovdisparitypostprocessor.h
+	"OvImageT.h"
+
+1225885758 e:\slam\programas\quatslam\ovflowglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 e:\slam\programas\quatslam\ovflowpostprocessor.h
+	"OvImageT.h"
+
+1225885758 e:\slam\programas\quatslam\ovstereot.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+
+1225885758 e:\slam\programas\quatslam\ovflowt.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+
+1225885758 e:\slam\programas\quatslam\btlocalmatchert.h
+	"OvLocalMatcherT.h"
+
+1225885758 e:\slam\programas\quatslam\ovstereodiffusematchert.h
+	"OvImageT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 e:\slam\programas\quatslam\ovflowdiffusematchert.h
+	"OvImageT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 e:\slam\programas\quatslam\opencvimageadapter.h
+	<cv.h>
+	"OvImageAdapter.h"
+
+1233769246 source:i:\slam\programas\quatslam\cvisor.cpp
+	"cvisor.h"
+
+1233676542 i:\slam\programas\quatslam\cvisor.h
+	<osgViewer/Viewer>
+	<osg/ShapeDrawable>
+	<osg/Geometry>
+	<osg/Group>
+	<osg/PositionAttitudeTransform>
+	<osg/Point>
+	<osg/MatrixTransform>
+	<osg/ref_ptr>
+	<osgDB/ReadFile>
+	<osg/Texture2D>
+	<osg/PolygonMode>
+	<osg/LineWidth>
+	<iostream>
+	"cslam.h"
+	<string>
+
+1233768742 i:\slam\programas\quatslam\cslam.h
+	<cv.h>
+	<highgui.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+	<cstdio>
+
+1219868286 i:\slam\programas\quatslam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224838474 i:\slam\programas\quatslam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1233577392 source:i:\slam\programas\quatslam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+	"cvisor.h"
+
+1225989780 source:i:\slam\programas\quatslam\surf.cpp
+	"surf.h"
+
+1224573478 source:i:\slam\programas\quatslam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1235667082 source:i:\slam\programas\quatslam\cslam.cpp
+	"cslam.h"
+	"Openvis3d.h"
+	"OpenCVImageAdapter.h"
+
+1225885758 i:\slam\programas\quatslam\openvis3d.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+	"OvStereoT.h"
+	"OvFlowT.h"
+	"BTLocalMatcherT.h"
+	"OvStereoDiffuseMatcherT.h"
+	"OvFlowDiffuseMatcherT.h"
+
+1225885758 i:\slam\programas\quatslam\ovimageadapter.h
+
+1225885758 i:\slam\programas\quatslam\ovimaget.h
+	<cmath>
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	"OvImageAdapter.h"
+
+1225885758 i:\slam\programas\quatslam\ovimagepairpreprocessort.h
+	"OvImageT.h"
+
+1225885758 i:\slam\programas\quatslam\ovlocalmatchert.h
+	"OvImageT.h"
+
+1225885758 i:\slam\programas\quatslam\ovstereoglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 i:\slam\programas\quatslam\ovdisparitypostprocessor.h
+	"OvImageT.h"
+
+1225885758 i:\slam\programas\quatslam\ovflowglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 i:\slam\programas\quatslam\ovflowpostprocessor.h
+	"OvImageT.h"
+
+1225885758 i:\slam\programas\quatslam\ovstereot.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+
+1225885758 i:\slam\programas\quatslam\ovflowt.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+
+1225885758 i:\slam\programas\quatslam\btlocalmatchert.h
+	"OvLocalMatcherT.h"
+
+1225885758 i:\slam\programas\quatslam\ovstereodiffusematchert.h
+	"OvImageT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 i:\slam\programas\quatslam\ovflowdiffusematchert.h
+	"OvImageT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 i:\slam\programas\quatslam\opencvimageadapter.h
+	<cv.h>
+	"OvImageAdapter.h"
+
+1233769246 source:g:\slam\programas\quatslam\cvisor.cpp
+	"cvisor.h"
+
+1233676542 g:\slam\programas\quatslam\cvisor.h
+	<osgViewer/Viewer>
+	<osg/ShapeDrawable>
+	<osg/Geometry>
+	<osg/Group>
+	<osg/PositionAttitudeTransform>
+	<osg/Point>
+	<osg/MatrixTransform>
+	<osg/ref_ptr>
+	<osgDB/ReadFile>
+	<osg/Texture2D>
+	<osg/PolygonMode>
+	<osg/LineWidth>
+	<iostream>
+	"cslam.h"
+	<string>
+
+1233768742 g:\slam\programas\quatslam\cslam.h
+	<cv.h>
+	<highgui.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+	<cstdio>
+
+1219868286 g:\slam\programas\quatslam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224838474 g:\slam\programas\quatslam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1233577392 source:g:\slam\programas\quatslam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+	"cvisor.h"
+
+1225989780 source:g:\slam\programas\quatslam\surf.cpp
+	"surf.h"
+
+1224573478 source:g:\slam\programas\quatslam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1235667082 source:g:\slam\programas\quatslam\cslam.cpp
+	"cslam.h"
+	"Openvis3d.h"
+	"OpenCVImageAdapter.h"
+
+1225885758 g:\slam\programas\quatslam\openvis3d.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+	"OvStereoT.h"
+	"OvFlowT.h"
+	"BTLocalMatcherT.h"
+	"OvStereoDiffuseMatcherT.h"
+	"OvFlowDiffuseMatcherT.h"
+
+1225885758 g:\slam\programas\quatslam\ovimageadapter.h
+
+1225885758 g:\slam\programas\quatslam\ovimaget.h
+	<cmath>
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	"OvImageAdapter.h"
+
+1225885758 g:\slam\programas\quatslam\ovimagepairpreprocessort.h
+	"OvImageT.h"
+
+1225885758 g:\slam\programas\quatslam\ovlocalmatchert.h
+	"OvImageT.h"
+
+1225885758 g:\slam\programas\quatslam\ovstereoglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 g:\slam\programas\quatslam\ovdisparitypostprocessor.h
+	"OvImageT.h"
+
+1225885758 g:\slam\programas\quatslam\ovflowglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 g:\slam\programas\quatslam\ovflowpostprocessor.h
+	"OvImageT.h"
+
+1225885758 g:\slam\programas\quatslam\ovstereot.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+
+1225885758 g:\slam\programas\quatslam\ovflowt.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+
+1225885758 g:\slam\programas\quatslam\btlocalmatchert.h
+	"OvLocalMatcherT.h"
+
+1225885758 g:\slam\programas\quatslam\ovstereodiffusematchert.h
+	"OvImageT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 g:\slam\programas\quatslam\ovflowdiffusematchert.h
+	"OvImageT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 g:\slam\programas\quatslam\opencvimageadapter.h
+	<cv.h>
+	"OvImageAdapter.h"
+
+1236011318 source:f:\slam\programas\quatslam\cvisor.cpp
+	"cvisor.h"
+
+1236011948 f:\slam\programas\quatslam\cvisor.h
+	<osgViewer/Viewer>
+	<osg/ShapeDrawable>
+	<osg/Geometry>
+	<osg/Group>
+	<osg/PositionAttitudeTransform>
+	<osg/Point>
+	<osg/MatrixTransform>
+	<osg/ref_ptr>
+	<osgDB/ReadFile>
+	<osg/Texture2D>
+	<osg/PolygonMode>
+	<osg/LineWidth>
+	<iostream>
+	"cslam.h"
+	<string>
+
+1235932090 f:\slam\programas\quatslam\cslam.h
+	<cv.h>
+	<highgui.h>
+	<iostream>
+	<fstream>
+	"xmlParser.h"
+	<string>
+	<vector>
+	"surf.h"
+	<cstdio>
+
+1219868286 f:\slam\programas\quatslam\xmlparser.h
+	<stdlib.h>
+	<tchar.h>
+	<wchar.h>
+
+1224838474 f:\slam\programas\quatslam\surf.h
+	<cv.h>
+	<highgui.h>
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1233577392 source:f:\slam\programas\quatslam\main.cpp
+	<iostream>
+	"cslam.h"
+	<cv.h>
+	<highgui.h>
+	"xmlParser.h"
+	"cvisor.h"
+
+1225989780 source:f:\slam\programas\quatslam\surf.cpp
+	"surf.h"
+
+1224573478 source:f:\slam\programas\quatslam\xmlparser.cpp
+	"xmlParser.h"
+	<Windows.h>
+	<memory.h>
+	<assert.h>
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<widec.h>
+	<widec.h>
+
+1236017144 source:f:\slam\programas\quatslam\cslam.cpp
+	"cslam.h"
+	"Openvis3d.h"
+	"OpenCVImageAdapter.h"
+
+1225885758 f:\slam\programas\quatslam\openvis3d.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+	"OvStereoT.h"
+	"OvFlowT.h"
+	"BTLocalMatcherT.h"
+	"OvStereoDiffuseMatcherT.h"
+	"OvFlowDiffuseMatcherT.h"
+
+1225885758 f:\slam\programas\quatslam\ovimageadapter.h
+
+1225885758 f:\slam\programas\quatslam\ovimaget.h
+	<cmath>
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	"OvImageAdapter.h"
+
+1225885758 f:\slam\programas\quatslam\ovimagepairpreprocessort.h
+	"OvImageT.h"
+
+1225885758 f:\slam\programas\quatslam\ovlocalmatchert.h
+	"OvImageT.h"
+
+1225885758 f:\slam\programas\quatslam\ovstereoglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 f:\slam\programas\quatslam\ovdisparitypostprocessor.h
+	"OvImageT.h"
+
+1225885758 f:\slam\programas\quatslam\ovflowglobalmatchert.h
+	"OvImageT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 f:\slam\programas\quatslam\ovflowpostprocessor.h
+	"OvImageT.h"
+
+1225885758 f:\slam\programas\quatslam\ovstereot.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvDisparityPostprocessor.h"
+
+1225885758 f:\slam\programas\quatslam\ovflowt.h
+	"OvImageAdapter.h"
+	"OvImageT.h"
+	"OvImagePairPreprocessorT.h"
+	"OvLocalMatcherT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvFlowPostprocessor.h"
+
+1225885758 f:\slam\programas\quatslam\btlocalmatchert.h
+	"OvLocalMatcherT.h"
+
+1225885758 f:\slam\programas\quatslam\ovstereodiffusematchert.h
+	"OvImageT.h"
+	"OvStereoGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225885758 f:\slam\programas\quatslam\ovflowdiffusematchert.h
+	"OvImageT.h"
+	"OvFlowGlobalMatcherT.h"
+	"OvLocalMatcherT.h"
+
+1225884396 f:\slam\programas\quatslam\opencvimageadapter.h
+	<cv.h>
+	"OvImageAdapter.h"
+
