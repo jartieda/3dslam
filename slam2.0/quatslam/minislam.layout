@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="config.xml" open="1" top="0" tabpos="7">
+		<Cursor position="107" topLine="9" />
+	</File>
+	<File name="cslam.cpp" open="1" top="1" tabpos="2">
+		<Cursor position="55896" topLine="1548" />
+	</File>
+	<File name="cslam.h" open="1" top="0" tabpos="1">
+		<Cursor position="2894" topLine="53" />
+	</File>
+	<File name="cvisor.cpp" open="1" top="0" tabpos="6">
+		<Cursor position="17338" topLine="383" />
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="812" topLine="0" />
+	</File>
+	<File name="surf.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="7006" topLine="208" />
+	</File>
+	<File name="surf.h" open="1" top="0" tabpos="4">
+		<Cursor position="1788" topLine="9" />
+	</File>
+	<File name="xmlParser.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="8585" topLine="186" />
+	</File>
+</CodeBlocks_layout_file>

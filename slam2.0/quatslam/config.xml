@@ -1,0 +1,48 @@
+<mainslam>
+<data>
+   F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif
+</data>
+<slam>
+    <model>
+        <SD>13</SD>
+        <MD>0</MD>
+        <CD>0</CD>
+        <A> 2 -1 0 0 0 0 0 0 0 0 0 0
+            1  0 0 0 0 0 0 0 0 0 0 0
+            0 0 2 -1 0 0 0 0 0 0 0 0
+            0 0 1  0 0 0 0 0 0 0 0 0
+            0 0 0 0 2 -1 0 0 0 0 0 0
+            0 0 0 0 1  0 0 0 0 0 0 0
+            0 0 0 0 0 0 2 -1 0 0 0 0
+            0 0 0 0 0 0 1  0 0 0 0 0
+            0 0 0 0 0 0 0 0 2 -1 0 0
+            0 0 0 0 0 0 0 0 1  0 0 0
+            0 0 0 0 0 0 0 0 0 0 2 -1
+            0 0 0 0 0 0 0 0 0 0 1 0
+        </A>
+    </model>
+    <Camera>
+        <fx>800</fx>
+        <fy>800</fy>
+        <cx>320</cx>
+        <cy>240</cy>
+        <height>480</height>
+        <width>640</width>
+        <k1>0</k1>
+        <k2>0</k2>
+        <k3>0</k3>
+        <k4>0</k4>
+    </Camera>
+    <Harris>
+        <searchZoneSize>50</searchZoneSize>
+        <patternSize>10</patternSize>
+        <minCorrVal>0.9</minCorrVal>
+        <MinBorderGreyDist>50</MinBorderGreyDist>
+        <cornercount>30</cornercount>
+        <quality_level>0.1</quality_level>
+        <min_distance>30</min_distance>
+    </Harris>
+    <InvDepth>10</InvDepth>
+</slam>
+</mainslam>
+

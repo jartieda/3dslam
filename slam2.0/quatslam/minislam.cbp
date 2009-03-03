@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="minislam" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\minislam" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Option projectIncludeDirsRelation="2" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add directory="C:\Archivos de programa\OpenCV\cv\include" />
+					<Add directory="C:\Archivos de programa\OpenCV\cvaux\include" />
+					<Add directory="C:\Archivos de programa\OpenCV\cxcore\include" />
+					<Add directory="C:\Archivos de programa\OpenCV\otherlibs\highgui" />
+					<Add directory="C:\Program Files\OpenSceneGraph\include" />
+				</Compiler>
+				<Linker>
+					<Add library="C:\Archivos de programa\OpenCV\lib\cxcore.lib" />
+					<Add library="C:\Archivos de programa\OpenCV\lib\highgui.lib" />
+					<Add library="C:\Archivos de programa\OpenCV\lib\cv.lib" />
+					<Add library="C:\Archivos de programa\OpenCV\lib\cvaux.lib" />
+					<Add library="C:\Archivos de programa\OpenCV\lib\cvhaartraining.lib" />
+					<Add library="C:\Archivos de programa\OpenCV\lib\cxts.lib" />
+					<Add library="C:\Archivos de programa\OpenCV\lib\ml.lib" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libOpenThreads.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosg.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgAnimation.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgDB.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgFX.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgGA.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgManipulator.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgParticle.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgShadow.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgSim.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgTerrain.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgText.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgUtil.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgViewer.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgVolume.dll.a" />
+					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgWidget.dll.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\minislam" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="config.xml" />
+		<Unit filename="cslam.cpp" />
+		<Unit filename="cslam.h" />
+		<Unit filename="cvisor.cpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="surf.cpp" />
+		<Unit filename="surf.h" />
+		<Unit filename="xmlParser.cpp" />
+		<Unit filename="xmlParser.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
