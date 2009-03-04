@@ -21,6 +21,7 @@
 					<Add directory="C:\Archivos de programa\OpenCV\cxcore\include" />
 					<Add directory="C:\Archivos de programa\OpenCV\otherlibs\highgui" />
 					<Add directory="C:\Program Files\OpenSceneGraph\include" />
+					<Add directory="C:\Archivos de programa\OpenSceneGraph\include" />
 				</Compiler>
 				<Linker>
 					<Add library="C:\Archivos de programa\OpenCV\lib\cxcore.lib" />
@@ -30,22 +31,20 @@
 					<Add library="C:\Archivos de programa\OpenCV\lib\cvhaartraining.lib" />
 					<Add library="C:\Archivos de programa\OpenCV\lib\cxts.lib" />
 					<Add library="C:\Archivos de programa\OpenCV\lib\ml.lib" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libOpenThreads.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosg.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgAnimation.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgDB.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgFX.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgGA.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgManipulator.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgParticle.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgShadow.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgSim.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgTerrain.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgText.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgUtil.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgViewer.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgVolume.dll.a" />
-					<Add library="C:\Program Files\OpenSceneGraph\lib\libosgWidget.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libOpenThreads.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosg.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgDB.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgFX.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgGA.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgManipulator.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgParticle.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgShadow.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgSim.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgTerrain.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgText.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgUtil.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgViewer.dll.a" />
+					<Add library="C:\Archivos de programa\OpenSceneGraph\lib\libosgWidget.dll.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -69,6 +68,7 @@
 		<Unit filename="cslam.cpp" />
 		<Unit filename="cslam.h" />
 		<Unit filename="cvisor.cpp" />
+		<Unit filename="cvisor.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="surf.cpp" />
 		<Unit filename="surf.h" />

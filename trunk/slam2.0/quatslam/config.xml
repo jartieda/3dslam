@@ -1,6 +1,6 @@
 <mainslam>
 <data>
-   F:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif
+   D:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif
 </data>
 <slam>
     <model>
@@ -28,8 +28,8 @@
         <cy>240</cy>
         <height>480</height>
         <width>640</width>
-        <k1>0</k1>
-        <k2>0</k2>
+        <k1>0.1</k1>
+        <k2>0.01</k2>
         <k3>0</k3>
         <k4>0</k4>
     </Camera>

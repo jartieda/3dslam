@@ -158,24 +158,24 @@ if (first!=0){
         std::cout<<"run"<<std::endl;
          MemMat2WorkMat();
         std::cout<<"predict"<<std::endl;
-         //PrintKalman();
+  //       PrintKalman();
          predict();
-         //PrintKalman();
+    //     PrintKalman();
         std::cout<<"project"<<std::endl;
          projectAllPoints(Xp);
         std::cout<<"match"<<std::endl;
         matchFile(img);
-        //matchHarris(img);
+         //matchHarris(img);
          MemMat2WorkMat();
         std::cout<<"test"<<std::endl;
          test();
         std::cout<<"correct"<<std::endl;
          MemMat2WorkMat();
          correct();
-         //PrintKalman();
+      // PrintKalman();
         std::cout<<"add"<<std::endl;
          //addHarris(img);
-         //PrintKalman();
+        //PrintKalman();
          addFile(img);
          MemMat2WorkMat();
         std::cout<<"project"<<std::endl;
@@ -415,8 +415,8 @@ void CSlam::predict()
     /** Pn = Diag [ a*Dt a*Dt a*Dt alpha*Dt alpha*Dt alpha*Dt ] **/
     CvMat *Pn = cvCreateMat (6,6,CV_32FC1);
     cvZero(Pn);
-    for (int i = 0; i<3; i++) cvmSet(Pn,i,i,1*1*D_t*D_t);
-    for (int i = 3; i<6; i++) cvmSet(Pn,i,i,1*1*D_t*D_t);
+    for (int i = 0; i<3; i++) cvmSet(Pn,i,i,0.01*1*D_t*D_t);
+    for (int i = 3; i<6; i++) cvmSet(Pn,i,i,0.0005*1*D_t*D_t);
     /** G= dX_by_dVOmega **/
     CvMat *G =cvCreateMatHeader(13,6,CV_32FC1);
     cvGetSubRect(A,G,cvRect(7,0,6,13));
@@ -433,8 +433,16 @@ void CSlam::predict()
   /* P'(k) = temp1*At + Q */
   cvGEMM( temp1, A, 1, Q, 1,
                    Pp, CV_GEMM_B_T );
+//    printf("------------A-------------\n");
+//    printMat(A);
+//    printf("-------------P------------\n");
+//    printMat(P);
+//    printf("------------Q-------------\n");
+//    printMat(Q);
+//    printf("-------------Pp-----------\n");
+//    printMat(Pp);
 
-
+   // cvCopy(P,Pp);///FIXME FIXME
 //    /** Normalize quaternion **/
 //    NormalizeQuatCov(Xp,Pp);
 //    double mod = sqrt(cvmGet(Xp,3,0)*cvmGet(Xp,3,0)+
@@ -853,8 +861,6 @@ if (keys.size()>0){
 }
 void CSlam::matchFile(IplImage *img)
 {
-   int projx;
-   int projy;
 
     CvPoint3D64f ptos[21];
     for (int i = 0; i<7; i++){
@@ -874,7 +880,6 @@ void CSlam::matchFile(IplImage *img)
     CvMat* dpdc=cvCreateMat(2,2,CV_32FC1);
     CvMat* dpdk=cvCreateMat(2,4,CV_32FC1);
     CvMat* dpdw=cvCreateMat(2,6,CV_32FC1);
-    CvMat *h= cvCreateMat(6,1,CV_32FC1);
 
 
     for (unsigned int i =0 ;i<keys.size();i++)
@@ -1122,7 +1127,8 @@ void CSlam::ProjectPoints3( CvPoint3D64f* M,
     R= r_vec->data.fl;
     float  dRdr[36];
     float *t;//[3];
-    double k[4] = {0,0,0,0};
+    //double k[4] = {0,0,0,0};
+    float *k = dist_coeffs->data.fl;
     double fx, fy, cx, cy;
 
     float *dpdr_p = 0,*dpdw_p = 0, *dpdt_p = 0, *dpdk_p = 0, *dpdf_p = 0, *dpdc_p = 0;
@@ -1582,7 +1588,10 @@ void CSlam::Draw(IplImage *framecopy)
         //prediccion en amarillo
         cvPutText (framecopy,strID,cvPoint((int)prediction[2*i],(int) prediction[2*i+1]), &font, cvScalar(0,255,255));
     }
-    cvShowImage( "SLAM", framecopy );
+    IplImage* t = cvCreateImage(cvSize(P->height,P->width),8,1);
+    cvConvertScale(P,t,255,0);
+    cvSaveImage("slam_p.tif",t);
+    cvShowImage("SLAM", framecopy );
     cvSaveImage("slam.jpg",framecopy);
 }
 
@@ -1596,21 +1605,21 @@ void CSlam::PrintKalman()
   std::cout<<"state_post"<<std::endl;
   printMat(X);
   std::cout<<"transition_matrix"<<std::endl;
-  //printMat(A);
+  printMat(A);
   std::cout<<"control_matrix"<<std::endl;
-  //printMat(B);
+  printMat(B);
   std::cout<<"measurement_matrix"<<std::endl;
-  //printMat(H);
+  printMat(H);
   std::cout<<"process_noise_cov"<<std::endl;
-  //printMat(Q);
+  printMat(Q);
   std::cout<<"measurement_noise_cov"<<std::endl;
-  //printMat(R);
+  printMat(R);
   std::cout<<"error_cov_pre"<<std::endl;
   printMat(Pp);
   std::cout<<"error_cov_post"<<std::endl;
   printMat(P);
   std::cout<<"kalman gain"<<std::endl;
-  //printMat(K);
+  printMat(K);
 
 }
 void CSlam::CopyMat(CvMat* o, CvMat* d, int row,int col)
@@ -1888,9 +1897,9 @@ void CSlam::AddPointToCovMatrix(double x, double y)
      CvMat *_temp2= cvCreateMatHeader(SD+3,SD+3,CV_32FC1);
      cvGetSubRect(PMem, _temp2,cvRect(0,0,SD+3,SD+3));
      cvCopy(_temp2,_P);
-     cvmSet(_P,SD,SD,1);
-     cvmSet(_P,SD+1,SD+1,1);///FIXME CAMBIAR AQUI LOS VALORE DE COVARIANZA
-     cvmSet(_P,SD+2,SD+2,0.25);
+     cvmSet(_P,SD,SD,4);
+     cvmSet(_P,SD+1,SD+1,4);///FIXME CAMBIAR AQUI LOS VALORE DE COVARIANZA
+     cvmSet(_P,SD+2,SD+2,0.00005);
      cvReleaseMatHeader(&_temp2);
 
      CvMat *_PNew = cvCreateMatHeader(SD+6,SD+6,CV_32FC1);
@@ -1961,15 +1970,15 @@ void CSlam::Disp_out(IplImage *framecopy)
           phi=fstate[modelSD+6*i+4];
           rho=fstate[modelSD+6*i+5];
 
-              cvGetSubRect( P,temp,cvRect(modelSD+i*6,modelSD+i*6,6,6) );
+          cvGetSubRect( P,temp,cvRect(modelSD+i*6,modelSD+i*6,6,6) );
 
-            for (int part=0; part<40; part++){
-              cvmSet(vect,0,0,randomVector(-1,1));
-              cvmSet(vect,1,0,randomVector(-1,1));
-              cvmSet(vect,2,0,randomVector(-1,1));
-              cvmSet(vect,3,0,randomVector(-1,1));
-              cvmSet(vect,4,0,randomVector(-1,1));
-              cvmSet(vect,5,0,randomVector(-1,1));
+          for (int part=0; part<40; part++){
+              cvmSet(vect,0,0,randomVector(-12.6,12.6));
+              cvmSet(vect,1,0,randomVector(-12.6,12.6));
+              cvmSet(vect,2,0,randomVector(-12.6,12.6));
+              cvmSet(vect,3,0,randomVector(-12.6,12.6));
+              cvmSet(vect,4,0,randomVector(-12.6,12.6));
+              cvmSet(vect,5,0,randomVector(-12.6,12.6));
               cvZero(_temp);
               Cholesky(temp,_temp);
               cvMatMul(_temp,vect,res6);
@@ -1977,8 +1986,8 @@ void CSlam::Disp_out(IplImage *framecopy)
               //cvZero(res6);
               //printMat(temp);
 
-            double ox, oy, oz;
-            InverseDepth2Depth( cvmGet(res6,0,0)+xc,
+              double ox, oy, oz;
+              InverseDepth2Depth( cvmGet(res6,0,0)+xc,
                                   cvmGet(res6,1,0)+yc,
                                   cvmGet(res6,2,0)+zc,
                                   cvmGet(res6,3,0)+theta,

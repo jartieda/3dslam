@@ -36,7 +36,12 @@ class myKeyboardEventHandler : public osgGA::GUIEventHandler
         osg::Geode* FrameGeode;
         osg::ref_ptr<osg::Geode> UncertGeode;
         osg::ref_ptr<osg::Geode> OldUncertGeode;
-        osg::Geode* CameraUncertainty();
+        osg::ref_ptr<osg::Geode> UncertCameraGeode;
+        osg::ref_ptr<osg::Geode> OldUncertCameraGeode;
+        osg::ref_ptr<osg::Geode> UncertCameraPredGeode;
+        osg::ref_ptr<osg::Geode> OldUncertCameraPredGeode;
+        osg::Geode* PlotEllipse3D(CvMat *X, CvMat *P, osg::Vec4Array* colors );
+        osg::Node *P_Hud(std::string filename);
 
     };
 
