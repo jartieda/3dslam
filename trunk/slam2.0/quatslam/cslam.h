@@ -131,9 +131,10 @@ class CSlam
         void Disp_out(IplImage *framecopy);
         void testStereo(IplImage *img, IplImage *old_img, double minshift, double maxshift);
         void testOpticalFlow(IplImage* img1, IplImage* img2, double minshiftX, double maxshiftX, double minshiftY, double maxshiftY);
-        void JCBB(std::vector<int> H, int level, int MaxRama);
+        void JCBB( int level, int MaxRama);
         bool joint_compatibility(std::vector<int> visible, std::vector<float> Meas);
         std::vector<int> BestH;
+        std::vector<int> H_;
         int pairingsBest;
         int maxLevels;
         void fillInvParamDeriv(CvMat* dpdw, CvMat* dpdW, float theta, float phi, float rho);
