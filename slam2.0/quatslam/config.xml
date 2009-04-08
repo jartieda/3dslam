@@ -1,6 +1,6 @@
 <mainslam>
 <data>
-   D:\\SLAM\\Datos\\Vuelo28032008ArgandadelRey\\vuelo6\\original%0.4d.tif
+   D:\\SLAM\\Datos\\calibr\\Secuencia01%0.3d.tif
 </data>
 <slam>
     <model>
@@ -22,25 +22,25 @@
         </A>
     </model>
     <Camera>
-        <fx>800</fx>
-        <fy>800</fy>
-        <cx>320</cx>
-        <cy>240</cy>
-        <height>480</height>
-        <width>640</width>
-        <k1>0.1</k1>
-        <k2>0.01</k2>
-        <k3>0</k3>
-        <k4>0</k4>
+        <fx>665.6290281321765900</fx>
+        <fy>720.4872606567138300</fy>
+        <cx>352.6269237516700100</cx>
+        <cy>283.1232542339545800</cy>
+        <height>576</height>
+        <width>720</width>
+        <k1>-0.1457450158709720</k1>
+        <k2>0.1565575385850068</k2>
+        <k3>0.0046598238666428551</k3>
+        <k4>-0.00074951896029971064</k4>
     </Camera>
     <Harris>
-        <searchZoneSize>50</searchZoneSize>
+        <searchZoneSize>60</searchZoneSize>
         <patternSize>10</patternSize>
-        <minCorrVal>0.9</minCorrVal>
-        <MinBorderGreyDist>50</MinBorderGreyDist>
+        <minCorrVal>0.95</minCorrVal>
+        <MinBorderGreyDist>40</MinBorderGreyDist>
         <cornercount>30</cornercount>
         <quality_level>0.1</quality_level>
-        <min_distance>30</min_distance>
+        <min_distance>40</min_distance>
     </Harris>
     <InvDepth>10</InvDepth>
 </slam>

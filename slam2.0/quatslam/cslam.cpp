@@ -164,8 +164,8 @@ if (first!=0){
         std::cout<<"project"<<std::endl;
          projectAllPoints(Xp);
         std::cout<<"match"<<std::endl;
-        matchFile(img);
-         //matchHarris(img);
+        //matchFile(img);
+         matchHarris(img);
          MemMat2WorkMat();
         std::cout<<"test"<<std::endl;
          test();
@@ -174,9 +174,9 @@ if (first!=0){
          correct();
       // PrintKalman();
         std::cout<<"add"<<std::endl;
-         //addHarris(img);
+         addHarris(img);
         //PrintKalman();
-         addFile(img);
+         //addFile(img);
          MemMat2WorkMat();
         std::cout<<"project"<<std::endl;
          projectAllPoints(X);
@@ -580,11 +580,13 @@ void CSlam::test()
     {
         pairingsBest = 0;
         maxLevels = visible.size();
-        std::vector<int> H;
-        JCBB(H,0,visible.size());
+        //std::vector<int> H;
+        JCBB(0,visible.size());
+        H_.clear();
         for (unsigned int i = 0 ; i < BestH.size() ; i++ )
         {
             std::cout<<BestH[i]<<" ";
+            visible[i]=BestH[i];
         }
         std::cout<<pairingsBest<<std::endl;
     }
@@ -710,10 +712,6 @@ if (keys.size()>0){
 
     IplImage *zonabusca;
     IplImage *corr;
-    double minVal;
-    double maxVal;
-    double maxVal2;
-    CvPoint minLoc;
     CvPoint maxLoc;
     int ancho, alto;
     zonabusca=cvCreateImage( cvSize( searchZoneSize, searchZoneSize), 8, 1 );
@@ -726,48 +724,43 @@ if (keys.size()>0){
    CvPoint temp;
    cvCvtColor(img,grey,CV_RGB2GRAY);
 
-   IplImage *patron,*patron_border;
+   IplImage *patron;
    patron = cvCreateImageHeader( cvSize(patternSize,patternSize),8,1);
-   patron_border = cvCreateImage( cvSize(patternSize,patternSize),8,1);
    int projx;
    int projy;
+   CvMat *S = cvCreateMatHeader(2,2,CV_32FC1);
+   CvMat *Sinv = cvCreateMat(2,2,CV_32FC1);
+   CvMat *innov = cvCreateMat(2,1,CV_32FC1);
+   CvMat *_temp = cvCreateMat(2,1,CV_32FC1);
+   CvMat *chi = cvCreateMat(1,1,CV_32FC1);
    for (unsigned int i =0 ;i<keys.size();i++) {
         projx=(int)prediction[i*2];
         projy=(int)prediction[i*2+1];
         patron->imageData=(char*)keys[i];
-
-        cvGetRectSubPix( grey, zonabusca,cvPoint2D32f(projx,projy));//cvPointTo32f((*It)->pto)
-        CvMat *zonabuscaMat = cvCreateMatHeader(zonabusca->height, zonabusca->width,CV_32FC1);
-        CvMat *S = cvCreateMatHeader(2,2,CV_32FC1);
-        printf("000 %d de %d ,%d %d\n", i,keys.size(), temp3->width, temp3->height);
-
         cvGetSubRect(_tmp3,S,cvRect(2*i,2*i,2,2));
-        printf("111\n");
+        cvInvert(S,Sinv);
 
-        CvMat *innov = cvCreateMat(2,1,CV_32FC1);
-        CvMat *_temp = cvCreateMat(2,1,CV_32FC1);
-        CvMat *Mul = cvCreateMat(patron->height, patron->width,CV_32FC1);
-        CvMat *chi = cvCreateMat(1,1,CV_32FC1);
         double suma=0;
         double suma1 = 0;
         double suma2 = 0;
         double maxcorr = 0;
         double nx, ny;
         bool nomatch = true;
-        printf("aaa\n");
-        for ( int ii = -zonabusca->width/2; ii<zonabusca->width; ii++)
-            for (int jj = -zonabusca->height/2; jj< zonabusca->height ; jj++)
+
+        for ( int ii = -searchZoneSize/2; ii<searchZoneSize/2; ii++)//width
+            for (int jj = -searchZoneSize/2; jj< searchZoneSize/2 ; jj++)//height
             {
                 nx = ii + projx;
                 ny = jj + projy;
                 cvmSet(innov,0,0,ii);
                 cvmSet(innov,1,0,jj);
-                cvMatMul(S,innov,_temp);
+                cvMatMul(Sinv,innov,_temp);
                 cvGEMM(innov,_temp,1,NULL,0,chi,CV_GEMM_A_T);
-                if (cvmGet(chi,0,0)< 5.99)
+                if (cvmGet(chi,0,0)< 3)//5.99)
                 {
                     suma1 = 0;
                     suma2 = 0;
+                    suma=0;
                     for (int iii = 0 ; iii< patron->width; iii++)
                         for (int jjj = 0; jjj< patron->height; jjj++)
                         {
@@ -775,58 +768,34 @@ if (keys.size()>0){
                             double greyy = jjj+ny-patron->height/2;
                             if (greyx>0 &&greyx<grey->width&&greyy>0 &&greyy<grey->height)
                             {
-                                cvmSet (Mul,jjj, iii,cvGet2D(patron,jjj,iii).val[0]*cvGet2D(grey,greyy,greyx).val[0]);
-                                suma1 += (cvGet2D(patron,jjj,iii).val[0]*cvGet2D(patron,jjj,iii).val[0]);
-                                suma2 += (cvGet2D(grey,greyy,greyx).val[0]*
-                                        cvGet2D(grey,greyy,greyx).val[0]);
+                                double patronPix = (uchar) patron->imageData[iii+jjj*patron->widthStep];//patronScalar.val[0];
+                                double greyPix = (uchar) grey->imageData[(int)(greyx+greyy*grey->widthStep)];//greyScalar.val[0];
+                                suma += patronPix*greyPix;
+                                suma1 += (patronPix*patronPix);
+                                suma2 += (greyPix*greyPix);
                             }
                         }
-                    suma1 = sqrt(suma1*suma2);
-                    suma = 0;
-                    for (int iii = 0 ; iii< patron->width; iii++)
-                        for (int jjj = 0; jjj< patron->height; jjj++)
-                        {
-                            suma += cvmGet(Mul,jjj,iii)/suma1;
-                        }
+                    suma = suma / sqrt(suma1*suma2);
+
                     if (suma > maxcorr )
                     {
                         maxcorr = suma;
-                        maxLoc.x = ii;
-                        maxLoc.y = jj;
+                        maxLoc.x =(int) nx;
+                        maxLoc.y =(int) ny;
                     }
-
                 }
             }
 
-//        cvMatchTemplate( zonabusca, patron,corr, CV_TM_CCORR_NORMED );
-//        cvMinMaxLoc( corr, &minVal, &maxVal, &minLoc, &maxLoc, 0 );
-//        if (maxVal >minCorrVal)
-//        {
           if (maxcorr > 0.8)
           {
               nomatch= false ;
-            temp.x=maxLoc.x+projx-(cvGetSize(corr).width/2);
-            temp.y=maxLoc.y+projy-(cvGetSize(corr).height/2);
+            temp.x=maxLoc.x;
+            temp.y=maxLoc.y;
           }
           else {
            printf("hey not enought corr\n");
           }
-//        }
-//        else
-//        {
-//            temp.x= 0;
-//            temp.y= 0;
-//        }
-//        cvSobel(zonabusca,zonabusca,1,1,3);
-//        cvSobel(patron,patron_border,1,1,3);
-//
-//        cvMatchTemplate( zonabusca, patron_border,corr, CV_TM_CCORR_NORMED );
-//        cvMinMaxLoc( corr, &minVal, &maxVal2, &minLoc, &maxLoc, 0 );
 
-//        double dx=temp.x-(maxLoc.x+projx-cvGetSize(corr).width/2);
-//        double dy=temp.y-(maxLoc.y+projy-cvGetSize(corr).height/2);
-
-//        if (sqrt(dx*dx+dy*dy)>MinBorderGreyDist||temp.x<0 ||temp.y<0)
         if (nomatch == true )
         {
             //std::cout<<"no match "<<sqrt(dx*dx+dy*dy)<<" "<<maxVal<<" "<<maxVal2<<std::endl;
@@ -849,9 +818,16 @@ if (keys.size()>0){
             }
         }
     }//end for
+    cvReleaseMatHeader(&S);
+    cvReleaseMat(&Sinv);
+    cvReleaseMat(&innov);
+    cvReleaseMat(&_temp);
+    cvReleaseMat(&chi);
+
     printf("endMatch");
     cvReleaseImage(&grey);
-    cvReleaseImage(&patron_border);
+    cvReleaseImageHeader(&patron);
+    cvReleaseMat(&_R);
     visNum=0;
     for (unsigned int i = 0 ; i<visible.size(); i++){
         if (visible.at(i)== true)
@@ -1337,14 +1313,17 @@ void CSlam::ProjectPoints3( CvPoint3D64f* M,
            dpdr_p[dpdr_step+j] = dmydr;
         }
     }
+    cvReleaseMat(&t_vec);
+    cvReleaseMat(&q_vec);
+    cvReleaseMat(&r_vec);
 }
 
 void CSlam::InverseDepth2Depth(double x, double y, double z, double theta, double phi, double rho, double *outx, double*outy, double *outz)
 {
    CvMat * m;
    m=cvCreateMat(3,1,CV_32FC1);
-   CvMat *obj;
-   obj=cvCreateMat(4,3,CV_32FC1);
+   //CvMat *obj;
+   //obj=cvCreateMat(4,3,CV_32FC1);
    cvmSet(m,0,0,cos(theta)*sin(phi));//(*It)->theta)*sin((*It)->phi));
    cvmSet(m,1,0,-sin(theta));//(*It)->theta));
    cvmSet(m,2,0,cos(theta)*cos(phi));//cos((*It)->theta)*cos((*It)->phi));
@@ -1352,7 +1331,8 @@ void CSlam::InverseDepth2Depth(double x, double y, double z, double theta, doubl
    *outx=x +cvmGet(m,0,0)/rho;
    *outy=y +cvmGet(m,1,0)/rho;
    *outz=z +cvmGet(m,2,0)/rho;
-
+    cvReleaseMat(&m);
+    //cvReleaseMat(&obj);
 }
 void CSlam::getTransRot(CvMat *state, CvMat *t, CvMat *q, CvMat *Rot)
 {
@@ -1641,14 +1621,12 @@ void CSlam::CopyMat(CvMat* o, CvMat* d, int row,int col)
 }
 float CSlam::ic_test(int pointNum, float measx, float measy)
 {
-    //int i = 0;
     float *fstate;
     fstate = Xp->data.fl;
-    //int step = Xp->step/sizeof(fstate[0]);
 
     double x,y,z,theta,phi,rho;
     double ox,oy,oz;
-  //  fstate=fstate+(modelSD*step);
+
     CvPoint2D64f proj;
     CvMat* dpdr=cvCreateMat(2,4,CV_32FC1);
     CvMat* dpdt=cvCreateMat(2,3,CV_32FC1);
@@ -1656,36 +1634,29 @@ float CSlam::ic_test(int pointNum, float measx, float measy)
     CvMat* dpdc=cvCreateMat(2,2,CV_32FC1);
     CvMat* dpdk=cvCreateMat(2,4,CV_32FC1);
     CvMat* dpdw=cvCreateMat(2,6,CV_32FC1);
-//    CvMat *dpdt_ =cvCreateMat(2,6,CV_32FC1);
-//    cvZero(dpdt_);
-//    CvMat *dpdr_ =cvCreateMat(2,6,CV_32FC1);
-//    cvZero(dpdr_);
     CvMat *dpdW = cvCreateMat(2,6,CV_32FC1);
     cvZero(dpdW);
-    //int j=0;//predicion vector index
-    //int nstate = modelSD;
 
     //IC_Test var
-  CvMat* innov;
-  CvMat* C;
-  CvMat* H_;
-  CvMat* P_;
-  CvMat* R_;
-  CvMat* T2;
-  CvMat* T3;
-  CvMat* T4;
-  int fdims=6;
-  innov=cvCreateMat(2,1,CV_32FC1);
-  C=cvCreateMat(2,2,CV_32FC1);
-  H_=cvCreateMat(2,modelSD+fdims,CV_32FC1);
-  P_=cvCreateMat(modelSD+fdims,modelSD+fdims,CV_32FC1);
-  R_=cvCreateMat(2,2,CV_32FC1);
-  T2=cvCreateMat(2,modelSD+fdims,CV_32FC1);
-  T3=cvCreateMat(2,1,CV_32FC1);
-  T4=cvCreateMat(1,1,CV_32FC1);
+    CvMat* innov;
+    CvMat* C;
+    CvMat* H_;
+    CvMat* P_;
+    CvMat* R_;
+    CvMat* T2;
+    CvMat* T3;
+    CvMat* T4;
+    int fdims=6;
+    innov=cvCreateMat(2,1,CV_32FC1);
+    C=cvCreateMat(2,2,CV_32FC1);
+    H_=cvCreateMat(2,modelSD+fdims,CV_32FC1);
+    P_=cvCreateMat(modelSD+fdims,modelSD+fdims,CV_32FC1);
+    R_=cvCreateMat(2,2,CV_32FC1);
+    T2=cvCreateMat(2,modelSD+fdims,CV_32FC1);
+    T3=cvCreateMat(2,1,CV_32FC1);
+    T4=cvCreateMat(1,1,CV_32FC1);
 
-  //int m_i=modelMD;
-  int s_i=modelSD+pointNum*6;//
+    int s_i=modelSD+pointNum*6;//
     fstate+=s_i;
     x=*fstate;        fstate++;
     y=*fstate;        fstate++;
@@ -1700,55 +1671,55 @@ float CSlam::ic_test(int pointNum, float measx, float measy)
                         &proj,  dpdr,dpdt, dpdf,
                         dpdc, dpdk , dpdw);
 
-        fillInvParamDeriv(dpdw, dpdW, theta,phi,rho);
+    fillInvParamDeriv(dpdw, dpdW, theta,phi,rho);
 
-        CopyMat(dpdt,H_,0,0);
-        CopyMat(dpdr,H_,0,3);
-        CopyMat(dpdW,H_,0,modelSD);
+    CopyMat(dpdt,H_,0,0);
+    CopyMat(dpdr,H_,0,3);
+    CopyMat(dpdW,H_,0,modelSD);
 
-        for (int col=0;col<modelSD;col++)
-            for (int row=0; row<modelSD;row++)
-            {
-              cvmSet(P_,row,col,cvmGet(Pp,row,col));
-            }
-        for (int col=0;col<fdims;col++)
-            for (int row=0; row<fdims;row++)
-            {
-              cvmSet(P_,row+modelSD,col+modelSD,cvmGet(Pp,s_i+row,s_i+col));
-            }
-        for (int col=0;col<modelSD;col++)
-          for (int row=0; row<fdims;row++)
-            {
-              cvmSet(P_,row+modelSD,col,cvmGet(Pp,s_i+row,col));
-            }
-        for (int col=0;col<fdims;col++)
-          for (int row=0; row<modelSD;row++)
-            {
-              cvmSet(P_,row,col+modelSD,cvmGet(Pp,row,col+s_i));
-            }
-        cvSetIdentity(R_,cvRealScalar(MEAS_NOISE_COV));
-
-        /* temp2 = H*P'(k) */
-        cvMatMulAdd( H_,P_,0,T2 );
-        /* C = temp2*Ht + R */
-        cvGEMM( T2,H_, 1,R_, 1, C, CV_GEMM_B_T );
-
-        /* temp5 = z(k) - H*x'(k) */
-
-        cvmSet(innov,0,0,measx-proj.x);
-        cvmSet(innov,1,0,measy-proj.y);
-
-        /* temp3=C^-1 * (z-h)*/
-        cvSolve( C,innov,T3, CV_SVD );
-        /* temp2 = (z-h) temp3t */
-        cvGEMM(innov,T3,1,NULL,0,  T4 ,CV_GEMM_A_T);
-
-        if (cvmGet(T4,0,0)>2.2)//18DOF 6DOF=10.864940
+    for (int col=0;col<modelSD;col++)
+        for (int row=0; row<modelSD;row++)
         {
-            std::cout<<"test ko : "<<cvmGet(T4,0,0)<<" xi: "<<10.864940<<" id "<<pointNum<<std::endl;
-        }else{
-            std::cout<<"test OK: "<<cvmGet(T4,0,0)<<" xi: "<<10.864940<<" id "<<pointNum<<std::endl;
+          cvmSet(P_,row,col,cvmGet(Pp,row,col));
         }
+    for (int col=0;col<fdims;col++)
+        for (int row=0; row<fdims;row++)
+        {
+          cvmSet(P_,row+modelSD,col+modelSD,cvmGet(Pp,s_i+row,s_i+col));
+        }
+    for (int col=0;col<modelSD;col++)
+      for (int row=0; row<fdims;row++)
+        {
+          cvmSet(P_,row+modelSD,col,cvmGet(Pp,s_i+row,col));
+        }
+    for (int col=0;col<fdims;col++)
+      for (int row=0; row<modelSD;row++)
+        {
+          cvmSet(P_,row,col+modelSD,cvmGet(Pp,row,col+s_i));
+        }
+    cvSetIdentity(R_,cvRealScalar(MEAS_NOISE_COV));
+
+    /* temp2 = H*P'(k) */
+    cvMatMulAdd( H_,P_,0,T2 );
+    /* C = temp2*Ht + R */
+    cvGEMM( T2,H_, 1,R_, 1, C, CV_GEMM_B_T );
+
+    /* temp5 = z(k) - H*x'(k) */
+
+    cvmSet(innov,0,0,measx-proj.x);
+    cvmSet(innov,1,0,measy-proj.y);
+
+    /* temp3=C^-1 * (z-h)*/
+    cvSolve( C,innov,T3, CV_SVD );
+    /* temp2 = (z-h) temp3t */
+    cvGEMM(innov,T3,1,NULL,0,  T4 ,CV_GEMM_A_T);
+
+    if (cvmGet(T4,0,0)>2.2)//18DOF 6DOF=10.864940
+    {
+        std::cout<<"test ko : "<<cvmGet(T4,0,0)<<" xi: "<<10.864940<<" id "<<pointNum<<std::endl;
+    }else{
+        std::cout<<"test OK: "<<cvmGet(T4,0,0)<<" xi: "<<10.864940<<" id "<<pointNum<<std::endl;
+    }
 
     double distance= cvmGet(T4,0,0);
     cvReleaseMat(&innov);
@@ -1766,11 +1737,9 @@ float CSlam::ic_test(int pointNum, float measx, float measy)
     cvReleaseMat(&dpdc);
     cvReleaseMat(&dpdk);
     cvReleaseMat(&dpdw);
-//    cvReleaseMat(&dpdt_);
-//    cvReleaseMat(&dpdr_);
     cvReleaseMat(&dpdW);
 
-      return distance;
+    return distance;
 }
 void CSlam::NormalizeQuatCov(CvMat *state, CvMat *_P)
 {
@@ -2030,58 +1999,56 @@ return  x+ (y*rand()/(RAND_MAX+1.0));
 
 }
 
-
-void CSlam::JCBB(std::vector<int> H, int level, int MaxRama)
+void CSlam::JCBB( int level, int MaxRama)
 {
     int pairingsH = 0;
-    for (unsigned int i = 0 ; i < H.size() ; i++ )
+    for (unsigned int i = 0 ; i < H_.size() ; i++ )
     {
-        if (H[i]>0) pairingsH++;
+        if (H_[i]>0) pairingsH++;
     }
     if (level > maxLevels - 1)
     {
         if ( pairingsH > pairingsBest )
         {
             BestH.clear();
-            for (unsigned int i = 0 ; i < H.size() ; i++)
-                BestH.push_back(H[i]);
+            for (unsigned int i = 0 ; i < H_.size() ; i++)
+                BestH.push_back(H_[i]);
             pairingsBest = pairingsH;
         }
     }
     else
     {
-        H.push_back(1);//voy por el camino de aceptar la feature
-//        for (int i = 0 ; i < H.size() ; i++ )
-//        {
-//            std::cout<<H[i]<<" ";
-//        }
-//        std::cout<<level<<std::endl;
-        if (joint_compatibility(H,measurement))
-        {
-            JCBB(H,level+1,MaxRama);
+        if (visible[level]){
+            H_.push_back(1);//voy por el camino de aceptar la feature
+    //        for (unsigned int i = 0 ; i < H_.size() ; i++ )
+    //        {
+    //            std::cout<<H_[i]<<" ";
+    //        }
+    //        std::cout<<level<<std::endl;
+            if (joint_compatibility(H_,measurement))
+            {
+                JCBB(level+1,MaxRama);
+            }
+            H_.pop_back();
         }
-        H.pop_back();
-
         if (pairingsBest < MaxRama)
         {
             //Todavia puedo cancelar algun punto
-            H.push_back(0);
-//            for (unsigned int i = 0 ; i < H.size() ; i++ )
+            H_.push_back(0);
+//            for (unsigned int i = 0 ; i < H_.size() ; i++ )
 //            {
-//                std::cout<<H[i]<<" ";
+//                std::cout<<H_[i]<<" ";
 //            }
 //            std::cout<<level<<std::endl;
-            JCBB(H,level+1,MaxRama-1);
-            H.pop_back();
+            JCBB(level+1,MaxRama-1);
+            H_.pop_back();
         }
     }
 }
 bool CSlam::joint_compatibility(std::vector<int> visible_, std::vector<float> Meas)
 {
-    //int i = 0;
     float *fstate;
     fstate = Xp->data.fl;
-    //int step = Xp->step/sizeof(fstate[0]);
 
     double x,y,z,theta,phi,rho;
     double ox,oy,oz;
@@ -2100,6 +2067,7 @@ bool CSlam::joint_compatibility(std::vector<int> visible_, std::vector<float> Me
     //IC_Test var
     CvMat* innov;
     CvMat* C;
+    CvMat* Cinv;
     CvMat* H_;
     CvMat* P_;
     CvMat* R_;
@@ -2118,6 +2086,7 @@ bool CSlam::joint_compatibility(std::vector<int> visible_, std::vector<float> Me
     //WARNING se usa visible.size() porque se quiere que se use la P completa
     innov=cvCreateMat(2*visNum_,1,CV_32FC1);
     C=cvCreateMat(2*visNum_,2*visNum_,CV_32FC1);
+    Cinv=cvCreateMat(2*visNum_,2*visNum_,CV_32FC1);
     H_=cvCreateMat(2*visNum_,modelSD+fdims*visible.size(),CV_32FC1);
     cvZero(H_);
     P_=cvCreateMat(modelSD+fdims*visible.size(),12+fdims*visible.size(),CV_32FC1);
@@ -2126,14 +2095,11 @@ bool CSlam::joint_compatibility(std::vector<int> visible_, std::vector<float> Me
     T3=cvCreateMat(2*visNum_,1,CV_32FC1);
     T4=cvCreateMat(1,1,CV_32FC1);
 
-    //int m_i=modelMD;
-    //float *fstate_=fstate;
     int visibleidx = 0;
     for (unsigned int i=0; i< visible_.size();i++)
     {
         if (visible_[i]>0)
         {
-
             float *fstate_=fstate;
             int s_i=modelSD+i*6;//
 
@@ -2151,15 +2117,8 @@ bool CSlam::joint_compatibility(std::vector<int> visible_, std::vector<float> Me
                                 &proj,  dpdr,dpdt, dpdf,
                                 dpdc, dpdk , dpdw);
             cvmSet(innov,0+2*visibleidx,0,Meas[2*i]-proj.x);
-            cvmSet(innov,1+2*visibleidx,0,Meas[2*i]-proj.y);
-//            for (int k = 0; k<3; k++)
-//            {
-//                cvmSet(dpdt_,0,2*k,cvmGet(dpdt,0,k));
-//                cvmSet(dpdt_,1,2*k,cvmGet(dpdt,1,k));
-//                cvmSet(dpdr_,0,2*k,cvmGet(dpdr,0,k));
-//                cvmSet(dpdr_,1,2*k,cvmGet(dpdr,1,k));
-//            }
-//
+            cvmSet(innov,1+2*visibleidx,0,Meas[2*i+1]-proj.y);
+
             fillInvParamDeriv(dpdw, dpdW, theta,phi,rho);
 
             CopyMat(dpdt,H_,2*visibleidx,0);
@@ -2178,27 +2137,28 @@ bool CSlam::joint_compatibility(std::vector<int> visible_, std::vector<float> Me
     /* temp5 = z(k) - H*x'(k) */
     // done at the loop upwards ^
     /* temp3=C^-1 * (z-h)*/
-    cvSolve( C,innov,T3, CV_SVD );
+    cvInvert(C,Cinv);
+    //cvSolve( C,innov,T3, CV_SVD );
+    cvMatMul(Cinv,innov,T3);
     /* temp2 = (z-h) temp3t */
     cvGEMM(innov,T3,1,NULL,0,  T4 ,CV_GEMM_A_T);
 
     bool result;
     double dist = 0;
-    for (int i = 0 ; i < visNum_;i++)
-        dist += cvmGet( innov,i,0)*cvmGet( innov,i,0);
 
-    if (cvmGet(T4,0,0)>1250)//18DOF 6DOF=10.864940
+    for (int i = 0 ; i < visNum_*2;i++){
+        dist += cvmGet( innov,i,0)*cvmGet( innov,i,0);
+    }
+    if (cvmGet(T4,0,0)>125)//18DOF 6DOF=10.864940
     {
-        //std::cout<<"test JC ko: "<<cvmGet(T4,0,0)<<" dist: "<<dist<<std::endl;
         result = false;
     }else{
-        //std::cout<<"test JC OK: "<<cvmGet(T4,0,0)<<" dist: "<<dist<<std::endl;
         result = true;
     }
 
-    //double distance= cvmGet(T4,0,0);
     cvReleaseMat(&innov);
     cvReleaseMat(&C);
+    cvReleaseMat(&Cinv);
     cvReleaseMat(&H_);
     cvReleaseMat(&P_);
     cvReleaseMat(&R_);
@@ -2212,8 +2172,6 @@ bool CSlam::joint_compatibility(std::vector<int> visible_, std::vector<float> Me
     cvReleaseMat(&dpdc);
     cvReleaseMat(&dpdk);
     cvReleaseMat(&dpdw);
-//    cvReleaseMat(&dpdt_);
-//    cvReleaseMat(&dpdr_);
     cvReleaseMat(&dpdW);
 
       return result;
