@@ -552,7 +552,7 @@ if (MD<1) {
             ii++;
             cvmSet(temp5,ii,0,measurement[2*j+1]-prediction[2*j+1]);
             ii++;
-            std::cout<<ii<<" "<<temp5->height<<" vis: "<<visible.size()<<std::endl;
+            std::cout<<ii<<" "<<temp5->height<<" vis: "<<visible.size()<<" j:"<<j<<" vis[j] "<<visible[j]<<std::endl;
         }
     }
 std::cout<<"prematmuladd"<<std::endl;
@@ -581,14 +581,32 @@ void CSlam::test()
         pairingsBest = 0;
         maxLevels = visible.size();
         //std::vector<int> H;
-        JCBB(0,visible.size());
+//          JCBB(0,visible.size());
+//        H_.clear();
+//        for (unsigned int i = 0 ; i < BestH.size() ; i++ )
+//        {
+//            std::cout<<BestH[i]<<" ";
+//            visible[i]=BestH[i];
+//        }
+//        std::cout<<pairingsBest<<std::endl;
+        JCBB_incremental(0,visible.size(),NULL,NULL,NULL,NULL);
         H_.clear();
-        for (unsigned int i = 0 ; i < BestH.size() ; i++ )
+        for (unsigned int i = 0 ; i < visible.size() ; i++ )
         {
-            std::cout<<BestH[i]<<" ";
-            visible[i]=BestH[i];
+            if ( i < BestH.size()){
+                std::cout<<BestH[i]<<" ";
+                visible[i]=BestH[i];
+            }else{
+                visible[i]=0;
+            }
         }
         std::cout<<pairingsBest<<std::endl;
+        visNum=0;
+        for (unsigned int i = 0 ; i<visible.size(); i++){
+            if (visible.at(i)== true)
+                visNum++;
+        }
+        MD=modelMD+visNum*2;
     }
 }
 /**
@@ -1998,7 +2016,65 @@ float CSlam::randomVector(float max,float min)
 return  x+ (y*rand()/(RAND_MAX+1.0));
 
 }
+void CSlam::JCBB_incremental(int level,int MaxRama,
+                 CvMat *C, CvMat* Cinv, CvMat* H, CvMat* innov)
+{
+    int pairingsH = 0;
+    for (unsigned int i = 0 ; i < H_.size() ; i++ )
+    {
+        if (H_[i]>0) pairingsH++;
+    }
+    if (level > maxLevels - 1)
+    {
+        if ( pairingsH > pairingsBest )
+        {
+            BestH.clear();
+            for (unsigned int i = 0 ; i < H_.size() ; i++)
+                BestH.push_back(H_[i]);
+            pairingsBest = pairingsH;
+        }
+    }
+    else
+    {
 
+        if (pairingsBest < MaxRama)
+        {
+            //Todavia puedo cancelar algun punto
+            H_.push_back(0);
+//            if (level<10){
+//            for (unsigned int i = 0 ; i < H_.size() ; i++ )
+//            {
+//                std::cout<<H_[i]<<" ";
+//            }
+//            std::cout<<level<<std::endl;
+//            }
+            JCBB_incremental(level+1,MaxRama-1,C,Cinv,H,innov);
+            H_.pop_back();
+        }
+        if (visible[level]){
+            H_.push_back(1);//voy por el camino de aceptar la feature
+//            if(level<10){
+//            for (unsigned int i = 0 ; i < H_.size() ; i++ )
+//            {
+//                std::cout<<H_[i]<<" ";
+//            }
+//            std::cout<<level<<std::endl;
+//            }
+            CvMat *Cnext,*Cinvnext,*Hnext,*innovnext;
+            if (joint_compatibility_incremental(H_,measurement, C, Cinv,  H, innov,
+                                            &Cnext, &Cinvnext, &Hnext, &innovnext))
+            {
+                JCBB_incremental(level+1,MaxRama,Cnext, Cinvnext, Hnext, innovnext);
+            }
+            cvReleaseMat(&Cnext);
+            cvReleaseMat(&Cinvnext);
+            cvReleaseMat(&Hnext);
+            cvReleaseMat(&innovnext);
+            H_.pop_back();
+        }
+
+    }
+}
 void CSlam::JCBB( int level, int MaxRama)
 {
     int pairingsH = 0;
@@ -2020,11 +2096,11 @@ void CSlam::JCBB( int level, int MaxRama)
     {
         if (visible[level]){
             H_.push_back(1);//voy por el camino de aceptar la feature
-    //        for (unsigned int i = 0 ; i < H_.size() ; i++ )
-    //        {
-    //            std::cout<<H_[i]<<" ";
-    //        }
-    //        std::cout<<level<<std::endl;
+            for (unsigned int i = 0 ; i < H_.size() ; i++ )
+            {
+                std::cout<<H_[i]<<" ";
+            }
+            std::cout<<level<<std::endl;
             if (joint_compatibility(H_,measurement))
             {
                 JCBB(level+1,MaxRama);
@@ -2035,11 +2111,11 @@ void CSlam::JCBB( int level, int MaxRama)
         {
             //Todavia puedo cancelar algun punto
             H_.push_back(0);
-//            for (unsigned int i = 0 ; i < H_.size() ; i++ )
-//            {
-//                std::cout<<H_[i]<<" ";
-//            }
-//            std::cout<<level<<std::endl;
+            for (unsigned int i = 0 ; i < H_.size() ; i++ )
+            {
+                std::cout<<H_[i]<<" ";
+            }
+            std::cout<<level<<std::endl;
             JCBB(level+1,MaxRama-1);
             H_.pop_back();
         }
@@ -2175,6 +2251,275 @@ bool CSlam::joint_compatibility(std::vector<int> visible_, std::vector<float> Me
     cvReleaseMat(&dpdW);
 
       return result;
+}
+/**
+ * \fn joint_compatibility_incremental
+ * \param visible_ vector of 1,0s
+ * \param Meas measurement vector
+ * \param C_1 covariance matrix in k-1
+ * \param Cinv_1 inverse of covariance matrix in k-1
+ * \param D_1 mahalanobis distane in k-1
+ **/
+bool CSlam::joint_compatibility_incremental(std::vector<int> visible_, std::vector<float> Meas,
+                                            CvMat *C_1, CvMat* Cinv_1, CvMat* H_1, CvMat* innov_1,
+                                            CvMat **C, CvMat** Cinv, CvMat** H_, CvMat** innov)
+{
+    float *fstate;
+    fstate = Xp->data.fl;
+
+    double x,y,z,theta,phi,rho;
+    double ox,oy,oz;
+
+    CvPoint2D64f proj;
+    CvMat* dpdr=cvCreateMat(2,4,CV_32FC1);
+    CvMat* dpdt=cvCreateMat(2,3,CV_32FC1);
+    CvMat* dpdf=cvCreateMat(2,2,CV_32FC1);
+    CvMat* dpdc=cvCreateMat(2,2,CV_32FC1);
+    CvMat* dpdk=cvCreateMat(2,4,CV_32FC1);
+    CvMat* dpdw=cvCreateMat(2,6,CV_32FC1);
+
+    CvMat *dpdW = cvCreateMat(2,6,CV_32FC1);
+    cvZero(dpdW);
+
+    //IC_Test var
+//    CvMat* innov;
+//    CvMat* C;
+//    CvMat* Cinv;
+//    CvMat* H_;
+    CvMat* P_;
+    CvMat* R_;
+    CvMat* T2;
+    CvMat* T3;
+    CvMat* T4;
+
+    //Iterative Calc var
+    CvMat* w;
+    CvMat* wt;
+    CvMat* Cij;
+    CvMat* Rij;
+    CvMat* Hij;
+    CvMat* N;
+    CvMat* L;
+    CvMat* LT;
+    CvMat* K;
+
+    CvMat* innov_ij;
+
+    int fdims=6;
+    int visNum_=0;
+    for (unsigned int i = 0 ; i < visible_.size(); i++)
+    {
+        if ( visible_[i]>0 )
+        {
+            visNum_++;
+        }
+    }
+
+    //WARNING se usa visible.size() porque se quiere que se use la P completa
+    *innov=cvCreateMat(2*visNum_,1,CV_32FC1);
+    *C=cvCreateMat(2*visNum_,2*visNum_,CV_32FC1);
+    *Cinv=cvCreateMat(2*visNum_,2*visNum_,CV_32FC1);
+    *H_=cvCreateMat(2*visNum_,modelSD+fdims*visible.size(),CV_32FC1);
+    cvZero(*H_);
+    P_=cvCreateMat(modelSD+fdims*visible.size(),12+fdims*visible.size(),CV_32FC1);
+    R_=cvCreateMat(2*visNum_,2*visNum_,CV_32FC1);
+    T2=cvCreateMat(2*visNum_,modelSD+fdims*visible.size(),CV_32FC1);
+    T3=cvCreateMat(2*visNum_,1,CV_32FC1);
+    T4=cvCreateMat(1,1,CV_32FC1);
+    cvSetIdentity(R_,cvRealScalar(MEAS_NOISE_COV));
+
+    if (C_1 == NULL)
+    {
+         unsigned int i = visible_.size()-1;
+    if (visible_[i]>0)
+    {
+        float *fstate_=fstate;
+        int s_i=modelSD+i*6;//
+
+        fstate_+=s_i;
+        x=*fstate_;        fstate_++;
+        y=*fstate_;        fstate_++;
+        z=*fstate_;        fstate_++;
+        theta=*fstate_;    fstate_++;
+        phi=*fstate_;      fstate_++;
+        rho=*fstate_;      fstate_++;
+
+        InverseDepth2Depth(x,y,z,theta,phi,rho,&ox,&oy,&oz);
+        CvPoint3D64f p = cvPoint3D64f(ox,oy,oz);
+        ProjectPoints3(&p, Xp,IntrinsicParam,DistortionParam,
+                            &proj, dpdr,dpdt, dpdf,
+                            dpdc, dpdk, dpdw);
+        cvmSet(*innov,0,0,Meas[2*i]-proj.x);
+        cvmSet(*innov,1,0,Meas[2*i+1]-proj.y);
+
+        fillInvParamDeriv(dpdw, dpdW, theta,phi,rho);
+
+        CopyMat(dpdt,*H_,0,0);
+        CopyMat(dpdr,*H_,0,3);
+        CopyMat(dpdW,*H_,0,modelSD+i*fdims);
+
+    }//end if visible
+
+        /* temp2 = H*P'(k) */
+        cvMatMulAdd( *H_,P,0,T2 );
+        /* C = temp2*Ht + R */
+        cvGEMM( T2,*H_, 1,R_, 1, *C, CV_GEMM_B_T );
+
+        // temp5 = z(k) - H*x'(k)
+
+        // temp3=C^-1 * (z-h)
+        cvInvert(*C,*Cinv);
+    }
+    else
+    {
+    //Cinv Sub matrixes
+    K = cvCreateMatHeader(C_1->height, C_1->width, CV_32FC1);
+    L = cvCreateMatHeader(2,C_1->height, CV_32FC1);
+    LT= cvCreateMatHeader(C_1->height,2,CV_32FC1);
+    N = cvCreateMatHeader(2,2,CV_32FC1);
+
+    cvGetSubRect(*Cinv,K,cvRect(0,0,C_1->width,C_1->height));
+    cvGetSubRect(*Cinv,L,cvRect(0,C_1->height,C_1->height,2));
+    cvGetSubRect(*Cinv,LT,cvRect(C_1->width,0,2,C_1->height));
+    cvGetSubRect(*Cinv,N,cvRect(C_1->width,C_1->height,2,2));
+
+    //C Sub matrixes
+    w = cvCreateMatHeader(2,C_1->width,CV_32FC1);
+    wt= cvCreateMatHeader(C_1->height,2,CV_32FC1);
+    Cij=cvCreateMatHeader(2,2,CV_32FC1);
+    Rij=cvCreateMatHeader(2,2,CV_32FC1);
+
+    cvGetSubRect(*C, w, cvRect(0,C_1->height,C_1->width, 2));
+    cvGetSubRect(*C,wt, cvRect(C_1->width,0,2,C_1->height));
+    cvGetSubRect(*C,Cij,cvRect(C_1->width,C_1->height,2,2));
+    cvGetSubRect(R_,Rij,cvRect(C_1->width,C_1->height,2,2));
+
+    //Hij matrix
+    Hij = cvCreateMatHeader(2,SD,CV_32FC1);
+    cvGetSubRect(*H_,Hij,cvRect(0,H_1->height,H_1->width,2));
+    CopyMat(H_1,*H_,0,0);
+
+    //innov matrix
+    innov_ij = cvCreateMatHeader(2,1,CV_32FC1);
+    CopyMat(innov_1,*innov,0,0);
+    cvGetSubRect(*innov, innov_ij, cvRect(0,C_1->height,1,2));
+    unsigned int i = visible_.size()-1;
+    if (visible_[i]>0)
+    {
+        float *fstate_=fstate;
+        int s_i=modelSD+i*6;//
+
+        fstate_+=s_i;
+        x=*fstate_;        fstate_++;
+        y=*fstate_;        fstate_++;
+        z=*fstate_;        fstate_++;
+        theta=*fstate_;    fstate_++;
+        phi=*fstate_;      fstate_++;
+        rho=*fstate_;      fstate_++;
+
+        InverseDepth2Depth(x,y,z,theta,phi,rho,&ox,&oy,&oz);
+        CvPoint3D64f p = cvPoint3D64f(ox,oy,oz);
+        ProjectPoints3(&p, Xp,IntrinsicParam,DistortionParam,
+                            &proj, dpdr,dpdt, dpdf,
+                            dpdc, dpdk, dpdw);
+        cvmSet(innov_ij,0,0,Meas[2*i]-proj.x);
+        cvmSet(innov_ij,1,0,Meas[2*i+1]-proj.y);
+
+        fillInvParamDeriv(dpdw, dpdW, theta,phi,rho);
+
+        CopyMat(dpdt,Hij,0,0);
+        CopyMat(dpdr,Hij,0,3);
+        CopyMat(dpdW,Hij,0,modelSD+i*fdims);
+
+    }//end if visible
+    //C Creation
+    CopyMat(C_1,*C,0,0);
+    //w=Hij*P*H_1'
+    CvMat* temp= cvCreateMat(2,SD,CV_32FC1);
+    cvMatMul(Hij,P, temp);
+    cvGEMM(temp,H_1, 1, B, 0 ,w, CV_GEMM_B_T);
+    cvReleaseMat(&temp);
+    cvTranspose(w,wt);
+    //Cij=Hij*p*Hij'
+    QuadForm(P,Hij,Cij);
+    cvAdd(Cij,Rij,Cij);
+
+    //Cinv Creation
+    //N=(Cij-w*Cinv_1*w')^-1
+    CvMat* temp2= cvCreateMat(2,2,CV_32FC1);
+    QuadForm(Cinv_1,w,temp2);
+    cvSub(Cij,temp2,N);
+    cvReleaseMat(&temp2);
+    cvInv(N,N);
+
+    //L=-N*W*Cinv_1
+    CvMat* temp3= cvCreateMat(2,C_1->width,CV_32FC1);
+    cvMatMul(w,Cinv_1,temp3);
+    cvGEMM(N,temp3,-1,NULL,0,L);
+    cvReleaseMat(&temp3);
+    cvTranspose(L,LT);
+    //K=Cinv_1+L N^-1 LT);
+    CvMat* temp4=cvCreateMat(N->height, N->width, CV_32FC1);
+    cvInv(N,temp4);
+    QuadForm(temp4,LT,K,Cinv_1);
+    }
+    //cvSolve( C,innov,T3, CV_SVD );
+
+    cvMatMul(*Cinv,*innov,T3);
+    /* temp2 = (z-h) temp3t */
+    cvGEMM(*innov,T3,1,NULL,0,  T4 ,CV_GEMM_A_T);
+
+    bool result;
+    double dist = 0;
+
+    for (int i = 0 ; i < visNum_*2;i++){
+        dist += cvmGet( *innov,i,0)*cvmGet( *innov,i,0);
+    }
+    if (cvmGet(T4,0,0)>125)//18DOF 6DOF=10.864940
+    {
+        result = false;
+    }else{
+        result = true;
+    }
+
+//    cvReleaseMatHeader(&w);
+//    cvReleaseMatHeader(&wt);
+//    cvReleaseMatHeader(&Cij);
+//    cvReleaseMatHeader(&Rij);
+//    cvReleaseMatHeader(&Hij);
+//    cvReleaseMatHeader(&N);
+//    cvReleaseMatHeader(&L);
+//    cvReleaseMatHeader(&LT);
+//    cvReleaseMatHeader(&K);
+//    cvReleaseMatHeader(&innov_ij);
+
+//    cvReleaseMat(&innov);
+//    cvReleaseMat(&C);
+//    cvReleaseMat(&Cinv);
+//    cvReleaseMat(&H_);
+    cvReleaseMat(&P_);
+    cvReleaseMat(&R_);
+    cvReleaseMat(&T2);
+    cvReleaseMat(&T3);
+    cvReleaseMat(&T4);
+
+    cvReleaseMat(&dpdt);
+    cvReleaseMat(&dpdr);
+    cvReleaseMat(&dpdf);
+    cvReleaseMat(&dpdc);
+    cvReleaseMat(&dpdk);
+    cvReleaseMat(&dpdw);
+    cvReleaseMat(&dpdW);
+
+
+      return result;
+}
+void CSlam::QuadForm(CvMat *A, CvMat *vect, CvMat* resultado,CvMat *B)
+{
+    CvMat* temp= cvCreateMat(vect->height, A->width,CV_32FC1);
+    cvMatMul(vect,A, temp);
+    cvGEMM(temp,vect, 1, B, 1 ,resultado, CV_GEMM_B_T);
+    cvReleaseMat(&temp);
 }
 void CSlam::Cholesky(CvMat *in, CvMat *out)
 {

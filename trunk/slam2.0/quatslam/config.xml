@@ -1,6 +1,6 @@
 <mainslam>
 <data>
-   D:\\SLAM\\Datos\\calibr\\Secuencia01%0.3d.tif
+   D:\\SLAM\\Datos\\Letras\\4abril2007\\Tif\\I2%0.2d.tif
 </data>
 <slam>
     <model>
@@ -40,7 +40,7 @@
         <MinBorderGreyDist>40</MinBorderGreyDist>
         <cornercount>30</cornercount>
         <quality_level>0.1</quality_level>
-        <min_distance>40</min_distance>
+        <min_distance>80</min_distance>
     </Harris>
     <InvDepth>10</InvDepth>
 </slam>
