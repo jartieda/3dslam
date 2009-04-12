@@ -287,7 +287,7 @@ osg::Geode* myKeyboardEventHandler::PlotEllipse3D(CvMat *X, CvMat *P, osg::Vec4A
     osg::Geode* geode = new osg::Geode();
     osg::Geometry* pointsGeom = new osg::Geometry();
     osg::Vec3Array* vertices = new osg::Vec3Array;
-    CvMat *temp,*temp2,*temp3;
+    CvMat *temp;
     temp=cvCreateMatHeader(3,3,CV_32FC1);
     CvMat *_temp = cvCreateMat (3,3,CV_32FC1);
     CvMat* vect=cvCreateMat (3,1,CV_32FC1);
@@ -574,8 +574,10 @@ osg::Geode* myKeyboardEventHandler::Feature()
                 printf("%s\n",DATA);
                 sprintf(filein,DATA,iter);
                 printf("%s\n",filein);
-                frame=cvLoadImage(filein,CV_LOAD_IMAGE_COLOR );
-
+                frame=cvLoadImage(filein );
+                if (frame == NULL){
+                    printf("error abriendo fichero\n");
+                }
                // Assign the texture to the image we read from file:
                pSlam->run(frame);
                osg::PositionAttitudeTransform* FrameXForm = new osg::PositionAttitudeTransform();
