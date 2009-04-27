@@ -7,14 +7,17 @@
 
 using namespace std;
 
-int main()
+int main(int argc,char *argv[])
 {
     cvNamedWindow( "SLAM", 1 );
     //IplImage* frame = 0;
     //int iter =1;
 
     XMLNode xMainNode;
-    xMainNode=XMLNode::openFileHelper("config.xml","mainslam");
+    if (argc>1)
+       xMainNode=XMLNode::openFileHelper(argv[1],"mainslam");
+    else
+        xMainNode=XMLNode::openFileHelper("config.xml","mainslam");
     /** Search for data dir in config.xml **/
     const char *DATA;
     DATA=xMainNode.getChildNode("data").getText();

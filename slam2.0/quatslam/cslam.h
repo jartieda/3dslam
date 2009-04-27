@@ -28,8 +28,11 @@ class CSlam
         void MemMat2WorkMat();
         void matchHarris(IplImage *img);
         void matchFile(IplImage *img);
+        void matchSurf(IplImage *img);
         void addHarris(IplImage* img);
         void addFile(IplImage* img);
+        void addSurf(IplImage* img);
+        int Detector;
         int numVisibleMin;
         int visNum;
         void projectAllPoints(CvMat *state);
