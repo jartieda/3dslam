@@ -2,28 +2,28 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
 	<File name="config.xml" open="1" top="0" tabpos="7">
-		<Cursor position="90" topLine="0" />
+		<Cursor position="1124" topLine="27" />
 	</File>
-	<File name="cslam.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="20234" topLine="583" />
+	<File name="cslam.cpp" open="1" top="1" tabpos="2">
+		<Cursor position="2667" topLine="69" />
 	</File>
 	<File name="cslam.h" open="1" top="0" tabpos="1">
-		<Cursor position="7155" topLine="130" />
+		<Cursor position="813" topLine="22" />
 	</File>
 	<File name="cvisor.cpp" open="1" top="0" tabpos="6">
-		<Cursor position="12528" topLine="278" />
+		<Cursor position="28176" topLine="497" />
 	</File>
 	<File name="cvisor.h" open="1" top="0" tabpos="8">
 		<Cursor position="1392" topLine="22" />
 	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="3">
-		<Cursor position="559" topLine="14" />
+	<File name="main.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="726" topLine="18" />
 	</File>
 	<File name="surf.cpp" open="1" top="0" tabpos="5">
-		<Cursor position="22224" topLine="653" />
+		<Cursor position="22224" topLine="593" />
 	</File>
 	<File name="surf.h" open="1" top="0" tabpos="4">
-		<Cursor position="1788" topLine="9" />
+		<Cursor position="1788" topLine="18" />
 	</File>
 	<File name="xmlParser.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="8585" topLine="186" />

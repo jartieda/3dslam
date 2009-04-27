@@ -48,11 +48,11 @@ osg::Node* myKeyboardEventHandler::Camera(std::string filename)
        if (!klnFace)
        {
           std::cout << " couldn't find texture, quiting." << std::endl;
-          exit (-1);
-       }
+         // exit (-1);
+       }else{
 
        FrameTexture->setImage(klnFace);
-
+       }
        // Associate this state set with the Geode that contains
        // the pyramid:
        FrameGeode->setStateSet(stateOne);
@@ -172,9 +172,9 @@ osg::Node* myKeyboardEventHandler::Camera(std::string filename)
        if (!klnFace)
        {
           std::cout << " couldn't find texture, quiting." << std::endl;
-          exit (-1);
+          //exit (-1);
        }
-
+        else
        FrameTexture->setImage(klnFace);
 
        // Associate this state set with the Geode that contains
@@ -254,9 +254,9 @@ osg::Node* myKeyboardEventHandler::Camera(std::string filename)
        if (!klnFace)
        {
           std::cout << " couldn't find texture, quiting." << std::endl;
-          exit (-1);
+          //exit (-1);
        }
-
+        else
        FrameTexture->setImage(klnFace);
 
        // Associate this state set with the Geode that contains
@@ -543,7 +543,83 @@ osg::Geode* myKeyboardEventHandler::Feature()
     // Create a new StateSet with default settings:
     osg::StateSet* stateOne = new osg::StateSet();
     osg::Point *  point = new osg::Point();
-    point->setSize(3.0);
+    point->setSize(2.0);
+    stateOne->setAttributeAndModes(point,osg::StateAttribute::ON);
+    geode->setStateSet(stateOne);
+    return geode;
+
+}
+
+osg::Geode* myKeyboardEventHandler::LastFeaturePos()
+{
+    osg::Geode* geode = new osg::Geode();
+    osg::Geometry* pointsGeom = new osg::Geometry();
+    float *fstate;
+    fstate = pSlam->X->data.fl;
+    int step = pSlam->X->step/sizeof(fstate[0]);
+    fstate+=(pSlam->modelSD*step);
+
+    // create a Vec3Array and add to it all my coordinates.
+    // Like all the *Array variants (see include/osg/Array) , Vec3Array is derived from both osg::Array
+    // and std::vector<>.  osg::Array's are reference counted and hence sharable,
+    // which std::vector<> provides all the convenience, flexibility and robustness
+    // of the most popular of all STL containers.
+    osg::Vec3Array* vertices = new osg::Vec3Array;
+    double x,y,z,theta,phi,rho;
+
+    double ox,oy,oz;
+    for (unsigned int i = 0 ; i < pSlam->visible.size(); i++)
+    {
+        x=*fstate;
+        fstate++;
+        y=*fstate;
+        fstate++;
+        z=*fstate;
+        fstate++;
+        theta=*fstate;
+        fstate++;
+        phi=*fstate;
+        fstate++;
+        rho=*fstate;
+        fstate++;
+        pSlam->InverseDepth2Depth(x,y,z,theta,phi,rho,&ox,&oy,&oz);
+        vertices->push_back(osg::Vec3(ox,oy,oz));
+    }
+
+    // pass the created vertex array to the points geometry object.
+    pointsGeom->setVertexArray(vertices);
+
+    // create the color of the geometry, one single for the whole geometry.
+    // for consistency of design even one single color must added as an element
+    // in a color array.
+    osg::Vec4Array* colors = new osg::Vec4Array;
+    // add a white color, colors take the form r,g,b,a with 0.0 off, 1.0 full on.
+    colors->push_back(osg::Vec4(0.0f,1.0f,0.0f,1.0f));
+
+    // pass the color array to points geometry, note the binding to tell the geometry
+    // that only use one color for the whole object.
+    pointsGeom->setColorArray(colors);
+    pointsGeom->setColorBinding(osg::Geometry::BIND_OVERALL);
+
+    // set the normal in the same way color.
+    osg::Vec3Array* normals = new osg::Vec3Array;
+    normals->push_back(osg::Vec3(0.0f,-1.0f,0.0f));
+    pointsGeom->setNormalArray(normals);
+    pointsGeom->setNormalBinding(osg::Geometry::BIND_OVERALL);
+
+    // create and add a DrawArray Primitive (see include/osg/Primitive).  The first
+    // parameter passed to the DrawArrays constructor is the Primitive::Mode which
+    // in this case is POINTS (which has the same value GL_POINTS), the second
+    // parameter is the index position into the vertex array of the first point
+    // to draw, and the third parameter is the number of points to draw.
+    pointsGeom->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::POINTS,0,vertices->size()));
+
+    // add the points geometry to the geode.
+    geode->addDrawable(pointsGeom);
+    // Create a new StateSet with default settings:
+    osg::StateSet* stateOne = new osg::StateSet();
+    osg::Point *  point = new osg::Point();
+    point->setSize(4.0);
     stateOne->setAttributeAndModes(point,osg::StateAttribute::ON);
     geode->setStateSet(stateOne);
     return geode;
@@ -575,8 +651,12 @@ osg::Geode* myKeyboardEventHandler::Feature()
                 sprintf(filein,DATA,iter);
                 printf("%s\n",filein);
                 frame=cvLoadImage(filein );
-                if (frame == NULL){
+                while (frame == NULL){
                     printf("error abriendo fichero\n");
+                     printf("%s\n",DATA);
+                    sprintf(filein,DATA,++iter);
+                    printf("%s\n",filein);
+                    frame=cvLoadImage(filein );
                 }
                // Assign the texture to the image we read from file:
                pSlam->run(frame);
@@ -624,9 +704,17 @@ osg::Geode* myKeyboardEventHandler::Feature()
                         root->addChild(UncertCameraPredGeode);
                     }
                     OldUncertCameraPredGeode = UncertCameraPredGeode;
+                    LastFeaturePosGeode=LastFeaturePos();
+                    if (root->containsNode(OldLastFeaturePosGeode)){
+                        root->replaceChild(OldLastFeaturePosGeode,LastFeaturePosGeode);
+                    }else{
+                        root->addChild(LastFeaturePosGeode);
+                    }
+                    OldLastFeaturePosGeode = LastFeaturePosGeode;
+
                }
                root->addChild(ImageHud(std::string("slam.jpg")));
-               root->addChild(P_Hud(std::string("slam_p.tif")));
+               //root->addChild(P_Hud(std::string("slam_p.tif")));
                osg::Vec3 FramePosition(xcam,ycam,zcam);
                FrameXForm->setPosition( FramePosition );
                osg::Quat FrameRotation(-cvmGet(r,1,0),-cvmGet(r,2,0),-cvmGet(r,3,0),cvmGet(r,0,0));

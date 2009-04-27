@@ -3,7 +3,7 @@
 #include "OpenCVImageAdapter.h"
 
 
-CSlam::CSlam(XMLNode* n):numVisibleMin(10),SD(0),MD(0),CD(0), levels(6),hScale(0.5),vScale(0.5),lineWidth(2)
+CSlam::CSlam(XMLNode* n):numVisibleMin(10),SD(0),MD(0),CD(0), levels(6),hScale(0.5),vScale(0.5),lineWidth(2),first(0)
 {
     //ctor
     xMainNode= n;
@@ -73,23 +73,32 @@ CSlam::CSlam(XMLNode* n):numVisibleMin(10),SD(0),MD(0),CD(0), levels(6),hScale(0
     cvmSet(DistortionParam,1,0,k2);
     cvmSet(DistortionParam,2,0,k3);
     cvmSet(DistortionParam,3,0,k4);
-
-    t=xMainNode->getChildNode("Harris").getChildNode("searchZoneSize").getText();
-    sscanf(t,"%d",&searchZoneSize);
-    t=xMainNode->getChildNode("Harris").getChildNode("patternSize").getText();
-    sscanf(t,"%d",&patternSize);
-    t=xMainNode->getChildNode("Harris").getChildNode("minCorrVal").getText();
-    sscanf(t,"%f",&minCorrVal);
-    t=xMainNode->getChildNode("Harris").getChildNode("MinBorderGreyDist").getText();
-    sscanf(t,"%f",&MinBorderGreyDist);
-    t=xMainNode->getChildNode("Harris").getChildNode("cornercount").getText();
-    sscanf(t,"%d",&cornercount);
-    t=xMainNode->getChildNode("Harris").getChildNode("quality_level").getText();
-    sscanf(t,"%f",&quality_level);
-    t=xMainNode->getChildNode("Harris").getChildNode("min_distance").getText();
-    sscanf(t,"%f",&min_distance);
-    printf("Harris: %d %d %f %f %d %f %f\n",searchZoneSize, patternSize, minCorrVal, MinBorderGreyDist, cornercount, quality_level,min_distance);
-
+    t = xMainNode->getChildNode("Detector").getText();
+    if (strcmp(t,"Surf")==0)
+    {
+        t=xMainNode->getChildNode("Surf").getChildNode("cornercount").getText();
+        sscanf(t,"%d",&cornercount);
+        t=xMainNode->getChildNode("Surf").getChildNode("min_distance").getText();
+        sscanf(t,"%f",&min_distance);
+        Detector=1;
+    }else{
+        t=xMainNode->getChildNode("Harris").getChildNode("searchZoneSize").getText();
+        sscanf(t,"%d",&searchZoneSize);
+        t=xMainNode->getChildNode("Harris").getChildNode("patternSize").getText();
+        sscanf(t,"%d",&patternSize);
+        t=xMainNode->getChildNode("Harris").getChildNode("minCorrVal").getText();
+        sscanf(t,"%f",&minCorrVal);
+        t=xMainNode->getChildNode("Harris").getChildNode("MinBorderGreyDist").getText();
+        sscanf(t,"%f",&MinBorderGreyDist);
+        t=xMainNode->getChildNode("Harris").getChildNode("cornercount").getText();
+        sscanf(t,"%d",&cornercount);
+        t=xMainNode->getChildNode("Harris").getChildNode("quality_level").getText();
+        sscanf(t,"%f",&quality_level);
+        t=xMainNode->getChildNode("Harris").getChildNode("min_distance").getText();
+        sscanf(t,"%f",&min_distance);
+        printf("Harris: %d %d %f %f %d %f %f\n",searchZoneSize, patternSize, minCorrVal, MinBorderGreyDist, cornercount, quality_level,min_distance);
+        Detector=0;
+    }
 
    storage = cvCreateMemStorage(0);
    feat= cvCreateSeq( CV_32FC3, /* sequence of integer elements */
@@ -109,6 +118,7 @@ CSlam::CSlam(XMLNode* n):numVisibleMin(10),SD(0),MD(0),CD(0), levels(6),hScale(0
     // fonts for data out
     cvInitFont(&font,CV_FONT_HERSHEY_SIMPLEX|CV_FONT_ITALIC, hScale,vScale,0,lineWidth);
 Xp=0; X=0;  A=0;  B=0;  H=0;  Q=0;  R=0; Pp=0; K=0;  P=0;  control=0;
+
 
 }
 CvMat* CSlam::String2CvMat(char *s,int cols, int rows)
@@ -165,7 +175,10 @@ if (first!=0){
          projectAllPoints(Xp);
         std::cout<<"match"<<std::endl;
         //matchFile(img);
+        if (Detector==0)
          matchHarris(img);
+        else
+         matchSurf(img);
          MemMat2WorkMat();
         std::cout<<"test"<<std::endl;
          test();
@@ -174,7 +187,10 @@ if (first!=0){
          correct();
       // PrintKalman();
         std::cout<<"add"<<std::endl;
+        if (Detector==0)
          addHarris(img);
+        else
+         addSurf(img);
         //PrintKalman();
          //addFile(img);
          MemMat2WorkMat();
@@ -711,6 +727,139 @@ void CSlam::MemMat2WorkMat()
     cvGetSubRect(temp5Mem,temp5, cvRect(0, 0, 1,meas));
   }
 }
+void CSlam::matchSurf(IplImage *img)
+{
+    if (keys.size()>0){
+        IplImage *grey =cvCreateImage(cvGetSize(img),8,1);
+        cvCvtColor(img,grey,CV_RGB2GRAY);
+
+        IplImage *grey2 =cvCreateImage(cvGetSize(img),8,1);
+        cvCvtColor(img,grey2,CV_RGB2GRAY);
+
+        surf.img = grey;
+        cvClearSeq( feat );
+        surf.find_features( grey,feat, levels);
+//        if(keys.size()>0)
+//            testOpticalFlow(img, old_img, 1, 15, 1, 15);
+        double ang;
+        int *desc;
+        int *samples1;
+        samples1=new int[64*feat->total];
+        CvMat *new_points = cvCreateMat(feat->total,4,CV_32FC1) ;
+        for( int i = 0; i < feat->total; i++ )
+        {
+             CvPoint3D32f point = *(CvPoint3D32f*)cvGetSeqElem( feat, i );
+             ang=surf.orientation((int)point.x,(int)point.y,(int)point.z);
+             desc=surf.descriptor((int)point.x,(int)point.y,(int)point.z,ang);
+             cvCircle(grey2 , cvPoint((int)point.x,(int)point.y), (int)(point.z*3.0), cvScalar(255));
+             cvLine(grey2,cvPoint((int)point.x,(int)point.y),
+                    cvPoint((int)(point.x+point.z*3.0*sin(ang)),
+                    (int)(point.y+point.z*3.0*cos(ang))),cvScalar(255));
+
+             cvmSet(new_points,i,0,point.x) ;
+             cvmSet(new_points,i,1,point.y) ;
+             cvmSet(new_points,i,2,point.z) ;
+             cvmSet(new_points,i,3,ang) ;
+             for (int di=0; di<64; di++){
+                  samples1[i*64+di]=(unsigned char )(desc[di]+128);
+             }
+             delete[] desc;
+        }
+        int key[64];
+        int projx, projy;
+        for ( unsigned int i =0 ;i<keys.size();i++) {
+            ///FIXME Esto tiene que estar relacionado con un valor mas claro del surf
+             projx=(int)prediction[i*2];
+             projy=(int)prediction[i*2+1];
+             if(projx>(9*levels+1) && projx<img->width-(9*levels+1) &&
+                projy>(9*levels+1) && projy<img->height-(9*levels+1))
+             {
+                 for (int d=0; d<64;d++)
+                 {
+                     key[d]=(keys[i])[d];
+                 }
+                 /*int p = surf.nearest_neighbor_2(key,samples1,feat->total,
+                                               cvPoint((int)projx,(int)projy),
+                                               new_points,50);*/
+                 std::vector<int> result;
+                 int n = surf.nearest_neighbor_classify3(key,samples1,feat->total,result);
+                 float ic;
+                 float best_ic=10000;
+                 int best_ic_n=0;
+                 if (n!=-1){
+                     for (unsigned int k= 0 ; k<result.size(); k++)
+                     {
+                         std::cout<<"result: "<<result[k]<<" ";
+                         ic = ic_test(i, cvmGet(new_points,result[k],0), cvmGet(new_points,result[k],1)) ;
+                         if (ic<best_ic){
+                             best_ic= ic;
+                             best_ic_n=k;
+                         }
+                     }
+                     if (n != result[best_ic_n]) {
+                         std::cout<<"Capturado un punto por IC-Test n:"<<n<<" res:"<<result[best_ic_n]<<std::endl;
+                         n = result[best_ic_n];
+                     }
+                 }
+                 //FIXME Use joint compatibility test here
+                 if(n==-1)//en caso de no encorar fallo
+                 {
+                     //cout<<"no match "<<endl;
+                     if(visible.at(i)==true)
+                     {
+                        //std::cout << "borropuntos: "<<(*It)->pto.x<<" "<<(*It)->pto.y<<std::endl;
+                        visible[i]=0;//false
+                     }
+
+//                    measurement[2*i]=0;
+//                    measurement[2*i+1]=0;
+                 }
+                 else//encaso de exito
+                 {
+//                     std::cout<<
+//                     std::cout<<measurement[2*i]<<" "<<measurement[2*i+1]<<" "<<cvGetReal2D(imgU1,measurement[2*i+1],measurement[2*i])<<" ";
+//                     std::cout<<cvGetReal2D(imgV1,measurement[2*i+1],measurement[2*i])<<" ";
+//                     std::cout<<measurement[2*i]+cvGetReal2D(imgU1,measurement[2*i+1],measurement[2*i])<<" ";
+//                     std::cout<<measurement[2*i+1]+cvGetReal2D(imgV1,measurement[2*i+1],measurement[2*i])<<" ";
+//                     std::cout<<cvmGet(new_points,n,0)<<" "<<cvmGet(new_points,n,1)<<std::endl;
+
+                       measurement[2*i]=cvmGet(new_points,n,0);
+                       measurement[2*i+1]=cvmGet(new_points,n,1);
+                       if(visible.at(i)==false)
+                       {
+                         visible[i]=1;//true
+                       }
+                 }
+            }else
+            {
+                if(visible.at(i)==true)
+                 {
+
+                     visible[i]=0;//false;
+                 }
+                measurement[2*i]=0;
+                measurement[2*i+1]=0;
+            } //end if proj dentro borde
+        }//end for cada elemento del mapa
+
+        int vis = 0;
+        for (unsigned int k = 0; k<visible.size(); k++)
+        {
+            if (visible.at(k)==true) {
+                vis++;
+            }
+        }
+        MD=modelMD+2*vis;
+
+        cvShowImage("win",grey2);
+        cvWaitKey(100);
+
+        cvReleaseImage(&grey);
+        cvReleaseImage(&grey2);
+        delete[] samples1;
+        cvReleaseMat(&new_points);
+    }
+}
 void CSlam::matchHarris(IplImage *img)
 {
 if (keys.size()>0){
@@ -804,7 +953,7 @@ if (keys.size()>0){
                 }
             }
 
-          if (maxcorr > 0.8)
+          if (maxcorr > minCorrVal)
           {
               nomatch= false ;
             temp.x=maxLoc.x;
@@ -995,6 +1144,144 @@ void CSlam::addFile(IplImage* img){
 //    cvCopyImage(img,old_img);
     cvmSet(Simul_State,1,0,cvmGet(Simul_State,1,0)+0.1);
 }
+  void CSlam::addSurf(IplImage* img)
+  {
+         /** count numbre of visible points **/
+    visNum=0;
+    for (unsigned int i = 0 ; i<visible.size(); i++){
+        if (visible.at(i)== true) visNum++;
+    }
+    /** if visible < numVisibleMin add points**/
+    std::vector<int *> temp_keys_old;
+    std::vector<int *> temp_keys;
+
+    if (visNum<numVisibleMin)
+    {
+        //get features from old_image
+        IplImage *grey_old =cvCreateImage(cvGetSize(old_img),8,1);
+        cvCvtColor(old_img,grey_old,CV_RGB2GRAY);
+        surf.img = grey_old;
+        cvClearSeq( feat_old );
+        surf.find_features( grey_old,feat_old, levels);
+        float ang_old;
+        int *desc_old;
+        int *samples1_old;
+        int *samples;
+        samples=new int[64*feat_old->total];
+        CvMat *new_points_old = cvCreateMat(feat_old->total,4,CV_32FC1) ;
+        //CvMat *h_old= cvCreateMat(6,1,CV_32FC1);
+        for( int i = 0; i < feat_old->total; i++ )
+        {
+             CvPoint3D32f point_old = *(CvPoint3D32f*)cvGetSeqElem( feat_old, i );
+             ang_old=surf.orientation((int)point_old.x,(int)point_old.y,(int)point_old.z);
+             desc_old=surf.descriptor((int)point_old.x,(int)point_old.y,(int)point_old.z,ang_old);
+
+             cvmSet(new_points_old,i,0,point_old.x) ;
+             cvmSet(new_points_old,i,1,point_old.y) ;
+             cvmSet(new_points_old,i,2,point_old.z) ;
+             cvmSet(new_points_old,i,3,ang_old) ;
+             samples1_old=new int[64];
+             for (int di=0; di<64; di++){
+                  samples1_old[di]=(unsigned char )(desc_old[di]+128);
+             }
+             temp_keys_old.push_back(samples1_old);
+              for (int di=0; di<64; di++){
+                  samples[i*64+di]=(unsigned char )(desc_old[di]+128);
+             }
+            if ( desc_old != NULL)
+             delete[] desc_old;
+        }
+
+        IplImage *grey =cvCreateImage(cvGetSize(img),8,1);
+        cvCvtColor(img,grey,CV_RGB2GRAY);
+        surf.img = grey;
+        cvClearSeq( feat );
+        surf.find_features( grey,feat, levels);
+
+        float ang;
+        int *desc;
+        int *samples1;
+        CvMat *new_points = cvCreateMat(feat->total,4,CV_32FC1) ;
+        CvMat *h= cvCreateMat(6,1,CV_32FC1);
+        for( int i = 0; i < feat->total; i++ )
+        {
+             CvPoint3D32f point = *(CvPoint3D32f*)cvGetSeqElem( feat, i );
+             ang=surf.orientation((int)point.x,(int)point.y,(int)point.z);
+             desc=surf.descriptor((int)point.x,(int)point.y,(int)point.z,ang);
+
+             cvmSet(new_points,i,0,point.x) ;
+             cvmSet(new_points,i,1,point.y) ;
+             cvmSet(new_points,i,2,point.z) ;
+             cvmSet(new_points,i,3,ang) ;
+             samples1=new int[64];
+             for (int di=0; di<64; di++){
+                  samples1[di]=(unsigned char )(desc[di]+128);
+             }
+             temp_keys.push_back(samples1);
+             delete[] desc;
+
+        }
+        int Nn;
+
+        for(unsigned int f=0; f<temp_keys.size();f++)
+        {
+
+            Nn=surf.nearest_neighbor_classify(temp_keys[f], samples,temp_keys_old.size()) ;
+            if (Nn!=-1)
+            {
+                 //Nearest Neightbour
+                 bool onenear = false;
+                 double x = cvmGet(new_points,f,0);
+                 double y = cvmGet(new_points,f,1);
+                 int mx = (int)min_distance;
+                 int my = (int)min_distance;
+                for (unsigned int i = 0 ; i<visible.size();i++)
+                {
+
+                    if(((measurement[2*i] - mx)<x) && ((measurement[2*i]+mx) > x )&&
+                       ((measurement[2*i+1] - my)<y) && ((measurement[2*i+1]+my) > y ))
+                       {
+                          onenear= true;
+                       }
+
+                    if(((prediction[2*i] - mx)<x) && ((prediction[2*i]+mx) > x )&&
+                       ((prediction[2*i+1] - my)<y) && ((prediction[2*i+1]+my) > y ))
+                       {
+                          onenear= true;
+                       }
+                }
+                if (onenear == false ) {
+                     visible.push_back(true);
+                     measurement.push_back(cvmGet(new_points,f,0));
+                     measurement.push_back(cvmGet(new_points,f,1));
+                     prediction.push_back(0.0);
+                     prediction.push_back(0.0);
+                     keys.push_back(temp_keys[f]);
+                     //insertar puntos en invdepht aqui
+                     InverseParam(&h,cvPoint((int) cvmGet(new_points,f,0),(int)cvmGet(new_points,f,1)));
+                     AddPointToCovMatrix(cvmGet(new_points,f,0),cvmGet(new_points,f,1));
+                     //SD+=6;
+                     //MemMat2WorkMat();
+                     std::cout<<SD<<std::endl;
+                     for ( int k = 6; k>0;k--){
+                        cvmSet(X,SD-k,0,cvmGet(h,6-k,0));
+                     //updates model matrix
+                        cvmSet(A,SD-k,SD-k,1);
+                     }
+
+                }
+            }
+        }
+
+    }
+    visNum=0;
+    for (unsigned int i = 0 ; i<visible.size(); i++){
+        if (visible.at(i)== true) visNum++;
+    }
+    MD=modelMD+visNum*2;
+    //cvCopyImage(img,old_img);
+
+  }
 
   void CSlam::addHarris(IplImage* img){
     visNum=0;
@@ -1035,6 +1322,11 @@ void CSlam::addFile(IplImage* img){
                 {
                     if(((measurement[2*j] - mx)<x) && ((measurement[2*j]+mx) > x )&&
                        ((measurement[2*j+1] - my)<y) && ((measurement[2*j+1]+my) > y ))
+                       {
+                          onenear= true;
+                       }
+                    if(((prediction[2*j] - mx)<x) && ((prediction[2*j]+mx) > x )&&
+                       ((prediction[2*j+1] - my)<y) && ((prediction[2*j+1]+my) > y ))
                        {
                           onenear= true;
                        }
