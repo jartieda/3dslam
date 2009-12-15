@@ -56,6 +56,8 @@ class CSlam
         float quality_level; ///< don't add corners with egigenv. below this threshold ex: 0.1
         float min_distance; ///< minimum distance between corners. ex 30
 //    protected:
+        double avalue; ///<postion variation model for the construcion of Pn matrix in correct fn
+        double alpha; ///<angle variation model for the construction of Pn matrix in correct() fn
         int SD;///<State Dimension
         int MD;///<Measurement Dimension
         int CD;///<Control Dimension

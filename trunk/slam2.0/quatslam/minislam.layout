@@ -2,22 +2,22 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
 	<File name="config.xml" open="1" top="0" tabpos="7">
-		<Cursor position="1124" topLine="27" />
+		<Cursor position="665" topLine="6" />
 	</File>
-	<File name="cslam.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="2667" topLine="69" />
+	<File name="cslam.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="32389" topLine="904" />
 	</File>
-	<File name="cslam.h" open="1" top="0" tabpos="1">
-		<Cursor position="813" topLine="22" />
+	<File name="cslam.h" open="1" top="0" tabpos="2">
+		<Cursor position="2390" topLine="46" />
 	</File>
-	<File name="cvisor.cpp" open="1" top="0" tabpos="6">
-		<Cursor position="28176" topLine="497" />
+	<File name="cvisor.cpp" open="1" top="1" tabpos="6">
+		<Cursor position="28741" topLine="670" />
 	</File>
 	<File name="cvisor.h" open="1" top="0" tabpos="8">
-		<Cursor position="1392" topLine="22" />
+		<Cursor position="1483" topLine="25" />
 	</File>
 	<File name="main.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="726" topLine="18" />
+		<Cursor position="726" topLine="11" />
 	</File>
 	<File name="surf.cpp" open="1" top="0" tabpos="5">
 		<Cursor position="22224" topLine="593" />

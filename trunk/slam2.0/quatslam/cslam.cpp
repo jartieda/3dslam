@@ -19,6 +19,10 @@ CSlam::CSlam(XMLNode* n):numVisibleMin(10),SD(0),MD(0),CD(0), levels(6),hScale(0
     t=xMainNode->getChildNode("model").getChildNode("CD").getText();
     sscanf(t,"%d",&modelCD);
     std::cout<<"modelCD IS : "<<modelMD<<std::endl;
+    t=xMainNode->getChildNode("model").getChildNode("avalue").getText();
+    sscanf(t,"%lf",&avalue);
+    t=xMainNode->getChildNode("model").getChildNode("alpha").getText();
+    sscanf(t,"%lf",&alpha);
 
     ReserveMemory();
 
@@ -431,8 +435,8 @@ void CSlam::predict()
     /** Pn = Diag [ a*Dt a*Dt a*Dt alpha*Dt alpha*Dt alpha*Dt ] **/
     CvMat *Pn = cvCreateMat (6,6,CV_32FC1);
     cvZero(Pn);
-    for (int i = 0; i<3; i++) cvmSet(Pn,i,i,0.01*1*D_t*D_t);
-    for (int i = 3; i<6; i++) cvmSet(Pn,i,i,0.0005*1*D_t*D_t);
+    for (int i = 0; i<3; i++) cvmSet(Pn,i,i,avalue*avalue*D_t*D_t);
+    for (int i = 3; i<6; i++) cvmSet(Pn,i,i,alpha*alpha*D_t*D_t);
     /** G= dX_by_dVOmega **/
     CvMat *G =cvCreateMatHeader(13,6,CV_32FC1);
     cvGetSubRect(A,G,cvRect(7,0,6,13));
@@ -638,6 +642,9 @@ void CSlam::transMat(CvMat* o_mat, CvMat* d_mat)
   cvCopy( o_mat, submat );
   cvReleaseMatHeader(&submat);
 }
+/** Select a part of the reserved memory to create matrixes.
+* IMPORTANT: This function doesnt fill any value
+**/
 void CSlam::MemMat2WorkMat()
 {
 
@@ -1392,7 +1399,8 @@ void CSlam::addFile(IplImage* img){
     }
 
 /**
-  *la funcion de proyeccion es la misma que opencv pero ampliada para devolver la derivada de los puntos respecto de los puntos
+  *la funcion de proyeccion es la misma que opencv pero ampliada para devolver la derivada
+  *de los puntos respecto de los puntos
   **/
 
 void CSlam::ProjectPoints3( CvPoint3D64f* M,
