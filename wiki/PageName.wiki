@@ -14,9 +14,3 @@ jartieda@yahoo.com
 = Docs = 
 
 http://www.diphernet.com/web/cvision/slamDox/
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
