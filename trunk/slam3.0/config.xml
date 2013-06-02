@@ -1,0 +1,57 @@
+<mainslam>
+<data>
+   c:/datos/univ_alberta/image%0.4d.png
+</data>
+<slam>
+    <model>
+        <SD>13</SD>
+        <MD>0</MD>
+        <CD>0</CD>
+        <A> 2 -1 0 0 0 0 0 0 0 0 0 0
+            1  0 0 0 0 0 0 0 0 0 0 0
+            0 0 2 -1 0 0 0 0 0 0 0 0
+            0 0 1  0 0 0 0 0 0 0 0 0
+            0 0 0 0 2 -1 0 0 0 0 0 0
+            0 0 0 0 1  0 0 0 0 0 0 0
+            0 0 0 0 0 0 2 -1 0 0 0 0
+            0 0 0 0 0 0 1  0 0 0 0 0
+            0 0 0 0 0 0 0 0 2 -1 0 0
+            0 0 0 0 0 0 0 0 1  0 0 0
+            0 0 0 0 0 0 0 0 0 0 2 -1
+            0 0 0 0 0 0 0 0 0 0 1 0
+        </A>
+        <avalue>0.1</avalue>
+        <alpha>0.01</alpha>
+    </model>
+    <Camera>
+        <fx>665.6290281321765900</fx>
+        <fy>720.4872606567138300</fy>
+        <cx>352.6269237516700100</cx>
+        <cy>283.1232542339545800</cy>
+        <height>576</height>
+        <width>720</width>
+        <k1>-0.1457450158709720</k1>
+        <k2>0.1565575385850068</k2>
+        <k3>0.0046598238666428551</k3>
+        <k4>-0.00074951896029971064</k4>
+    </Camera>
+    <Detector>
+        Harris
+    </Detector>
+    <Surf>
+        <cornercount>10</cornercount>
+        <min_distance>50</min_distance>
+    </Surf>
+    <Harris>
+        <searchZoneSize>60</searchZoneSize>
+        <patternSize>10</patternSize>
+        <minCorrVal>0.95</minCorrVal>
+        <MinBorderGreyDist>40</MinBorderGreyDist>
+        <cornercount>10</cornercount>
+        <quality_level>0.1</quality_level>
+        <min_distance>50</min_distance>
+    </Harris>
+    <InvDepth>10</InvDepth>
+</slam>
+</mainslam>
+

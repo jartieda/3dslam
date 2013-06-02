@@ -3,7 +3,7 @@
 osg::Node* myKeyboardEventHandler::Camera(std::string filename)
     {
         // Declare and initialize a transform node.
-       osg::Group* Cam = new osg::Group();
+       osg::ref_ptr<osg::Group> Cam = new osg::Group();
 
        osg::Geode* FrameGeode = new osg::Geode();
        osg::Geometry* FrameGeometry = new osg::Geometry();
@@ -737,12 +737,14 @@ cvisor::cvisor()
 {
     //ctor
 	//Creating the root node
-	osg::ref_ptr<osg::Group> root (new osg::Group);
+	printf("constructing viewr...\n");
+    
+	viewer = new osgViewer::Viewer();
+	osg::ref_ptr<osg::Group> root = new osg::Group();
 
 	//The geode containing our shpae
    	osg::ref_ptr<osg::Geode> myshapegeode (new osg::Geode);
 
-    viewer = new osgViewer::Viewer();
     viewer->setSceneData( root.get() );
     myFirstEventHandler = new myKeyboardEventHandler();
     myFirstEventHandler->FrameTexture=FrameTexture ;
